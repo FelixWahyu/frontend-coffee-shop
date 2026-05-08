@@ -26,10 +26,10 @@ export const CategoriesSliders = ({ categories }: { categories: Category[] }) =>
   return (
     <section className="mt-16 px-6">
       <div className="container mx-auto relative">
-        <button ref={prevRef} className="absolute left-0 top-1/2 z-10 -translate-y-1/2 bg-white/80 backdrop-blur-md shadow-md rounded-full p-3 hover:scale-105 transition">
+        <button ref={prevRef} className="absolute left-2 md:-left-10 top-1/2 z-10 -translate-y-1/2 bg-white/80 backdrop-blur-md shadow-md rounded-full p-3 hover:scale-105 transition">
           <ArrowLeft size={20} />
         </button>
-        <button ref={nextRef} className="absolute right-0 top-1/2 z-10 -translate-y-1/2 bg-white/80 backdrop-blur-md shadow-md rounded-full p-3 hover:scale-105 transition">
+        <button ref={nextRef} className="absolute right-2 md:-right-10 top-1/2 z-10 -translate-y-1/2 bg-white/80 backdrop-blur-md shadow-md rounded-full p-3 hover:scale-105 transition">
           <ArrowRight size={20} />
         </button>
 

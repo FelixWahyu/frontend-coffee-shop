@@ -5,8 +5,7 @@ import { CategoriesApi } from "@/src/lib/FeaturesData";
 import featuresImg from "@/src/app/asset/image/expresso.jpg";
 import Link from "next/link";
 import { Category } from "../types/categories";
-import { Reviews } from "../lib/profileData";
-import ReviewCard from "../components/ui/cards-ui";
+import ReviewSection from "../components/SectionReviews";
 
 export default async function Home() {
   let categories: Category[] = [];
@@ -107,21 +106,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="px-8 py-14 bg-[#E2D9C8]">
-        <div className="container mx-auto">
-          <div className="mb-10 text-center">
-            <h2 className="text-3xl md:text-4xl font-playfair font-bold italic">
-              Customers <span className="text-[#C67C4E]">Review</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-center">
-            {Reviews.map((reviews) => (
-              <ReviewCard key={reviews.id} review={reviews} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <ReviewSection />
     </main>
   );
 }
