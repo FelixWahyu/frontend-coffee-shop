@@ -1,14 +1,25 @@
-interface ReviewProps {
-  id: number;
-  name: string;
-  email: string;
-  review: string;
-  rating: number;
-}
+import { ReviewApiResponse } from "../types/review";
 
-export interface ReviewCardProps {
-  review: ReviewProps;
-}
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
+export const ReviewApi = {
+  getReviews: async (): Promise<ReviewApiResponse> => {
+    const response = await fetch(`${BASE_URL}/reviews`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) {
+      // throw new Error("Failed to fetch reviews");
+      const errorText = await response.text();
+
+      console.error("API Error:", errorText);
+
+      throw new Error(errorText);
+    }
+
+    return response.json();
+  },
+};
 
 export const Reviews = [
   {

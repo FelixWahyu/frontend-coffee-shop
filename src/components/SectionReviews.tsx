@@ -1,21 +1,48 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import ReviewCard from "../components/ui/cards-ui";
-import { Reviews } from "../lib/profileData";
+import { ReviewApi } from "../lib/profileData";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
+import { Review } from "../types/review";
 
 export default function ReviewSection() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  if (Reviews.length === 0) {
+  const [ReviewData, setReviewData] = useState<Review[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await ReviewApi.getReviews();
+        setReviewData(result.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="my-6">
+        <p className="text-gray-500 font-semibold font-lato">Loading...</p>
+      </div>
+    );
+  }
+
+  if (ReviewData.length === 0) {
     return (
       <div className="my-6">
         <p className="text-gray-500 font-semibold font-lato">Data review belum tersedia.</p>
@@ -52,7 +79,7 @@ export default function ReviewSection() {
                 swiper.params.navigation.nextEl = nextRef.current;
               }
             }}
-            loop={Reviews.length > 3}
+            loop={ReviewData.length > 3}
             grabCursor={true}
             pagination={{
               dynamicBullets: true,
@@ -69,7 +96,7 @@ export default function ReviewSection() {
               },
             }}
           >
-            {Reviews.map((review) => (
+            {ReviewData.map((review) => (
               <SwiperSlide key={review.id}>
                 <ReviewCard review={review} />
               </SwiperSlide>
