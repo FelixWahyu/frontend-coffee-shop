@@ -5,10 +5,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import Image from "next/image";
 import FeaturesImg from "@/src/app/asset/image/expresso.jpg";
 import type { Swiper as SwiperType } from "swiper";
 import { Category } from "../types/categories";
+import FeatureCard from "./cards/features-card";
 
 export default function FeaturesSection({ features }: { features: Category[] }) {
   const prevRef = useRef(null);
@@ -70,15 +70,7 @@ export default function FeaturesSection({ features }: { features: Category[] }) 
         >
           {features.map((feature) => (
             <SwiperSlide key={feature.id}>
-              <div className="flex flex-col h-full justify-center group bg-[#F1F0EE] border border-[#30261C]/15">
-                <div className="mb-4 aspect-4/3 relative overflow-hidden">
-                  <Image src={FeaturesImg} alt={feature.name} fill className="object-cover opacity-100 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300" />
-                </div>
-                <div className="p-4 flex-1 flex-col justify-between">
-                  <h3 className="text-xl font-semibold font-playfair mb-3">{feature.name}</h3>
-                  <p className="text-md font-lato flex-1">{feature.description}</p>
-                </div>
-              </div>
+              <FeatureCard title={feature.name} description={feature.description} image={FeaturesImg} />
             </SwiperSlide>
           ))}
         </Swiper>
