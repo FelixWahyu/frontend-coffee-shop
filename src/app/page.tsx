@@ -6,6 +6,7 @@ import featuresImg from "@/src/app/asset/image/expresso.jpg";
 import Link from "next/link";
 import { Category } from "../types/categories";
 import ReviewSection from "../components/SectionReviews";
+import FeaturesSection from "../components/SectionFeatures";
 
 export default async function Home() {
   let categories: Category[] = [];
@@ -43,7 +44,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="px-8 py-14 bg-[#E2D9C8] text-center">
+      {/* <section className="px-8 py-14 bg-[#E2D9C8] text-center">
         <div className="flex flex-col gap-3 mb-8">
           <h2 className="text-4xl font-playfair font-bold italic">Features</h2>
           <p className="text-lg font-medium font-lato">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolorem!</p>
@@ -67,7 +68,8 @@ export default async function Home() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
+      <FeaturesSection features={categories} />
 
       <section className="px-8 py-14 bg-[#E2D9C8]">
         <div className="flex flex-col md:flex-row items-center gap-8 container mx-auto">
