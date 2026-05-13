@@ -4,6 +4,7 @@ import Logo from "@/app/asset/logo/brand-3.jpg";
 import { Mail, MapPin, MessageCircleCheck, MessagesSquare } from "lucide-react";
 
 export default function Footer() {
+  const year = new Date().getFullYear();
   return (
     <footer className="bg-[#30261C] px-6 py-16">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -65,6 +66,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <div className="border-t border-white/10 mt-14 pt-6 text-center text-sm text-slate-300">© {year} Coffee Shop. All rights reserved.</div>
     </footer>
   );
 }

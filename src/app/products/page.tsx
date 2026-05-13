@@ -9,7 +9,7 @@ import { CategoriesSliders } from "@/src/components/CategoriesSliders";
 import { Category } from "@/src/types/categories";
 import { CategoriesApi } from "@/src/lib/FeaturesData";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api";
+// const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api";
 
 export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   // const products = ProductsData;
