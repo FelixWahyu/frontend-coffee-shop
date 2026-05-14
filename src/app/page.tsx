@@ -44,31 +44,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* <section className="px-8 py-14 bg-[#E2D9C8] text-center">
-        <div className="flex flex-col gap-3 mb-8">
-          <h2 className="text-4xl font-playfair font-bold italic">Features</h2>
-          <p className="text-lg font-medium font-lato">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolorem!</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 container mx-auto">
-          {categories.length === 0 && (
-            <div className="my-6">
-              <p className="text-gray-500 font-semibold">Data Features belum di tambahkan.</p>
-            </div>
-          )}
-          {categories.map((feature) => (
-            <div key={feature.id} className="flex flex-col h-full justify-center group bg-[#F1F0EE] border border-[#30261C]/15">
-              <div className="mb-4 aspect-square relative overflow-hidden">
-                <Image src={featuresImg} alt={feature.name} fill className="object-cover opacity-100 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300" />
-              </div>
-              <div className="px-4 py-2 mb-4 flex flex-1 flex-col">
-                <h3 className="text-xl font-semibold font-playfair mb-3">{feature.name}</h3>
-                <p className="text-md font-lato flex-1">{feature.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section> */}
       <FeaturesSection features={categories} />
 
       <section className="px-8 py-14 bg-[#E2D9C8]">

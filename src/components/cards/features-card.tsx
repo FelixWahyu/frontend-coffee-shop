@@ -9,13 +9,13 @@ interface FeatureCardProps {
 
 export default function FeatureCard({ title, description, image }: FeatureCardProps) {
   return (
-    <Card className="h-full group">
+    <Card className="h-full group bg-[#F1F0EE]">
       <div className="relative overflow-hidden aspect-4/3">
         <Image src={image} alt={title} className="object-cover opacity-100 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300" fill />
       </div>
       <div className="p-5">
         <h3 className="mb-3 text-xl font-semibold font-playfair">{title}</h3>
-        <p className="text-gray-600 font-lato">{description}</p>
+        <p className="text-gray-700 font-lato">{description}</p>
       </div>
     </Card>
   );

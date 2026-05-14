@@ -5,12 +5,12 @@ interface ProductCardProps {
   title: string;
   image: ImageProps["src"];
   price: number;
-  category: string;
+  category?: string | null;
 }
 
 export default function ProductCard({ title, image, price, category }: ProductCardProps) {
   return (
-    <Card className="cursor-pointer">
+    <Card className="cursor-pointer p-2 bg-[#F1F0EE]">
       <div className="relative aspect-square bg-muted overflow-hidden rounded-lg">
         <Image src={image} alt={title} fill className="object-cover opacity-100 transition-all duration-500 group-hover:opacity-80 group-hover:scale-105" />
         <div className="absolute inset-0 opcaity-100 transition-all duration-300 group-hover:opacity-80"></div>

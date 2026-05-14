@@ -8,6 +8,7 @@ import { Product } from "../../types/product";
 import { CategoriesSliders } from "@/src/components/CategoriesSliders";
 import { Category } from "@/src/types/categories";
 import { CategoriesApi } from "@/src/lib/FeaturesData";
+import ProductCard from "@/src/components/cards/product-card";
 
 // const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api";
 
@@ -36,8 +37,8 @@ export default async function productPage({ searchParams }: { searchParams: Prom
   //   return product.name.toLowerCase().includes(search.toLowerCase());
   // });
   return (
-    <main>
-      <section className="relative h-screen bg-gray-800 flex items-center mb-6 justify-center">
+    <main className="bg-[#E2D9C8]">
+      <section className="relative h-screen bg-gray-800 flex items-center justify-center">
         <Image src={HeroImage} alt="hero-background" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-linear-to-t from-[#30261C] to-[#30261C]/10"></div>
         <div className="relative z-10 container mx-auto p-4 mt-8 md:mt-10">
@@ -74,7 +75,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
           )}
           {products.map((product) => (
             <Link key={product.id} href={`/products/${product.id}`} className="block">
-              <div className="group cursor-pointer border border-gray-200 p-2 rounded-lg">
+              {/* <div className="group cursor-pointer border border-gray-200 p-2 rounded-lg">
                 <div className="relative aspect-square bg-muted overflow-hidden rounded-lg">
                   <Image src={ProductImg} alt="aqua botol" fill className="object-cover opacity-100 transition-all duration-500 group-hover:opacity-80 group-hover:scale-105" />
                   <div className="absolute inset-0 opcaity-100 transition-all duration-300 group-hover:opacity-80"></div>
@@ -87,7 +88,8 @@ export default async function productPage({ searchParams }: { searchParams: Prom
                     <button className="bg-[#C67C4E] px-4 py-2 cursor-pointer text-slate-100 font-semibold rounded-lg shadow-sm hover:bg-[#C67C4E]/80">Add to Chart</button>
                   </div>
                 </div>
-              </div>
+              </div> */}
+              <ProductCard title={product.name} image={ProductImg} price={product.price} category={product.category?.name} />
             </Link>
           ))}
         </div>
