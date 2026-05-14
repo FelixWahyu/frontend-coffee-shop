@@ -3,8 +3,8 @@ import Loading from "./loading";
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main>
+    <section>
       <Suspense fallback={<Loading />}>{children}</Suspense>
-    </main>
+    </section>
   );
 }
