@@ -6,7 +6,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import ReviewCard from "../components/ui/cards-ui";
+import ReviewCard from "./cards/review-card";
 import { ReviewApi } from "../lib/profileData";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
@@ -98,7 +98,7 @@ export default function ReviewSection() {
           >
             {ReviewData.map((review) => (
               <SwiperSlide key={review.id}>
-                <ReviewCard review={review} />
+                <ReviewCard name={review.user.name} email={review.user.contacts[0]?.email} rating={review.rating} comment={review.comment} />
               </SwiperSlide>
             ))}
           </Swiper>

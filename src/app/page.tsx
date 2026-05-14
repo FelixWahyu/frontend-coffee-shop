@@ -2,7 +2,6 @@ import Image from "next/image";
 import heroImage from "@/src/app/asset/image/3cup-coffe.jpg";
 import ImgCoffe from "@/src/app/asset/image/biji-coffe-cup.jpg";
 import { CategoriesApi } from "@/src/lib/FeaturesData";
-import featuresImg from "@/src/app/asset/image/expresso.jpg";
 import Link from "next/link";
 import { Category } from "../types/categories";
 import ReviewSection from "../components/SectionReviews";
@@ -78,7 +77,7 @@ export default async function Home() {
           </div>
 
           <div className="aspect-square overflow-hidden relative w-full md:flex-1">
-            <Image src={ImgCoffe} alt="coffe-image" fill className="object-cover rounded-md shadow-md" />
+            <Image src={ImgCoffe} alt="coffe-image" fill sizes="(max-width: 640px) 50vw,(max-width: 768px) 33vw,(max-width: 1024px) 25vw,20vw" className="object-cover rounded-md shadow-md" />
           </div>
         </div>
       </section>

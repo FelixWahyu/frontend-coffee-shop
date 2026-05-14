@@ -65,7 +65,13 @@ export const CategoriesSliders = ({ categories }: { categories: Category[] }) =>
             <SwiperSlide key={category.id}>
               <div className="flex flex-col items-center gap-4 group cursor-pointer">
                 <div className="aspect-square overflow-hidden relative w-36 h-36 rounded-full">
-                  <Image src={ProductImg} alt={category.name} fill className="object-cover group-hover:scale-105 transition-transform duration-300 opacity-100 group-hover:opacity-80" />
+                  <Image
+                    src={ProductImg}
+                    alt={category.name}
+                    fill
+                    sizes="(max-width: 640px) 50vw,(max-width: 768px) 33vw,(max-width: 1024px) 25vw,20vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300 opacity-100 group-hover:opacity-80"
+                  />
                 </div>
                 <h3 className="text-center font-semibold font-playfair text-lg">{category.name}</h3>
               </div>
