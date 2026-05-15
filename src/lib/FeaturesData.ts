@@ -1,4 +1,4 @@
-import featuresImg from "@/src/app/asset/image/expresso.jpg";
+import featuresImg from "@/src/asset/image/expresso.jpg";
 import { CategoryApiResponse } from "../types/categories";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api";

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import Logo from "@/app/asset/logo/brand-3.jpg";
+import Logo from "@/src/asset/logo/brand-3.jpg";
 import { Mail, MapPin, MessageCircleCheck, MessagesSquare } from "lucide-react";
 
 export default function Footer() {

@@ -2,11 +2,11 @@ import { profileData } from "@/src/lib/profileData";
 import { CardBody } from "@/src/components/ui/card-body";
 import Link from "next/link";
 import Image from "next/image";
-import BlogBack from "@/app/asset/image/blog-background.jpg";
+import BlogBack from "@/src/asset/image/blog-background.jpg";
 
 export default function BlogPage() {
   return (
-    <main className="bg-[#E2D9C8]">
+    <>
       <section className="relative h-[90vh] md:h-[80vh] bg-gray-800 flex items-center justify-center">
         <Image src={BlogBack} alt="hero-background" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-linear-to-t from-[#30261C] to-[#30261C]/10"></div>
@@ -39,6 +39,6 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

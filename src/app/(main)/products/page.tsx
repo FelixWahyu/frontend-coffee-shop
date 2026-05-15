@@ -1,10 +1,10 @@
-import ProductImg from "@/src/app/asset/image/expresso.jpg";
-import HeroImage from "@/src/app/asset/image/biji-coffe-cup.jpg";
+import ProductImg from "@/src/asset/image/expresso.jpg";
+import HeroImage from "@/src/asset/image/biji-coffe-cup.jpg";
 import Image from "next/image";
 import Link from "next/link";
-import { ProductApi } from "../../lib/ProductData";
+import { ProductApi } from "@/src/lib/ProductData";
 import { SearchParams } from "./searchBox";
-import { Product } from "../../types/product";
+import { Product } from "../../../types/product";
 import { CategoriesSliders } from "@/src/components/CategoriesSliders";
 import { Category } from "@/src/types/categories";
 import { CategoriesApi } from "@/src/lib/FeaturesData";
@@ -37,7 +37,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
   //   return product.name.toLowerCase().includes(search.toLowerCase());
   // });
   return (
-    <main className="bg-[#E2D9C8]">
+    <>
       <section className="relative h-screen bg-gray-800 flex items-center justify-center">
         <Image src={HeroImage} alt="hero-background" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-linear-to-t from-[#30261C] to-[#30261C]/10"></div>
@@ -94,6 +94,6 @@ export default async function productPage({ searchParams }: { searchParams: Prom
           ))}
         </div>
       </section>
-    </main>
+    </>
   );
 }

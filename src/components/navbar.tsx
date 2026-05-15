@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Logo from "@/app/asset/logo/brand-3.jpg";
+import Logo from "@/src/asset/logo/brand-3.jpg";
 import Link from "next/link";
 import { Search, Menu, ShoppingBag, X } from "lucide-react";
 import { usePathname } from "next/navigation";

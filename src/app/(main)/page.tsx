@@ -1,11 +1,11 @@
 import Image from "next/image";
-import heroImage from "@/src/app/asset/image/3cup-coffe.jpg";
-import ImgCoffe from "@/src/app/asset/image/biji-coffe-cup.jpg";
+import heroImage from "@/src/asset/image/3cup-coffe.jpg";
+import ImgCoffe from "@/src/asset/image/biji-coffe-cup.jpg";
 import { CategoriesApi } from "@/src/lib/FeaturesData";
 import Link from "next/link";
-import { Category } from "../types/categories";
-import ReviewSection from "../components/SectionReviews";
-import FeaturesSection from "../components/SectionFeatures";
+import { Category } from "@/src/types/categories";
+import ReviewSection from "@/src/components/SectionReviews";
+import FeaturesSection from "@/src/components/SectionFeatures";
 
 export default async function Home() {
   let categories: Category[] = [];
@@ -18,7 +18,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="bg-[#E2D9C8]">
+    <>
       <section className="relative flex h-screen items-center justify-center bg-gray-800">
         <Image src={heroImage} fill className="object-cover" priority alt="hero-image" />
         <div className="absolute inset-0 bg-linear-to-r from-[#30261C]/90 to-[#30261C]/30"></div>
@@ -83,6 +83,6 @@ export default async function Home() {
       </section>
 
       <ReviewSection />
-    </main>
+    </>
   );
 }
