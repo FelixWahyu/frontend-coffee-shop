@@ -13,38 +13,63 @@ import { ErrorMsg } from "@/src/types/errorMessage";
 import { LoginRequest } from "../types/login";
 import { BASE_URL } from "../lib/api";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
+
+const validate = (values: LoginRequest): ErrorMsg => {
+  const errors: ErrorMsg = {};
+
+  if (!values.username) {
+    errors.username = "Username is required";
+  } else if (values.username.length < 3) {
+    errors.username = "Username must be at least 3 characters";
+  }
+
+  if (!values.password) {
+    errors.password = "Password is required";
+  } else if (values.password.length < 6) {
+    errors.password = "Password must be at least 6 characters";
+  }
+
+  return errors;
+};
 
 export default function Login() {
   const [errors, setErrors] = useState<ErrorMsg>({});
-  const [username, setUsername] = useState<LoginRequest["username"]>("");
-  const [password, setPassword] = useState<LoginRequest["password"]>("");
+  const [form, setForm] = useState<LoginRequest>({
+    username: "",
+    password: "",
+  });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const updateForm = {
+      ...form,
+      [name]: value,
+    };
+    setForm(updateForm);
+
+    const validationErrors = validate(updateForm);
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validationErrors[name as keyof LoginRequest],
+      general: "",
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const formData = new FormData(e.currentTarget);
-    // const username = formData.get("username") as string;
-    // setUsername(formData.get("username") as string);
-
-    // const password = formData.get("password") as string;
-    // setPassword(formData.get("password") as string);
-
-    const newErrors: ErrorMsg = {};
-    if (!username) {
-      newErrors.username = "Username is required";
-    } else if (username.length < 3) {
-      newErrors.username = "Username must be at least 3 characters";
+    if (loading) {
+      return;
     }
 
-    if (!password) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
+    const validationErrors = validate(form);
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
@@ -57,10 +82,7 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
+        body: JSON.stringify(form),
       });
 
       const response = await request.json();
@@ -71,12 +93,14 @@ export default function Login() {
         });
         return;
       }
-      setUsername("");
-      setPassword("");
+      setForm({
+        username: "",
+        password: "",
+      });
       router.replace("/");
       //   console.log(response);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setErrors({
         general: "Terjadi kesalahan saat login.",
       });
@@ -98,7 +122,7 @@ export default function Login() {
           </div>
         </div>
         <div className="flex items-center px-6 py-12 md:px-12 justify-center">
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-sm">
             <div className="mb-8">
               <h2 className="text-4xl font-bold font-playfair mb-3">Login</h2>
               <p className="text-sm font-lato">Silahkan login dengan akun yang terdaftar.</p>
@@ -113,42 +137,22 @@ export default function Login() {
             <form onSubmit={handleSubmit} className="space-y-5">
               <FormGroup>
                 <Label htmlFor="username">Username</Label>
-                <TextInput
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                    setErrors((prev) => ({
-                      ...prev,
-                      username: "",
-                      general: "",
-                    }));
-                  }}
-                  value={username}
-                  type="text"
-                  id="username"
-                  name="username"
-                  autoComplete="username"
-                  className="bg-gray-100"
-                />
+                <TextInput onChange={handleChange} value={form.username} type="text" id="username" name="username" autoComplete="username" className="bg-gray-100" />
                 <ErrorMessage message={errors.username} />
               </FormGroup>
               <FormGroup>
                 <Label htmlFor="password">Password</Label>
-                <TextInput
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setErrors((prev) => ({
-                      ...prev,
-                      password: "",
-                      general: "",
-                    }));
-                  }}
-                  value={password}
-                  type="password"
-                  id="password"
-                  name="password"
-                  autoComplete="current-password"
-                  className="bg-gray-100"
-                />
+                <div className="relative">
+                  <TextInput onChange={handleChange} value={form.password} type={showPassword ? "text" : "password"} id="password" name="password" autoComplete="current-password" className="bg-gray-100" />
+                  <button
+                    type="button"
+                    aria-label="Toggle password visibility"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
                 <ErrorMessage message={errors.password} />
               </FormGroup>
 
