@@ -1,8 +1,8 @@
-import { profileData } from "@/src/lib/profileData";
+import { profileData } from "@/constants/profile";
 import { CardBody } from "@/src/components/ui/card-body";
 import Link from "next/link";
 import Image from "next/image";
-import BlogBack from "@/src/asset/image/blog-background.jpg";
+import BlogBack from "@/public/assets/image/blog-background.jpg";
 
 export default function BlogPage() {
   return (

@@ -1,5 +1,5 @@
 import AuthLayout from "../layout";
-import Login from "@/src/components/SectionLogin";
+import Login from "@/components/sections/SectionLogin";
 
 export default function LoginPage() {
   return (

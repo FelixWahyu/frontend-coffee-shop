@@ -5,10 +5,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import FeaturesImg from "@/src/asset/image/expresso.jpg";
+import FeaturesImg from "@/public/assets/image/expresso.jpg";
 import type { Swiper as SwiperType } from "swiper";
-import { Category } from "../types/categories";
-import FeatureCard from "./cards/features-card";
+import { Category } from "@/types/categories";
+import FeatureCard from "@/components/cards/FeatureCard";
 
 export default function FeaturesSection({ features }: { features: Category[] }) {
   const prevRef = useRef(null);

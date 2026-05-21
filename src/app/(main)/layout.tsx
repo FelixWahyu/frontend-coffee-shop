@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Loading from "./blog/loading";
-import Navbar from "@/src/components/navbar";
-import Footer from "@/src/components/footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (

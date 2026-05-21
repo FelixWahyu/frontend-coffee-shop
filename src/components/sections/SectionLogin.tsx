@@ -1,28 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import CoffeeBg from "@/src/asset/image/biji-coffe-cup.jpg";
-import Image from "next/image";
-import Link from "next/link";
 import FormGroup from "@/src/components/ui/form/form-group";
 import TextInput from "@/src/components/ui/form/text-input";
 import Label from "@/src/components/ui/form/label";
 import ErrorMessage from "@/src/components/ui/form/error";
 import Button from "@/src/components/ui/button";
+import CoffeeBg from "@/public/assets/image/biji-coffe-cup.jpg";
+import Link from "next/link";
+import Image from "next/image";
 import { ErrorMsg } from "@/src/types/errorMessage";
-import { RegisterRequest } from "../types/login";
-import { BASE_URL } from "../lib/api";
+import { LoginRequest } from "@/types/login";
+import { BASE_URL } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 
-const validate = (values: RegisterRequest): ErrorMsg => {
+const validate = (values: LoginRequest): ErrorMsg => {
   const errors: ErrorMsg = {};
-
-  if (!values.name) {
-    errors.name = "Name is required";
-  } else if (values.name.length < 3) {
-    errors.name = "Name must be at least 3 characters";
-  }
 
   if (!values.username) {
     errors.username = "Username is required";
@@ -39,13 +33,12 @@ const validate = (values: RegisterRequest): ErrorMsg => {
   return errors;
 };
 
-export default function Register() {
-  const [form, setForm] = useState<RegisterRequest>({
-    name: "",
+export default function Login() {
+  const [errors, setErrors] = useState<ErrorMsg>({});
+  const [form, setForm] = useState<LoginRequest>({
     username: "",
     password: "",
   });
-  const [errors, setErrors] = useState<ErrorMsg>({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
@@ -62,7 +55,7 @@ export default function Register() {
 
     setErrors((prev) => ({
       ...prev,
-      [name]: validationErrors[name as keyof RegisterRequest],
+      [name]: validationErrors[name as keyof LoginRequest],
       general: "",
     }));
   };
@@ -84,7 +77,7 @@ export default function Register() {
     setErrors({});
 
     try {
-      const request = await fetch(`${BASE_URL}/users`, {
+      const request = await fetch(`${BASE_URL}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,17 +89,15 @@ export default function Register() {
 
       if (!request.ok) {
         setErrors({
-          general: response.message || "Username is already taken.",
+          general: response.message || "Username atau Password salah.",
         });
         return;
       }
-
       setForm({
-        name: "",
         username: "",
         password: "",
       });
-      router.replace("/login");
+      router.replace("/");
       //   console.log(response);
     } catch (error) {
       console.error(error);
@@ -133,8 +124,8 @@ export default function Register() {
         <div className="flex items-center px-6 py-12 md:px-12 justify-center">
           <div className="w-full max-w-sm">
             <div className="mb-8">
-              <h2 className="text-4xl font-bold font-playfair mb-3">Daftar</h2>
-              <p className="text-sm font-lato">Silahkan membuat akun baru untuk mendaftar.</p>
+              <h2 className="text-4xl font-bold font-playfair mb-3">Login</h2>
+              <p className="text-sm font-lato">Silahkan login dengan akun yang terdaftar.</p>
             </div>
 
             {errors.general && (
@@ -144,11 +135,6 @@ export default function Register() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              <FormGroup>
-                <Label htmlFor="name">Name</Label>
-                <TextInput onChange={handleChange} value={form.name} type="text" id="name" name="name" className="bg-gray-100" />
-                <ErrorMessage message={errors.name} />
-              </FormGroup>
               <FormGroup>
                 <Label htmlFor="username">Username</Label>
                 <TextInput onChange={handleChange} value={form.username} type="text" id="username" name="username" autoComplete="username" className="bg-gray-100" />
@@ -175,15 +161,15 @@ export default function Register() {
                 disabled={loading}
                 className="bg-[#C67C4E] mt-4 w-full cursor-pointer text-white font-semibold transition-all duration-300 hover:bg-[#b86d3e] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#C67C4E]"
               >
-                {loading ? "Loading..." : "Daftar"}
+                {loading ? "Loading..." : "Login"}
               </Button>
             </form>
 
             <div className="my-6 text-center">
               <p className="text-sm font-lato text-gray-600">
-                Sudah memiliki akun?{" "}
-                <Link href={"/login"} className="font-semibold text-[#C67C4E] hover:underline">
-                  Login
+                Belum punya akun?{" "}
+                <Link href={"/register"} className="font-semibold text-[#C67C4E] hover:underline">
+                  Daftar
                 </Link>
               </p>
             </div>

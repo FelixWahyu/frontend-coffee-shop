@@ -6,11 +6,11 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import ReviewCard from "./cards/review-card";
-import { ReviewApi } from "../lib/profileData";
+import ReviewCard from "@/components/cards/ReviewCard";
+import { ReviewApi } from "@/constants/profile";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
-import { Review } from "../types/review";
+import { Review } from "@/types/review";
 
 export default function ReviewSection() {
   const prevRef = useRef(null);

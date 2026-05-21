@@ -1,11 +1,11 @@
 import Image from "next/image";
-import heroImage from "@/src/asset/image/3cup-coffe.jpg";
-import ImgCoffe from "@/src/asset/image/biji-coffe-cup.jpg";
-import { CategoriesApi } from "@/src/lib/FeaturesData";
+import heroImage from "@/public/assets/image/3cup-coffe.jpg";
+import ImgCoffe from "@/public/assets/image/biji-coffe-cup.jpg";
+import { CategoriesApi } from "@/constants/features";
 import Link from "next/link";
 import { Category } from "@/src/types/categories";
-import ReviewSection from "@/src/components/SectionReviews";
-import FeaturesSection from "@/src/components/SectionFeatures";
+import ReviewSection from "@/components/sections/SectionReviews";
+import FeaturesSection from "@/components/sections/SectionFeatures";
 
 export default async function Home() {
   let categories: Category[] = [];

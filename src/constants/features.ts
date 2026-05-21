@@ -1,5 +1,5 @@
-import featuresImg from "@/src/asset/image/expresso.jpg";
-import { CategoryApiResponse } from "../types/categories";
+import featuresImg from "@/public/assets/image/expresso.jpg";
+import { CategoryApiResponse } from "@/types/categories";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api";
 

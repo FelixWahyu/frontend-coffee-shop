@@ -1,5 +1,5 @@
 import Image from "next/image";
-import CafeFront from "@/src/asset/image/cafe-front.jpg";
+import CafeFront from "@/public/assets/image/cafe-front.jpg";
 
 export default function AboutPage() {
   return (

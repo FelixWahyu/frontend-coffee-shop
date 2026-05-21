@@ -1,14 +1,14 @@
-import ProductImg from "@/src/asset/image/expresso.jpg";
-import HeroImage from "@/src/asset/image/biji-coffe-cup.jpg";
+import ProductImg from "@/public/assets/image/expresso.jpg";
+import HeroImage from "@/public/assets/image/biji-coffe-cup.jpg";
 import Image from "next/image";
 import Link from "next/link";
-import { ProductApi } from "@/src/lib/ProductData";
-import { SearchParams } from "./searchBox";
+import { ProductApi } from "@/constants/products";
+import { SearchParams } from "@/components/products/SearchBox";
 import { Product } from "../../../types/product";
-import { CategoriesSliders } from "@/src/components/CategoriesSliders";
+import { CategoriesSliders } from "@/components/sections/CategoriesSliders";
 import { Category } from "@/src/types/categories";
-import { CategoriesApi } from "@/src/lib/FeaturesData";
-import ProductCard from "@/src/components/cards/product-card";
+import { CategoriesApi } from "@/constants/features";
+import ProductCard from "@/components/cards/ProductCard";
 
 // const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api";
 

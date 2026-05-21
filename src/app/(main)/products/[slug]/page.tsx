@@ -1,7 +1,7 @@
-import { ProductApi, ProductsData } from "@/src/lib/ProductData";
+import { ProductApi, ProductsData } from "@/constants/products";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import ProductImg from "@/src/app/asset/image/expresso.jpg";
+import ProductImg from "@/public/assets/image/expresso.jpg";
 import Link from "next/link";
 
 export default async function DetailProduct({ params }: { params: Promise<{ slug: string }> }) {

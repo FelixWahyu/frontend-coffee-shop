@@ -5,9 +5,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import ProductImg from "@/src/asset/image/expresso.jpg";
+import ProductImg from "@/public/assets/image/expresso.jpg";
 import Image from "next/image";
-import { Category } from "../types/categories";
+import { Category } from "@/types/categories";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
 

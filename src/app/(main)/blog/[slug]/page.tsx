@@ -1,7 +1,7 @@
-import { profileData } from "@/src/lib/profileData";
+import { profileData } from "@/constants/profile";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Aqua from "@/app/asset/image/aqua-botol.jpg";
+import Aqua from "@/public/assets/image/aqua-botol.jpg";
 
 export default async function DetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
