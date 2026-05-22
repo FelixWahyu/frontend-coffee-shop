@@ -41,7 +41,7 @@ export default function Navbar() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "X-API-TOKEN": token,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (!response.ok) {
