@@ -5,7 +5,9 @@ import Logo from "@/public/assets/logo/brand-3.jpg";
 import Link from "next/link";
 import { Search, Menu, ShoppingBag, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { BASE_URL } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -17,6 +19,49 @@ const navLinks = [
 export default function Navbar() {
   const pathName = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
+  const [auth, setAuth] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    setAuth(!!token);
+    setMounted(true);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      // console.log(token);
+      if (!token) {
+        return;
+      }
+
+      const response = await fetch(`${BASE_URL}/users/logout`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-TOKEN": token,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to logout");
+      }
+      // const data = await response.json();
+      // console.log(data);
+      sessionStorage.removeItem("token");
+      setAuth(false);
+      router.replace("/");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-4rem)] max-w-6xl">
       <div className="flex px-4 md:px-6 py-2 items-center justify-between rounded-2xl border border-white shadow-md bg-white">
@@ -47,9 +92,15 @@ export default function Navbar() {
               <ShoppingBag size={18} />
             </button>
           </div>
-          <Link href={"/login"} className="text-white hidden md:flex bg-[#C67C4E] px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-[#C67C4E]/70 transition-colors duration-300">
-            Sign In
-          </Link>
+          {auth ? (
+            <button onClick={handleLogout} className="text-white hidden md:flex bg-red-500 px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300">
+              Sign Out
+            </button>
+          ) : (
+            <Link href={"/login"} className="text-white hidden md:flex bg-[#C67C4E] px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-[#C67C4E]/70 transition-colors duration-300">
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
 
@@ -66,9 +117,15 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="mt-8 p-4 border-t border-gray-500">
-            <Link href={"/login"} className="text-white bg-[#C67C4E] px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-[#C67C4E]/70 transition-colors duration-300">
-              Sign In
-            </Link>
+            {auth ? (
+              <button onClick={handleLogout} className="text-white bg-red-500 px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300">
+                Sign Out
+              </button>
+            ) : (
+              <Link href={"/login"} className="text-white bg-[#C67C4E] px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-[#C67C4E]/70 transition-colors duration-300">
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       )}
