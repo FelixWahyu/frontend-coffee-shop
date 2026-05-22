@@ -52,7 +52,7 @@ export default function Navbar() {
       sessionStorage.removeItem("token");
       setAuth(false);
       router.replace("/");
-      router.refresh();
+      // router.refresh();
     } catch (error) {
       console.error(error);
     }

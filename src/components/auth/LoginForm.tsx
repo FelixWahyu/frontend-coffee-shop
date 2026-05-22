@@ -11,27 +11,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { ErrorMsg } from "@/types/errorMessage";
 import { LoginRequest } from "@/types/login";
-import { BASE_URL } from "@/lib/api";
+// import { BASE_URL } from "@/lib/api";
+import LoginService from "@/services/auth/loginService";
+import { ValidationLogin } from "@/validations/auth/loginValidation";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
-
-const validate = (values: LoginRequest): ErrorMsg => {
-  const errors: ErrorMsg = {};
-
-  if (!values.username) {
-    errors.username = "Username is required";
-  } else if (values.username.length < 3) {
-    errors.username = "Username must be at least 3 characters";
-  }
-
-  if (!values.password) {
-    errors.password = "Password is required";
-  } else if (values.password.length < 6) {
-    errors.password = "Password must be at least 6 characters";
-  }
-
-  return errors;
-};
 
 export default function Login() {
   const [errors, setErrors] = useState<ErrorMsg>({});
@@ -51,7 +35,7 @@ export default function Login() {
     };
     setForm(updateForm);
 
-    const validationErrors = validate(updateForm);
+    const validationErrors = ValidationLogin(updateForm);
 
     setErrors((prev) => ({
       ...prev,
@@ -66,38 +50,26 @@ export default function Login() {
       return;
     }
 
-    const validationErrors = validate(form);
+    const validationErrors = ValidationLogin(form);
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    setLoading(true);
-    setErrors({});
-
     try {
-      const request = await fetch(`${BASE_URL}/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      setLoading(true);
+      setErrors({});
 
-      const response = await request.json();
+      const response = await LoginService(form);
 
-      if (!request.ok) {
-        setErrors({
-          general: response.message || "Username atau Password salah.",
-        });
-        return;
-      }
+      sessionStorage.setItem("token", response.data.token);
+
       setForm({
         username: "",
         password: "",
       });
-      sessionStorage.setItem("token", response.data.token);
+
       router.replace("/");
       // console.log(response);
     } catch (error) {
