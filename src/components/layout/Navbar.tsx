@@ -6,15 +6,9 @@ import Link from "next/link";
 import { Search, Menu, ShoppingBag, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { BASE_URL } from "@/lib/api";
 import { useRouter } from "next/navigation";
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/products", label: "Product" },
-  { href: "/blog", label: "Blog" },
-];
+import { navLinks } from "@/constants/navLinks";
+import LogoutService from "@/services/auth/logoutService";
 
 export default function Navbar() {
   const pathName = usePathname();
@@ -32,23 +26,12 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       const token = sessionStorage.getItem("token");
-      // console.log(token);
       if (!token) {
         return;
       }
 
-      const response = await fetch(`${BASE_URL}/users/logout`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to logout");
-      }
-      // const data = await response.json();
-      // console.log(data);
+      const response = await LogoutService(token);
+
       sessionStorage.removeItem("token");
       setAuth(false);
       router.replace("/");
