@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import FormGroup from "@/components/ui/form/form-group";
 import TextInput from "@/components/ui/form/text-input";
 import Label from "@/components/ui/form/label";
@@ -9,78 +8,11 @@ import Button from "@/components/ui/button";
 import CoffeeBg from "@/public/assets/image/biji-coffe-cup.jpg";
 import Link from "next/link";
 import Image from "next/image";
-import { ErrorMsg } from "@/types/errorMessage";
-import { LoginRequest } from "@/types/login";
-// import { BASE_URL } from "@/lib/api";
-import LoginService from "@/services/auth/loginService";
-import { ValidationLogin } from "@/validations/auth/loginValidation";
-import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import { UseLogin } from "@/hooks/auth/UseLogin";
 
 export default function Login() {
-  const [errors, setErrors] = useState<ErrorMsg>({});
-  const [form, setForm] = useState<LoginRequest>({
-    username: "",
-    password: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const updateForm = {
-      ...form,
-      [name]: value,
-    };
-    setForm(updateForm);
-
-    const validationErrors = ValidationLogin(updateForm);
-
-    setErrors((prev) => ({
-      ...prev,
-      [name]: validationErrors[name as keyof LoginRequest],
-      general: "",
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (loading) {
-      return;
-    }
-
-    const validationErrors = ValidationLogin(form);
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setErrors({});
-
-      const response = await LoginService(form);
-
-      sessionStorage.setItem("token", response.data.token);
-
-      setForm({
-        username: "",
-        password: "",
-      });
-
-      router.replace("/");
-      // console.log(response);
-    } catch (error) {
-      console.error(error);
-      setErrors({
-        general: "Terjadi kesalahan saat login.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { form, loading, errors, showPassword, handleChange, handleTogglePassword, handleSubmit } = UseLogin();
 
   return (
     <section className="px-4 py-10">
@@ -117,12 +49,7 @@ export default function Login() {
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <TextInput onChange={handleChange} value={form.password} type={showPassword ? "text" : "password"} id="password" name="password" autoComplete="current-password" className="bg-gray-100" />
-                  <button
-                    type="button"
-                    aria-label="Toggle password visibility"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700"
-                  >
+                  <button type="button" aria-label="Toggle password visibility" onClick={handleTogglePassword} className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700">
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
