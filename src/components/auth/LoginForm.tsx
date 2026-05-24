@@ -49,9 +49,9 @@ export default function Login() {
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <TextInput onChange={handleChange} value={form.password} type={showPassword ? "text" : "password"} id="password" name="password" autoComplete="current-password" className="bg-gray-100" />
-                  <button type="button" aria-label="Toggle password visibility" onClick={handleTogglePassword} className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700">
+                  <Button type="button" aria-label="Toggle password visibility" onClick={handleTogglePassword} className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700">
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
+                  </Button>
                 </div>
                 <ErrorMessage message={errors.password} />
               </FormGroup>
@@ -59,7 +59,7 @@ export default function Login() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-[#C67C4E] mt-4 w-full cursor-pointer text-white font-semibold transition-all duration-300 hover:bg-[#b86d3e] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#C67C4E]"
+                className="bg-[#C67C4E] mt-4 w-full px-4 py-1.5 rounded-lg cursor-pointer shadow-sm text-white font-semibold transition-all duration-300 hover:bg-[#b86d3e] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#C67C4E]"
               >
                 {loading ? "Loading..." : "Login"}
               </Button>

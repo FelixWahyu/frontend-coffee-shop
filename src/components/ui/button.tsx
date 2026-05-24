@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export default function Button({ type = "button", className = "", children = "Click", ...props }: ButtonProps) {
   return (
-    <button type={type} className={`px-4 py-1.5 rounded-lg shadow-sm transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 ${className}`} {...props}>
+    <button type={type} className={`${className}`} {...props}>
       {children}
     </button>
   );

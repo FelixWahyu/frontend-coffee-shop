@@ -4,6 +4,7 @@ import Image from "next/image";
 import Logo from "@/public/assets/logo/brand-3.jpg";
 import Link from "next/link";
 import { Search, Menu, ShoppingBag, X } from "lucide-react";
+import Button from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/constants/navLinks";
 import NavbarLinks from "@/components/ui/nav-links/navbar-links";
@@ -17,9 +18,9 @@ export default function Navbar() {
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-4rem)] max-w-6xl">
       <div className="flex px-4 md:px-6 py-2 items-center justify-between rounded-2xl border border-white shadow-md bg-white">
         <div className="flex items-center gap-3">
-          <button onClick={toggleMenu} className="text-gray-800 rounded-md p-1 flex md:hidden cursor-pointer hover:bg-gray-50 hover:text-gray-700">
+          <Button onClick={toggleMenu} className="text-gray-800 rounded-md p-1 flex md:hidden cursor-pointer hover:bg-gray-50 hover:text-gray-700">
             {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
+          </Button>
           <div className="flex gap-2 items-center">
             <Image src={Logo} width={40} height={40} className="rounded-full" alt="aqua botol" />
             <span className="text-xl font-bold text-gray-800 font-playfair">
@@ -32,17 +33,17 @@ export default function Navbar() {
         </div>
         <div className="flex gap-8 items-center">
           <div className="flex gap-3 items-center">
-            <button className="p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300">
+            <Button className="p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300">
               <Search size={18} />
-            </button>
-            <button className="p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300">
+            </Button>
+            <Button className="p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300">
               <ShoppingBag size={18} />
-            </button>
+            </Button>
           </div>
           {isAuth ? (
-            <button onClick={handleLogout} className="text-white hidden md:flex bg-red-500 px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300">
+            <Button onClick={handleLogout} className="text-white hidden cursor-pointer md:flex bg-red-500 px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300">
               Sign Out
-            </button>
+            </Button>
           ) : (
             <Link href={"/login"} className="text-white hidden md:flex bg-[#C67C4E] px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-[#C67C4E]/70 transition-colors duration-300">
               Sign In
@@ -65,9 +66,9 @@ export default function Navbar() {
           ))}
           <div className="mt-8 p-4 border-t border-gray-500">
             {isAuth ? (
-              <button onClick={handleLogout} className="text-white bg-red-500 px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300">
+              <Button onClick={handleLogout} className="text-white bg-red-500 cursor-pointer px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300">
                 Sign Out
-              </button>
+              </Button>
             ) : (
               <Link href={"/login"} className="text-white bg-[#C67C4E] px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-[#C67C4E]/70 transition-colors duration-300">
                 Sign In
