@@ -1,0 +1,87 @@
+"use client";
+
+import Image from "next/image";
+import heroImage from "@/public/assets/image/3cup-coffe.jpg";
+import ImgCoffe from "@/public/assets/image/biji-coffe-cup.jpg";
+import Link from "next/link";
+import ReviewSection from "@/components/sections/SectionReviews";
+import FeaturesSection from "@/components/sections/SectionFeatures";
+import useFeatures from "@/hooks/featuresCategory/UseFeature";
+import LoadingSkeleton from "../ui/loading";
+
+export default function HomePage() {
+  const { categories, loading } = useFeatures();
+
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
+
+  return (
+    <>
+      <section className="relative flex h-screen items-center justify-center bg-gray-800">
+        <Image src={heroImage} fill className="object-cover" priority alt="hero-image" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#30261C]/90 to-[#30261C]/30"></div>
+        <div className="relative z-10 container p-4 mt-8 md:mt-10">
+          <div className="text-white max-w-2xl px-4 md:px-0 text-left">
+            <div className="px-4 py-1 bg-gray-50/30 backdrop-blur-md w-fit mb-4 border border-gray-200/15 rounded-xl">
+              <p className="text-lg font-lato">Welcome to Coffee Shop</p>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight italic font-playfair">
+              Nikmati Secangkir Kopi Yang Dibuat Dengan <span className="not-italic text-[#C67C4E]">Biji Kopi Pilihan</span>
+            </h1>
+            <div>
+              <p className="text-lg text-gray-200 font-lato">Dibuat dengan biji kopi pilihan dari berbagai penjuru dunia, disajikan dengan penuh kehangatan.</p>
+              <div className="flex gap-6 items-center mt-10">
+                <button className="px-6 py-1.5 font-lato border border-gray-200/15 rounded-2xl bg-gray-50/30 backdrop-blur-md hover:bg-gray-50/50 transition-colors cursor-pointer duration-300">Order Now</button>
+                <Link href={"/about"} className="px-6 py-1.5 font-lato rounded-2xl bg-[#C67C4E] hover:bg-[#C67C4E]/70 transition-colors cursor-pointer duration-300">
+                  About Us
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <FeaturesSection features={categories} />
+
+      <section className="px-8 py-14 bg-[#E2D9C8]">
+        <div className="flex flex-col md:flex-row items-center gap-8 container mx-auto">
+          <div className="w-full flex-1">
+            <h2 className="text-4xl font-playfair font-bold italic mb-4">
+              Why Choose <span className="text-[#C67C4E]">Us?</span>
+            </h2>
+            <p className="text-lg font-medium font-lato mb-3">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolorem! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cupiditate nesciunt exercitationem aspernatur, doloribus repellendus dignissimos deleniti
+              beatae ratione maiores eveniet consectetur ipsum adipisci expedita optio, voluptatum dolorum, reprehenderit similique! Assumenda.
+            </p>
+            <p className="text-lg font-medium font-lato mb-8">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolorem! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cupiditate nesciunt exercitationem aspernatur, doloribus repellendus dignissimos deleniti
+              beatae ratione maiores eveniet consectetur ipsum adipisci expedita optio, voluptatum dolorum, reprehenderit similique! Assumenda. Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, accusantium!
+            </p>
+            <div className="flex gap-8 mb-8">
+              <div>
+                <p className="text-3xl font-playfair font-bold text-[#30261C]">10+</p>
+                <p className="text-sm font-lato text-[#30261C]/60">Tahun Pengalaman</p>
+              </div>
+              <div>
+                <p className="text-3xl font-playfair font-bold text-[#30261C]">50+</p>
+                <p className="text-sm font-lato text-[#30261C]/60">Jenis Kopi</p>
+              </div>
+              <div>
+                <p className="text-3xl font-playfair font-bold text-[#30261C]">1K+</p>
+                <p className="text-sm font-lato text-[#30261C]/60">Pelanggan Setia</p>
+              </div>
+            </div>
+            <button className="bg-[#30261C] px-6 py-1.5 text-white font-semibold rounded-2xl shadow-sm hover:bg-[#30261C]/70 transition-colors duration-300 cursor-pointer">More Info</button>
+          </div>
+
+          <div className="aspect-square overflow-hidden relative w-full md:flex-1">
+            <Image src={ImgCoffe} alt="coffe-image" fill sizes="(max-width: 640px) 50vw,(max-width: 768px) 33vw,(max-width: 1024px) 25vw,20vw" className="object-cover rounded-md shadow-md" />
+          </div>
+        </div>
+      </section>
+
+      <ReviewSection />
+    </>
+  );
+}

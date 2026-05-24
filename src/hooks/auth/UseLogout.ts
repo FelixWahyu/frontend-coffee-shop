@@ -12,7 +12,7 @@ export const useNavbar = () => {
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     setIsAuth(!!token);
-  });
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
