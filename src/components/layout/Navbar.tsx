@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Logo from "@/public/assets/logo/brand-3.jpg";
-import Link from "next/link";
 import { Search, Menu, ShoppingBag, X } from "lucide-react";
 import Button from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/constants/navLinks";
 import NavbarLinks from "@/components/ui/nav-links/navbar-links";
+import MobileNav from "@/components/ui/nav-links/mobile-nav";
+import NavbarAuth from "@/components/ui/nav-links/navbar-auth";
 import { useNavbar } from "@/hooks/auth/UseLogout";
 
 export default function Navbar() {
@@ -40,40 +41,15 @@ export default function Navbar() {
               <ShoppingBag size={18} />
             </Button>
           </div>
-          {isAuth ? (
-            <Button onClick={handleLogout} className="text-white hidden cursor-pointer md:flex bg-red-500 px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300">
-              Sign Out
-            </Button>
-          ) : (
-            <Link href={"/login"} className="text-white hidden md:flex bg-[#C67C4E] px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-[#C67C4E]/70 transition-colors duration-300">
-              Sign In
-            </Link>
-          )}
+          <NavbarAuth isAuth={isAuth} onLogout={handleLogout} atributes="hidden md:flex" />
         </div>
       </div>
 
       {isMenuOpen && (
         <div className="bg-white md:hidden flex flex-col gap-4 px-4 py-2 rounded-xl shadow-md mt-2">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={closeMenu}
-              className={`${pathName === link.href ? "text-[#C67C4E] bg-[#30261C]/10" : "text-gray-800"} px-3 py-1 rounded-lg font-lato font-semibold hover:bg-[#30261C]/10 hover:text-[#C67C4E] transition-all duration-300`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          <MobileNav pathName={pathName} links={navLinks} closeMenu={closeMenu} />
           <div className="mt-8 p-4 border-t border-gray-500">
-            {isAuth ? (
-              <Button onClick={handleLogout} className="text-white bg-red-500 cursor-pointer px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300">
-                Sign Out
-              </Button>
-            ) : (
-              <Link href={"/login"} className="text-white bg-[#C67C4E] px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-[#C67C4E]/70 transition-colors duration-300">
-                Sign In
-              </Link>
-            )}
+            <NavbarAuth isAuth={isAuth} onLogout={handleLogout} />
           </div>
         </div>
       )}
