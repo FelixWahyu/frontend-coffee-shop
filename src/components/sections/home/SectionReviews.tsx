@@ -4,27 +4,21 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import ReviewCard from "@/components/cards/ReviewCard";
+import LoadingSkeleton from "../../ui/loading";
+import EdgeUi from "../../ui/edge-ui";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
 import useReview from "@/hooks/reviews/UseReview";
 
 export default function ReviewSection() {
-  const { ReviewData, isLoading, prevRef, nextRef } = useReview();
+  const { reviewData, isLoading, prevRef, nextRef } = useReview();
 
   if (isLoading) {
-    return (
-      <div className="my-6">
-        <p className="text-gray-500 font-semibold font-lato">Loading...</p>
-      </div>
-    );
+    return <LoadingSkeleton />;
   }
 
-  if (ReviewData.length === 0) {
-    return (
-      <div className="my-6">
-        <p className="text-gray-500 font-semibold font-lato">Data review belum tersedia.</p>
-      </div>
-    );
+  if (reviewData.length === 0) {
+    return <EdgeUi message="Data review belum tersedia." />;
   }
 
   return (
@@ -56,7 +50,7 @@ export default function ReviewSection() {
                 swiper.params.navigation.nextEl = nextRef.current;
               }
             }}
-            loop={ReviewData.length > 3}
+            loop={reviewData.length > 3}
             grabCursor={true}
             pagination={{
               dynamicBullets: true,
@@ -73,7 +67,7 @@ export default function ReviewSection() {
               },
             }}
           >
-            {ReviewData.map((review) => (
+            {reviewData.map((review) => (
               <SwiperSlide key={review.id}>
                 <ReviewCard name={review.user.name} email={review.user.contacts[0]?.email} rating={review.rating} comment={review.comment} />
               </SwiperSlide>

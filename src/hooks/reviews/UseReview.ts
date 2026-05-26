@@ -6,7 +6,7 @@ export default function useReview() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const [ReviewData, setReviewData] = useState<Review[]>([]);
+  const [reviewData, setReviewData] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -24,5 +24,5 @@ export default function useReview() {
     fetchData();
   }, []);
 
-  return { ReviewData, isLoading, prevRef, nextRef };
+  return { reviewData, isLoading, prevRef, nextRef };
 }
