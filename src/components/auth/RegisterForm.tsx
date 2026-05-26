@@ -125,7 +125,7 @@ export default function Register() {
           <Image src={CoffeeBg} alt="coffee-bean" fill className="object-cover" priority />
           <div className="absolute inset-0 bg-[#30261C]/70"></div>
           <div className="absolute top-1/2 left-14 text-center z-10 text-white">
-            <h2 className="mb-4 text-4xl font-bold font-playfair">Welcome Back</h2>
+            <h2 className="mb-4 text-4xl font-bold font-playfair">Daftarkan Akun Anda</h2>
 
             <p className="max-w-md text-sm leading-relaxed text-gray-200">Nikmati pengalaman kopi terbaik dengan suasana hangat dan modern.</p>
           </div>
