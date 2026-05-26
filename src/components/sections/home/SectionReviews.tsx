@@ -5,7 +5,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import ReviewCard from "@/components/cards/ReviewCard";
-import { ReviewApi } from "@/constants/profile";
+// import { ReviewApi } from "@/constants/profile";
+import { ReviewService } from "@/services/home/reviewService";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
 import { Review } from "@/types/review";
@@ -20,7 +21,7 @@ export default function ReviewSection() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await ReviewApi.getReviews();
+        const result = await ReviewService.getReviews();
         setReviewData(result.data);
       } catch (error) {
         console.error("Error fetching products:", error);
