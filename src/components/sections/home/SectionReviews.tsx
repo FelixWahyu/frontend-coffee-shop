@@ -1,37 +1,15 @@
-import { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import ReviewCard from "@/components/cards/ReviewCard";
-// import { ReviewApi } from "@/constants/profile";
-import { ReviewService } from "@/services/home/reviewService";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
-import { Review } from "@/types/review";
+import useReview from "@/hooks/reviews/UseReview";
 
 export default function ReviewSection() {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-
-  const [ReviewData, setReviewData] = useState<Review[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await ReviewService.getReviews();
-        setReviewData(result.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { ReviewData, isLoading, prevRef, nextRef } = useReview();
 
   if (isLoading) {
     return (
