@@ -5,19 +5,12 @@ import Link from "next/link";
 import { ProductApi } from "@/constants/products";
 import { SearchParams } from "@/components/products/SearchBox";
 import { Product } from "../../../types/product";
-import { CategoriesSliders } from "@/components/sections/CategoriesSliders";
-import { Category } from "@/src/types/categories";
+import { CategoriesSliders } from "@/components/sections/product/CategoriesSliders";
+import { Category } from "@/types/categories";
 import { FeaturesService } from "@/services/featureService";
 import ProductCard from "@/components/cards/ProductCard";
 
-// const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api";
-
-export default async function productPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  // const products = ProductsData;
+export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const params = await searchParams;
   const search = typeof params.search === "string" ? params.search : "";
 
@@ -40,13 +33,7 @@ export default async function productPage({
   return (
     <>
       <section className="relative h-screen bg-gray-800 flex items-center justify-center">
-        <Image
-          src={HeroImage}
-          alt="hero-background"
-          fill
-          priority
-          className="object-cover"
-        />
+        <Image src={HeroImage} alt="hero-background" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-linear-to-t from-[#30261C] to-[#30261C]/10"></div>
         <div className="relative z-10 container mx-auto p-4 mt-8 md:mt-10">
           <div className="text-white max-w-2xl mx-auto flex flex-col items-start md:items-center md:justify-center px-4 md:px-0 text-left md:text-center">
@@ -54,18 +41,12 @@ export default async function productPage({
               <p className="text-lg font-lato">Coffee Shop Menus</p>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight italic font-playfair">
-              Our Menus And{" "}
-              <span className="not-italic text-[#C67C4E]">Coffee</span>
+              Our Menus And <span className="not-italic text-[#C67C4E]">Coffee</span>
             </h1>
             <div className="flex flex-col items-start md:items-center md:justify-center">
-              <p className="text-lg text-gray-200 font-lato">
-                Dibuat dengan cinta dan biji kopi pilihan dari berbagai penjuru
-                dunia, disajikan dengan penuh kehangatan.
-              </p>
+              <p className="text-lg text-gray-200 font-lato">Dibuat dengan cinta dan biji kopi pilihan dari berbagai penjuru dunia, disajikan dengan penuh kehangatan.</p>
               <div className="mt-10">
-                <button className="px-6 py-1.5 font-lato border-none rounded-2xl bg-[#C67C4E] hover:bg-[#C67C4E]/70 transition-colors cursor-pointer duration-300">
-                  Order Now
-                </button>
+                <button className="px-6 py-1.5 font-lato border-none rounded-2xl bg-[#C67C4E] hover:bg-[#C67C4E]/70 transition-colors cursor-pointer duration-300">Order Now</button>
               </div>
             </div>
           </div>
@@ -77,31 +58,18 @@ export default async function productPage({
       <section className="container mx-auto px-6 py-14">
         <div className="mb-10">
           <h1 className="text-4xl font-bold font-playfair mb-3">Our Menus</h1>
-          <p className="text-md font-lato">
-            This is the our menus we offer you.
-          </p>
+          <p className="text-md font-lato">This is the our menus we offer you.</p>
           <SearchParams />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-center">
           {products.length === 0 && (
             <div className="my-6">
-              <p className="text-gray-500 font-semibold">
-                Product tidak ditemukan.
-              </p>
+              <p className="text-gray-500 font-semibold">Product tidak ditemukan.</p>
             </div>
           )}
           {products.map((product) => (
-            <Link
-              key={product.id}
-              href={`/products/${product.id}`}
-              className="block"
-            >
-              <ProductCard
-                title={product.name}
-                image={ProductImg}
-                price={product.price}
-                category={product.category?.name}
-              />
+            <Link key={product.id} href={`/products/${product.id}`} className="block">
+              <ProductCard title={product.name} image={ProductImg} price={product.price} category={product.category?.name} />
             </Link>
           ))}
         </div>

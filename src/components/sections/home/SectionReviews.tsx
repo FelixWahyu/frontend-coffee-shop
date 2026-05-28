@@ -9,9 +9,22 @@ import EdgeUi from "../../ui/edge-ui";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
 import useReview from "@/hooks/reviews/UseReview";
+import getSliderAtributes from "@/constants/slider";
 
 export default function ReviewSection() {
   const { reviewData, isLoading, prevRef, nextRef } = useReview();
+  const { swiperAutoPlay, swiperPagination, swiperBreakPoints } = getSliderAtributes({
+    breakpoints: [
+      {
+        width: 640,
+        slidesPerView: 2,
+      },
+      {
+        width: 768,
+        slidesPerView: 3,
+      },
+    ],
+  });
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -40,10 +53,7 @@ export default function ReviewSection() {
           <Swiper
             className="review-swiper"
             modules={[Navigation, Autoplay, Pagination]}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
+            autoplay={swiperAutoPlay}
             onBeforeInit={(swiper: SwiperType) => {
               if (typeof swiper.params.navigation !== "boolean" && swiper.params.navigation) {
                 swiper.params.navigation.prevEl = prevRef.current;
@@ -52,20 +62,10 @@ export default function ReviewSection() {
             }}
             loop={reviewData.length > 3}
             grabCursor={true}
-            pagination={{
-              dynamicBullets: true,
-              clickable: true,
-            }}
+            pagination={swiperPagination}
             slidesPerView={1}
             spaceBetween={20}
-            breakpoints={{
-              640: {
-                slidesPerView: 2,
-              },
-              768: {
-                slidesPerView: 3,
-              },
-            }}
+            breakpoints={swiperBreakPoints}
           >
             {reviewData.map((review) => (
               <SwiperSlide key={review.id}>
