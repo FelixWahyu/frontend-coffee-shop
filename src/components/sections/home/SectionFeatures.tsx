@@ -1,23 +1,36 @@
-import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import FeaturesImg from "@/public/assets/image/expresso.jpg";
 import type { Swiper as SwiperType } from "swiper";
-import { Category } from "@/types/categories";
 import FeatureCard from "@/components/cards/FeatureCard";
+import EdgeUi from "../../ui/edge-ui";
+import LoadingSkeleton from "../../ui/loading";
+import useFeatures from "@/hooks/featuresCategory/UseFeature";
+import getSliderAtributes from "@/constants/slider";
 
-export default function FeaturesSection({ features }: { features: Category[] }) {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+export default function FeaturesSection() {
+  const { categories, loading, prevRef, nextRef } = useFeatures();
+  const { swiperAutoPlay, swiperPagination, swiperBreakPoints } = getSliderAtributes({
+    breakpoints: [
+      {
+        width: 640,
+        slidesPerView: 2,
+      },
+      {
+        width: 768,
+        slidesPerView: 3,
+      },
+      {
+        width: 1024,
+        slidesPerView: 4,
+      },
+    ],
+  });
 
-  if (features.length === 0) {
-    return (
-      <div className="m-6">
-        <p className="text-gray-500 font-semibold font-lato">Data features belum tersedia.</p>
-      </div>
-    );
+  if (loading) {
+    return <LoadingSkeleton />;
   }
 
   return (
@@ -28,45 +41,25 @@ export default function FeaturesSection({ features }: { features: Category[] }) 
       </div>
 
       <div className="container mx-auto">
-        {features.length === 0 && (
-          <div className="my-6">
-            <p className="text-gray-500 font-semibold">Data Features belum di tambahkan.</p>
-          </div>
-        )}
+        {categories.length === 0 && <EdgeUi message="Data features belum ditambahkan." />}
         <Swiper
           className="features-swiper"
           modules={[Pagination, Autoplay]}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
+          autoplay={swiperAutoPlay}
           onBeforeInit={(swiper: SwiperType) => {
             if (typeof swiper.params.navigation !== "boolean" && swiper.params.navigation) {
               swiper.params.navigation.prevEl = prevRef.current;
               swiper.params.navigation.nextEl = nextRef.current;
             }
           }}
-          loop={features.length > 4}
+          loop={categories.length > 4}
           grabCursor={true}
           slidesPerView={1}
           spaceBetween={20}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-            },
-            768: {
-              slidesPerView: 3,
-            },
-            1024: {
-              slidesPerView: 4,
-            },
-          }}
-          pagination={{
-            clickable: true,
-            dynamicBullets: true,
-          }}
+          breakpoints={swiperBreakPoints}
+          pagination={swiperPagination}
         >
-          {features.map((feature) => (
+          {categories.map((feature) => (
             <SwiperSlide key={feature.id}>
               <FeatureCard title={feature.name} description={feature.description} image={FeaturesImg} />
             </SwiperSlide>

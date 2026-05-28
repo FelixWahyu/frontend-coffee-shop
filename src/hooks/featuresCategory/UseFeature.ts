@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Category } from "@/types/categories";
-import { FeaturesService } from "@/services/featureService";
+import { FeaturesService } from "@/services/home/featureService";
 
 export default function useFeatures() {
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,5 +27,5 @@ export default function useFeatures() {
     fetchCategories();
   }, []);
 
-  return { categories, loading };
+  return { categories, loading, prevRef, nextRef };
 }

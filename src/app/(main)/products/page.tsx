@@ -7,7 +7,7 @@ import { SearchParams } from "@/components/products/SearchBox";
 import { Product } from "../../../types/product";
 import { CategoriesSliders } from "@/components/sections/product/CategoriesSliders";
 import { Category } from "@/types/categories";
-import { FeaturesService } from "@/services/featureService";
+import { FeaturesService } from "@/src/services/home/featureService";
 import ProductCard from "@/components/cards/ProductCard";
 
 export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
