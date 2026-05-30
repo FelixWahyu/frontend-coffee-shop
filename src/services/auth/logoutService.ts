@@ -1,12 +1,9 @@
 import { BASE_URL } from "@/lib/api";
 
-export default async function LogoutService(token: string) {
+export default async function LogoutService() {
   const req = await fetch(`${BASE_URL}/users/logout`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: "include",
   });
 
   const res = await req.json();

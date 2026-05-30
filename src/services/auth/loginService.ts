@@ -7,6 +7,7 @@ export default async function LoginService(data: LoginRequest) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(data),
   });
 

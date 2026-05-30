@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import getCurrrentUser from "@/services/auth/authUser";
 import LogoutService from "@/services/auth/logoutService";
 
 export const useNavbar = () => {
@@ -10,8 +11,19 @@ export const useNavbar = () => {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    setIsAuth(!!token);
+    const getUser = async () => {
+      try {
+        const user = await getCurrrentUser();
+        setIsAuth(!!user);
+      } catch (error) {
+        setIsAuth(false);
+        if (error instanceof Error) {
+          console.error(error);
+        }
+      }
+    };
+
+    getUser();
   }, []);
 
   const toggleMenu = () => {
@@ -24,15 +36,9 @@ export const useNavbar = () => {
 
   const handleLogout = async () => {
     try {
-      const token = sessionStorage.getItem("token");
-      if (!token) return;
+      await LogoutService();
 
-      await LogoutService(token);
-
-      sessionStorage.removeItem("token");
       setIsAuth(false);
-      router.replace("/");
-
       router.replace("/");
     } catch (error) {
       if (error instanceof Error) {

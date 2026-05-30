@@ -7,7 +7,7 @@ import { LoginRequest } from "@/types/login";
 import { ValidationLogin } from "@/validations/auth/loginValidation";
 import { ErrorMsg } from "@/types/errorMessage";
 
-export const UseLogin = () => {
+export const useLogin = () => {
   const router = useRouter();
   const [form, setForm] = useState<LoginRequest>({
     username: "",
@@ -50,9 +50,7 @@ export const UseLogin = () => {
       setLoading(true);
       setErrors({});
 
-      const response = await LoginService(form);
-
-      sessionStorage.setItem("token", response.data.token);
+      await LoginService(form);
 
       setForm({
         username: "",

@@ -9,10 +9,10 @@ import CoffeeBg from "@/public/assets/image/biji-coffe-cup.jpg";
 import Link from "next/link";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
-import { UseLogin } from "@/hooks/auth/UseLogin";
+import { useLogin } from "@/hooks/auth/UseLogin";
 
 export default function Login() {
-  const { form, loading, errors, showPassword, handleChange, handleTogglePassword, handleSubmit } = UseLogin();
+  const { form, loading, errors, showPassword, handleChange, handleTogglePassword, handleSubmit } = useLogin();
 
   return (
     <section className="px-4 py-10">
