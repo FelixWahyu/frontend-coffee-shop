@@ -1,26 +1,43 @@
 "use client";
 
-import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import ProductImg from "@/public/assets/image/expresso.jpg";
 import Image from "next/image";
-import { Category } from "@/types/categories";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
+import LoadingSkeleton from "../../ui/loading";
+import EdgeUi from "../../ui/edge-ui";
+import useFeatures from "@/hooks/featuresCategory/UseFeature";
+import getSliderAtributes from "@/constants/slider";
 
-export const CategoriesSliders = ({ categories }: { categories: Category[] }) => {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+export const CategoriesSliders = () => {
+  const { categories, loading, prevRef, nextRef } = useFeatures();
+  const { swiperAutoPlay, swiperBreakPoints } = getSliderAtributes({
+    breakpoints: [
+      {
+        width: 640,
+        slidesPerView: 3,
+      },
+      {
+        width: 768,
+        slidesPerView: 4,
+      },
+      {
+        width: 1024,
+        slidesPerView: 5,
+      },
+    ],
+  });
+
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
 
   if (categories.length === 0) {
-    return (
-      <div className="my-6">
-        <p className="text-gray-500 font-semibold font-lato">Data category belum tersedia.</p>
-      </div>
-    );
+    return <EdgeUi message="Data kategori belum tersedia." />;
   }
 
   return (
@@ -35,10 +52,7 @@ export const CategoriesSliders = ({ categories }: { categories: Category[] }) =>
 
         <Swiper
           modules={[Navigation, Autoplay]}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
+          autoplay={swiperAutoPlay}
           onBeforeInit={(swiper: SwiperType) => {
             if (typeof swiper.params.navigation !== "boolean" && swiper.params.navigation) {
               swiper.params.navigation.prevEl = prevRef.current;
@@ -49,17 +63,7 @@ export const CategoriesSliders = ({ categories }: { categories: Category[] }) =>
           grabCursor={true}
           slidesPerView={2}
           spaceBetween={20}
-          breakpoints={{
-            640: {
-              slidesPerView: 3,
-            },
-            768: {
-              slidesPerView: 4,
-            },
-            1024: {
-              slidesPerView: 5,
-            },
-          }}
+          breakpoints={swiperBreakPoints}
         >
           {categories.map((category) => (
             <SwiperSlide key={category.id}>

@@ -6,8 +6,6 @@ import { ProductApi } from "@/constants/products";
 import { SearchParams } from "@/components/products/SearchBox";
 import { Product } from "../../../types/product";
 import { CategoriesSliders } from "@/components/sections/product/CategoriesSliders";
-import { Category } from "@/types/categories";
-import { FeaturesService } from "@/src/services/home/featureService";
 import ProductCard from "@/components/cards/ProductCard";
 
 export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -15,13 +13,13 @@ export default async function productPage({ searchParams }: { searchParams: Prom
   const search = typeof params.search === "string" ? params.search : "";
 
   let products: Product[] = [];
-  let categoriesData: Category[] = [];
+  // let categoriesData: Category[] = [];
 
   try {
     const result = await ProductApi.getProducts({ search });
-    const categoryResult = await FeaturesService.getAllFeatures();
+    // const categoryResult = await FeaturesService.getAllFeatures();
 
-    categoriesData = categoryResult.data;
+    // categoriesData = categoryResult.data;
     products = result.data;
 
     // console.log(result);
@@ -53,7 +51,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
         </div>
       </section>
 
-      <CategoriesSliders categories={categoriesData} />
+      <CategoriesSliders />
 
       <section className="container mx-auto px-6 py-14">
         <div className="mb-10">
