@@ -2,28 +2,21 @@ import ProductImg from "@/public/assets/image/expresso.jpg";
 import HeroImage from "@/public/assets/image/biji-coffe-cup.jpg";
 import Image from "next/image";
 import Link from "next/link";
-import { ProductApi } from "@/constants/products";
+import { ProductService } from "@/services/products/products";
 import { SearchParams } from "@/components/products/SearchBox";
 import { Product } from "../../../types/product";
 import { CategoriesSliders } from "@/components/sections/product/CategoriesSliders";
 import ProductCard from "@/components/cards/ProductCard";
+// import useProducts from "@/hooks/products/UseProducts";
 
 export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const params = await searchParams;
   const search = typeof params.search === "string" ? params.search : "";
-
   let products: Product[] = [];
-  // let categoriesData: Category[] = [];
 
   try {
-    const result = await ProductApi.getProducts({ search });
-    // const categoryResult = await FeaturesService.getAllFeatures();
-
-    // categoriesData = categoryResult.data;
+    const result = await ProductService.getAllProducts({ search });
     products = result.data;
-
-    // console.log(result);
-    // return products;
   } catch (error) {
     console.error("Error fetching products:", error);
   }
@@ -67,7 +60,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
           )}
           {products.map((product) => (
             <Link key={product.id} href={`/products/${product.id}`} className="block">
-              <ProductCard title={product.name} image={ProductImg} price={product.price} category={product.category?.name} />
+              <ProductCard title={product.name} image={ProductImg} price={product.price.toLocaleString("id-ID")} category={product.category?.name} />
             </Link>
           ))}
         </div>

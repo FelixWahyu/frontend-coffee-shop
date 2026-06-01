@@ -1,4 +1,4 @@
-import { ProductApi, ProductsData } from "@/constants/products";
+import { ProductApi } from "@/constants/products";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import ProductImg from "@/public/assets/image/expresso.jpg";
@@ -8,7 +8,6 @@ export default async function DetailProduct({ params }: { params: Promise<{ slug
   const { slug } = await params;
   const getProductId = await ProductApi.getProductById(slug);
   const getProduct = getProductId.data;
-  // const getProduct = await ProductsData.find((product) => product.id === Number(slug));
   if (!getProduct) {
     console.log("product tidak ada.");
     notFound();

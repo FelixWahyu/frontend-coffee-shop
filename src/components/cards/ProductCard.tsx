@@ -4,7 +4,7 @@ import Card from "../ui/cards";
 interface ProductCardProps {
   title: string;
   image: ImageProps["src"];
-  price: number;
+  price: number | string;
   category?: string | null;
 }
 
