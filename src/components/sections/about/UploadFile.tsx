@@ -7,9 +7,31 @@ import Button from "../../ui/button";
 import FormGroup from "../../ui/form/form-group";
 import { useState, useEffect } from "react";
 
+interface ProductsProps {
+  name: string;
+}
+
+type ProductsFormError = Partial<ProductsProps>;
+
+const Validation = (value: ProductsFormError) => {
+  const errorsValidataion: ProductsFormError = {};
+
+  if (!value.name) {
+    errorsValidataion.name = "Nama product wajib diisi.";
+  } else if (value.name.trim().length < 3) {
+    errorsValidataion.name = "Nama minimal harus 3 karakter.";
+  }
+
+  return errorsValidataion;
+};
+
 export default function UploadFile() {
   const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string>("");
+  const [products, setProducts] = useState<ProductsProps>({
+    name: "",
+  });
+  const [error, setError] = useState<ProductsFormError>({});
+  const [errorFile, setErrorFile] = useState<string>("");
   const [preview, setPreview] = useState<string>("");
 
   const allowedTypes = ["image/png", "image/jpg", "image/jpeg"];
@@ -23,22 +45,35 @@ export default function UploadFile() {
     };
   }, [preview]);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const updateName = { ...products, [name]: value };
+    setProducts(updateName);
+
+    const validateName = Validation(updateName);
+
+    setError((prev) => ({
+      ...prev,
+      [name]: validateName[name as keyof ProductsProps],
+    }));
+  };
+
   const handleUploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
-    setError("");
+    setErrorFile("");
 
     if (!allowedTypes.includes(selectedFile.type)) {
       setFile(null);
       setPreview("");
-      setError("Tipe gambar hanya boleh PNG/JPG/JPEG");
+      setErrorFile("Tipe gambar hanya boleh PNG/JPG/JPEG");
       return;
     }
 
     if (selectedFile.size > maxSize) {
       setFile(null);
       setPreview("");
-      setError("Ukuran gambar maksimal 1 MB");
+      setErrorFile("Ukuran gambar maksimal 1 MB");
       return;
     }
 
@@ -51,14 +86,45 @@ export default function UploadFile() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError({});
+
+    const validate = Validation(products);
+
+    if (Object.keys(validate).length > 0) {
+      setError(validate);
+      return;
+    }
+
+    if (!file) {
+      setErrorFile("Silahkan pilih file gambar dahulu.");
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("name", products.name);
+    formData.append("image", file);
+
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    setProducts({ name: "" });
+    setFile(null);
+    setPreview("");
   };
   return (
     <section className="my-20 mx-auto max-w-md">
       <form action="" onSubmit={handleSubmit} encType="multipart/form-data">
         <FormGroup>
+          <Label htmlFor="name">Product Name</Label>
+          <TextInput type="text" id="name" className="bg-gray-50" name="name" onChange={handleChange} value={products.name} />
+          {error.name && <ErrorMessage message={error.name} />}
+        </FormGroup>
+        <FormGroup>
           <Label htmlFor="image">Upload file</Label>
           <TextInput type="file" id="image" className="bg-gray-50" name="image" accept="image/*" onChange={handleUploadFile} />
-          {error && <ErrorMessage message={error} />}
+          {errorFile && <ErrorMessage message={errorFile} />}
         </FormGroup>
         {preview && (
           <div className="mt-3">
