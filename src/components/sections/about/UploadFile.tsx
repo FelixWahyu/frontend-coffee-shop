@@ -6,6 +6,7 @@ import ErrorMessage from "../../ui/form/error";
 import Button from "../../ui/button";
 import FormGroup from "../../ui/form/form-group";
 import { useState, useEffect } from "react";
+import { BASE_URL } from "@/lib/api";
 
 interface ProductsProps {
   name: string;
@@ -19,7 +20,9 @@ const Validation = (value: ProductsFormError) => {
   if (!value.name) {
     errorsValidataion.name = "Nama product wajib diisi.";
   } else if (value.name.trim().length < 3) {
-    errorsValidataion.name = "Nama minimal harus 3 karakter.";
+    errorsValidataion.name = "Nama product minimal harus 3 karakter.";
+  } else if (value.name.trim().length > 20) {
+    errorsValidataion.name = "Nama product tidak boleh lebih dari 20 karakter.";
   }
 
   return errorsValidataion;
@@ -84,7 +87,7 @@ export default function UploadFile() {
     setPreview(previewURL);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError({});
 
@@ -105,16 +108,33 @@ export default function UploadFile() {
     formData.append("name", products.name);
     formData.append("image", file);
 
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
+    try {
+      const response = await fetch(`${BASE_URL}/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Gagal upload gambar.");
+      }
+
+      const result = await response.json();
+
+      console.log(result);
+
+      setProducts({ name: "" });
+      setFile(null);
+      setPreview("");
+    } catch (error) {
+      console.error(error);
     }
 
-    setProducts({ name: "" });
-    setFile(null);
-    setPreview("");
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
   };
   return (
-    <section className="my-20 mx-auto max-w-md">
+    <section className="my-20 mx-6 md:mx-auto max-w-md">
       <form action="" onSubmit={handleSubmit} encType="multipart/form-data">
         <FormGroup>
           <Label htmlFor="name">Product Name</Label>
