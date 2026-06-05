@@ -4,3 +4,8 @@ export interface ErrorMsg {
   password?: string;
   general?: string;
 }
+
+export interface ErrorCategory {
+  name?: string;
+  description?: string;
+}
