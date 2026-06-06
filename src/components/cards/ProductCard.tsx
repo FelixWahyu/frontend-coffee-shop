@@ -19,7 +19,7 @@ export default function ProductCard({ title, image, price, category }: ProductCa
         <h3 className="text-xl font-semibold">{title}</h3>
         <p className="text-md font-light">{category}</p>
         <div className="grid grid-cols-2 items-center justify-between mt-6">
-          <p className="text-md mt-4 font-semibold text-[#C67C4E]">Rp {price}</p>
+          <p className="text-md mt-4 font-semibold text-[#C67C4E]">{price}</p>
           <button className="bg-[#C67C4E] px-4 py-2 cursor-pointer text-slate-100 font-semibold rounded-lg shadow-sm hover:bg-[#C67C4E]/80">Add to Chart</button>
         </div>
       </div>

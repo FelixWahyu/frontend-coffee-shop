@@ -57,7 +57,7 @@ export const useLogin = () => {
         password: "",
       });
 
-      router.replace("/");
+      router.replace("/admin");
       //   console.log(response);
     } catch (error) {
       //   console.error(error);

@@ -6,6 +6,7 @@ import { SearchParams } from "@/components/products/SearchBox";
 import { Product } from "../../../types/product";
 import { CategoriesSliders } from "@/components/sections/product/CategoriesSliders";
 import ProductCard from "@/components/cards/ProductCard";
+import { formatCurrency } from "@/utils/formatCurrency";
 // import useProducts from "@/hooks/products/UseProducts";
 
 export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
@@ -38,7 +39,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
           )}
           {products.map((product) => (
             <Link key={product.id} href={`/products/${product.id}`} className="block">
-              <ProductCard title={product.name} image={ProductImg} price={product.price.toLocaleString("id-ID")} category={product.category?.name} />
+              <ProductCard title={product.name} image={ProductImg} price={formatCurrency(product.price)} category={product.category?.name} />
             </Link>
           ))}
         </div>
