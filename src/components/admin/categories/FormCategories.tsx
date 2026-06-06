@@ -68,7 +68,7 @@ export default function FormCategories() {
   return (
     <div className="p-6 rounded-md border-3 border-gray-900 max-w-lg shadow-[6px_6px_0px_#000000]/60 bg-white">
       <div className="mb-6 text-xl font-semibold tracking-wide text-gray-800">
-        <h2>Categories Management</h2>
+        <h2>Form Create Categories</h2>
       </div>
       <form action="" onSubmit={handleSubmit}>
         <FormGroup>
@@ -91,10 +91,10 @@ export default function FormCategories() {
 
         <Button
           type="submit"
-          className="flex items-center mt-4 cursor-pointer px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 border border-black rounded-md bg-white font-semibold hover:text-white hover:bg-blue-600 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+          className="flex items-center mt-4 cursor-pointer px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 border border-black rounded-md bg-gray-200 font-semibold hover:text-white hover:bg-blue-600 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
         >
           <Save className="w-5 h-5 mr-1" />
-          Save
+          Simpan
         </Button>
       </form>
     </div>

@@ -18,9 +18,9 @@ export default function AdminPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <StatCard title="Total Products" value="1,250" icon={<Package className="w-6 h-6" />} className="bg-yellow-400" />
-        <StatCard title="Total Users" value="340" icon={<Users className="w-6 h-6" />} className="bg-blue-500" />
-        <StatCard title="Total Orders" value="8,450" icon={<ShoppingCart className="w-6 h-6" />} className="bg-emerald-500" />
+        <StatCard title="Total Products" value="96" icon={<Package className="w-6 h-6" />} className="bg-yellow-400" />
+        <StatCard title="Total Users" value="135" icon={<Users className="w-6 h-6" />} className="bg-blue-500" />
+        <StatCard title="Total Orders" value="450" icon={<ShoppingCart className="w-6 h-6" />} className="bg-emerald-500" />
       </div>
     </div>
   );
