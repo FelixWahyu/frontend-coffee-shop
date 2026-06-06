@@ -5,11 +5,17 @@ import { ArrowLeft, LayoutGrid, Tag, Boxes, Archive } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 
-export default function SidebarAdmin() {
+interface SidebarAdminProps {
+  isOpen: boolean;
+}
+
+export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
   const pathName = usePathname();
 
   return (
-    <aside className="w-64 bg-white text-gray-900 p-6 hidden md:flex flex-col border-r border-gray-900">
+    <aside
+      className={`${isOpen ? "md:w-64 md:p-6" : "md:w-0 md:p-0"} fixed top-0 left-0 p-4 z-50 h-screen transition-all duration-300 overflow-hidden bg-gray-100 text-gray-900 md:translate-x-0 md:relative ${isOpen ? "translate-x-0" : "-translate-x-full"} flex flex-col`}
+    >
       <div className="mb-10 flex flex-col items-center justify-center gap-2">
         <div className="w-18 h-18 p-0.5 flex items-center justify-center bg-white rounded-full border border-black shadow-[3px_3px_0px_#000000]/50">
           <Image src="/assets/logo/brand-3.jpg" alt="Logo Cafe" width={64} height={64} className="rounded-full object-cover" />
@@ -50,7 +56,7 @@ export default function SidebarAdmin() {
           </Link>
         </div>
       </nav>
-      <div className="mt-auto border-t border-gray-700 pt-3">
+      <div className="mt-auto">
         <Link
           href="/"
           className="text-md text-gray-900 border border-black px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 hover:text-white hover:bg-gray-900 hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all flex items-center justify-center gap-2"

@@ -6,12 +6,12 @@ export default function AdminPage() {
   const currentDate = new Date();
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col md:flex-row justify-center md:justify-between items-start md:items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
           <p className="text-gray-500 mt-1">Welcome to the admin dashboard.</p>
         </div>
-        <div className="text-right">
+        <div className="text-left mt-3 md:mt-0 md:text-right">
           <p className="text-lg font-semibold text-gray-800">{formatDate(currentDate)}</p>
           <p className="text-sm text-gray-500">Todays Date</p>
         </div>
