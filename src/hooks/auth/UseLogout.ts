@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import getCurrrentUser from "@/services/auth/authUser";
 import LogoutService from "@/services/auth/logoutService";
+import { UserResponse } from "@/types/users";
 
 export const useNavbar = () => {
   const router = useRouter();
+  const [users, setUsers] = useState<UserResponse | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
 
@@ -14,9 +16,16 @@ export const useNavbar = () => {
     const getUser = async () => {
       try {
         const user = await getCurrrentUser();
-        setIsAuth(!!user);
+        // console.log(user);
+        if (!user) {
+          setIsAuth(false);
+          return;
+        }
+        setUsers(user.data);
+        setIsAuth(true);
       } catch (error) {
         setIsAuth(false);
+        setUsers(null);
         if (error instanceof Error) {
           console.error(error);
         }
@@ -49,6 +58,7 @@ export const useNavbar = () => {
 
   return {
     isMenuOpen,
+    users,
     isAuth,
     toggleMenu,
     closeMenu,

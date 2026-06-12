@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { ArrowLeft, LayoutGrid, Tag, Boxes, Archive } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useNavbar } from "@/hooks/auth/UseLogout";
 import Image from "next/image";
+import Button from "@/components/ui/button";
 
 interface SidebarAdminProps {
   isOpen: boolean;
@@ -11,6 +13,7 @@ interface SidebarAdminProps {
 
 export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
   const pathName = usePathname();
+  const { isAuth, handleLogout } = useNavbar();
 
   return (
     <aside
@@ -57,6 +60,11 @@ export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
         </div>
       </nav>
       <div className="mt-auto">
+        {isAuth && (
+          <Button onClick={handleLogout} className={`text-white bg-red-500 cursor-pointer px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300 `}>
+            Sign Out
+          </Button>
+        )}
         <Link
           href="/"
           className="text-md text-gray-900 border border-black px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 hover:text-white hover:bg-gray-900 hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all flex items-center justify-center gap-2"
