@@ -3,7 +3,7 @@ import Card from "../ui/cards";
 
 interface FeatureCardProps {
   title: string;
-  description: string;
+  description?: string | null;
   image: ImageProps["src"];
 }
 
