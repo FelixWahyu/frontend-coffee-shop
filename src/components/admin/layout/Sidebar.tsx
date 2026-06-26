@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, LayoutGrid, Tag, Boxes, Archive } from "lucide-react";
+import { ArrowLeft, LayoutGrid, Tag, Boxes, Archive, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useNavbar } from "@/hooks/auth/UseLogout";
 import Image from "next/image";
@@ -17,16 +17,16 @@ export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
 
   return (
     <aside
-      className={`${isOpen ? "md:w-64 md:p-6" : "md:w-0 md:p-0"} fixed top-0 left-0 p-4 z-50 h-screen transition-all duration-300 overflow-hidden bg-gray-100 text-gray-900 md:translate-x-0 md:relative ${isOpen ? "translate-x-0" : "-translate-x-full"} flex flex-col`}
+      className={`fixed md:relative top-0 left-0 z-50 h-screen md:h-full p-4 transition-all duration-300 bg-gray-100 text-gray-900 flex flex-col min-w-0 overflow-hidden ${isOpen ? "md:w-64" : "md:w-0 md:p-0"} ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
     >
-      <div className="mb-10 flex flex-col items-center justify-center gap-2">
+      <div className="shrink-0 mb-6 flex flex-col items-center justify-center gap-2">
         <div className="w-18 h-18 p-0.5 flex items-center justify-center bg-white rounded-full border border-black shadow-[3px_3px_0px_#000000]/50">
           <Image src="/assets/logo/brand-3.jpg" alt="Logo Cafe" width={64} height={64} className="rounded-full object-cover" />
         </div>
         <h2 className="text-xl font-bold uppercase tracking-wider text-center">Cafe Admin</h2>
         <p className="text-xs text-gray-500 text-center">Management System</p>
       </div>
-      <nav className="flex flex-col">
+      <nav className="flex-1">
         <Link
           href="/admin"
           className={`flex items-center gap-2 ${pathName === "/admin" ? "bg-gray-900 text-white translate-y-1 translate-x-1 shadow-none" : "hover:bg-gray-900 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none"} shadow-[4px_4px_0px_#000000]/50 border border-black px-4 py-1.5 transition-all`}
@@ -34,7 +34,7 @@ export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
           <LayoutGrid className="w-5 h-5" />
           Dashboard
         </Link>
-        <div className="mt-8 px-4 mb-2 font-semibold text-gray-500/90 text-md tracking-wider">Management</div>
+        <div className="mt-6 px-4 mb-2 font-semibold text-gray-500/90 text-md tracking-wider">Management</div>
         <div className="flex flex-col gap-2">
           <Link
             href="/admin/categories"
@@ -52,24 +52,28 @@ export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
           </Link>
           <Link
             href="/admin/blog"
-            className={`flex items-center gap-2 ${pathName === "/admin/blog" ? "bg-gray-900 text-white translate-y-1 translate-x-1 shadow-none" : "hover:bg-gray-900 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none"} shadow-[4px_4px_0px_#000000]/50 border border-black px-4 py-1.5 transition-all`}
+            className={`flex items-center gap-2 ${pathName.startsWith("/admin/blog") ? "bg-gray-900 text-white translate-y-1 translate-x-1 shadow-none" : "hover:bg-gray-900 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none"} shadow-[4px_4px_0px_#000000]/50 border border-black px-4 py-1.5 transition-all`}
           >
             <Archive className="w-5 h-5" />
             Manage Blog
           </Link>
         </div>
       </nav>
-      <div className="mt-auto">
+      <div className="shrink-0 space-y-2">
         {isAuth && (
-          <Button onClick={handleLogout} className={`text-white bg-red-500 cursor-pointer px-4 py-1.5 font-lato font-semibold rounded-xl shadow-sm hover:bg-red-600 transition-colors duration-300 `}>
+          <Button
+            onClick={handleLogout}
+            className="flex items-center justify-center w-full gap-2 text-md text-gray-900 bg-red-50 border border-black cursor-pointer px-4 py-1.5 font-lato shadow-[4px_4px_0px_#000000]/50 hover:bg-red-700 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all"
+          >
+            <LogOut className="w-5 h-5" />
             Sign Out
           </Button>
         )}
         <Link
           href="/"
-          className="text-md text-gray-900 border border-black px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 hover:text-white hover:bg-gray-900 hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all flex items-center justify-center gap-2"
+          className="flex items-center justify-center gap-2 cursor-pointer text-md text-gray-900 border border-black px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 hover:text-white hover:bg-gray-900 hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all"
         >
-          <ArrowLeft className="w-5 h-5 mr-1" />
+          <ArrowLeft className="w-5 h-5" />
           Back to Website
         </Link>
       </div>

@@ -10,7 +10,7 @@ export default function HeaderAdmin({ toggleSidebar }: HeaderAdminProps) {
   const { isAuth, users } = useNavbar();
 
   return (
-    <div className="bg-white px-6 py-3 border-b border-gray-900">
+    <div className="bg-white px-6 py-3 sticky top-0 left-0 right-0 border-b border-gray-900">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="border-r border-gray-600 pr-4">
