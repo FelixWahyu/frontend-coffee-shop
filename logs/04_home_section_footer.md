@@ -1,7 +1,7 @@
-# Home Section & Footer Redesign
+# Home Section, Footer & Login Redesign
 
 **Tanggal:** 26 Juni 2026
-**Tujuan:** Merapikan tampilan Why Choose Us section, menambah CTA banner, dan redesign footer dengan tampilan modern dan konsisten
+**Tujuan:** Merapikan tampilan Why Choose Us section, menambah CTA banner, redesign footer, dan redesign halaman login full-screen modern
 
 ## File yang Dibuat
 
@@ -12,6 +12,8 @@
 - `src/components/sections/home/SectionWhyUs.tsx` — Perbaikan layout, konten, dan visual stats
 - `src/components/home/homePage.tsx` — Menambahkan `<CtaSection />` setelah `ReviewSection`
 - `src/components/layout/Footer.tsx` — Redesign total footer dengan tampilan modern
+- `src/app/(auth)/layout.tsx` — Disederhanakan untuk full-screen layout
+- `src/components/auth/LoginForm.tsx` — Redesign total halaman login
 
 ---
 
@@ -95,7 +97,38 @@ Bottom bar tetap `text-sm` karena bersifat sekunder/legal.
 
 ---
 
-## Catatan
+## 4. Login Page Redesign
+
+### Tujuan
+Membuat halaman login full-screen (tanpa padding/page margin) dengan tampilan modern, tetap konsisten dengan warna dan font existing.
+
+### Layout
+- **Grid:** `min-h-screen` dengan `md:grid-cols-2` — full viewport
+- **AuthLayout:** Wrapper flex centering dihapus, menjadi pass-through agar form mengatur layout sendiri
+
+### Kolom Kiri — Image
+- Image `biji-coffe-cup.jpg` full height dengan `object-cover`
+- Overlay: `bg-linear-to-r from-[#30261C]/80 to-[#30261C]/20` — lebih modern dari sebelumnya (`bg-[#30261C]/70`)
+- Teks overlay: `absolute inset-0 flex items-center justify-center` — center sempurna di tengah image
+
+### Kolom Kanan — Form
+- Background putih penuh, `flex items-center justify-center`
+- Max width form: `max-w-sm`
+- Input styling:
+  - `bg-gray-50 border border-gray-200`
+  - Focus: `border-[#C67C4E] ring-2 ring-[#C67C4E]/20`
+  - Border radius: `rounded-xl`
+- **Ikon dalam input:**
+  - Username: icon `User` (lucide-react) absolute left, `pl-10` pada input
+  - Password: icon `Lock` (lucide-react) absolute left, `pl-10` pada input (eye toggle tetap di kanan)
+- **Lupa Password?** — Link baru di bawah input password, rata kanan, warna `#C67C4E`, `href="/forgot-password"`
+- Tombol Login: `rounded-xl` dengan `hover:shadow-md`
+
+### Link
+- **Lupa Password:** `/forgot-password` (placeholder page, perlu dibuat)
+- **Daftar:** `/register` — tetap sama
+
+---
 
 - `lucide-react` sudah terinstall (digunakan juga di section lain)
 - Tidak ada instalasi package baru
