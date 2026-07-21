@@ -1,4 +1,3 @@
-import ProductImg from "@/public/assets/image/expresso.jpg";
 import Link from "next/link";
 import HeroSection from "@/components/sections/product/SectionHero";
 import { ProductService } from "@/services/products/products";
@@ -39,7 +38,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
           )}
           {products.map((product) => (
             <Link key={product.id} href={`/products/${product.id}`} className="block">
-              <ProductCard title={product.name} image={ProductImg} price={formatCurrency(product.price)} category={product.category?.name} />
+              <ProductCard title={product.name} price={formatCurrency(product.price)} category={product.category?.name} />
             </Link>
           ))}
         </div>

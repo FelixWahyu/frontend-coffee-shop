@@ -4,9 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import ProductImg from "@/public/assets/image/expresso.jpg";
-import Image from "next/image";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Coffee } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
 import LoadingSkeleton from "../../ui/loading";
 import EdgeUi from "../../ui/edge-ui";
@@ -67,17 +65,11 @@ export const CategoriesSliders = () => {
         >
           {categories.map((category) => (
             <SwiperSlide key={category.id}>
-              <div className="flex flex-col items-center gap-4 group cursor-pointer">
-                <div className="aspect-square overflow-hidden relative w-36 h-36 rounded-full">
-                  <Image
-                    src={ProductImg}
-                    alt={category.name}
-                    fill
-                    sizes="(max-width: 640px) 50vw,(max-width: 768px) 33vw,(max-width: 1024px) 25vw,20vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-300 opacity-100 group-hover:opacity-80"
-                  />
+              <div className="flex flex-col py-4 items-center gap-4 group cursor-pointer">
+                <div className="aspect-square w-36 h-36 rounded-full bg-[#FAF7F2] border border-stone-200/50 shadow-sm flex items-center justify-center text-[#C67C4E] group-hover:bg-[#F5EFE6] group-hover:scale-105 transition-all duration-300">
+                  <Coffee className="w-14 h-14" />
                 </div>
-                <h3 className="text-center font-semibold font-playfair text-lg">{category.name}</h3>
+                <h3 className="text-center font-bold font-playfair text-stone-800 text-lg group-hover:text-[#C67C4E] transition-colors">{category.name}</h3>
               </div>
             </SwiperSlide>
           ))}

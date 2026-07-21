@@ -1,26 +1,24 @@
-import Image, { ImageProps } from "next/image";
 import Card from "../ui/cards";
+import { Coffee } from "lucide-react";
 
 interface ProductCardProps {
   title: string;
-  image: ImageProps["src"];
   price: number | string;
   category?: string | null;
 }
 
-export default function ProductCard({ title, image, price, category }: ProductCardProps) {
+export default function ProductCard({ title, price, category }: ProductCardProps) {
   return (
-    <Card className="cursor-pointer p-2 bg-[#F1F0EE]">
-      <div className="relative aspect-square bg-muted overflow-hidden rounded-lg">
-        <Image src={image} alt={title} fill className="object-cover opacity-100 transition-all duration-500 group-hover:opacity-80 group-hover:scale-105" />
-        <div className="absolute inset-0 opcaity-100 transition-all duration-300 group-hover:opacity-80"></div>
+    <Card className="cursor-pointer p-3 bg-[#FAF7F2] border border-stone-200/50 hover:border-[#C67C4E]/40 hover:shadow-lg transition-all group duration-300 rounded-2xl">
+      <div className="relative aspect-square bg-[#F5EFE6] overflow-hidden rounded-xl flex items-center justify-center text-[#C67C4E]">
+        <Coffee className="w-16 h-16 transition-transform duration-500 group-hover:scale-110" />
       </div>
       <div className="mt-4">
-        <h3 className="text-xl font-semibold">{title}</h3>
-        <p className="text-md font-light">{category}</p>
-        <div className="grid grid-cols-2 items-center justify-between mt-6">
-          <p className="text-md mt-4 font-semibold text-[#C67C4E]">{price}</p>
-          <button className="bg-[#C67C4E] px-4 py-2 cursor-pointer text-slate-100 font-semibold rounded-lg shadow-sm hover:bg-[#C67C4E]/80">Add to Chart</button>
+        <h3 className="text-lg font-bold text-stone-800 font-playfair group-hover:text-[#C67C4E] transition-colors">{title}</h3>
+        <p className="text-xs font-semibold px-2 py-0.5 mt-1 inline-block rounded-full bg-stone-100 text-stone-500 border border-stone-200/50 uppercase tracking-wider font-lato">{category || "Uncategorized"}</p>
+        <div className="flex items-center justify-between mt-6">
+          <p className="text-md font-bold text-[#C67C4E] font-lato">{price}</p>
+          <button className="bg-[#C67C4E] px-4 py-2 cursor-pointer text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#C67C4E]/80 transition-colors font-lato">Add to Cart</button>
         </div>
       </div>
     </Card>

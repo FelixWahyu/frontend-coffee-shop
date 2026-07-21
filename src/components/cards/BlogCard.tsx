@@ -23,7 +23,6 @@ export default function BlogCard({ article }: BlogCardProps) {
           <div className="flex items-center justify-between text-sm font-lato text-gray-500">
             <span>Author : {article.author}</span>
             <span>Tanggal : {formatDate(article.date || article.createdAt)}</span>
-            <span>{article.readingTime} min read</span>
           </div>
         </div>
       </div>
