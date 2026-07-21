@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Search, X, Coffee, Loader2 } from "lucide-react";
 import useProducts from "@/hooks/products/UseProducts";
@@ -14,10 +15,17 @@ interface SearchModalProps {
 const SUGGESTIONS = ["Espresso", "Cappuccino", "Latte", "Americano", "Macchiato"];
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // Set mounted flag on client side to prevent SSR issues with Portal
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   // Debounce the query to prevent overloading the database/API on every keystroke
   useEffect(() => {
@@ -69,9 +77,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  return createPortal(
     <div onClick={handleBackdropClick} className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 backdrop-blur-sm pt-24 px-4 transition-all duration-300 ease-out">
       <div ref={modalRef} className="w-full max-w-4xl bg-[#FDFBF7] border border-stone-200/60 shadow-2xl rounded-2xl overflow-hidden flex flex-col max-h-[70vh] animate-in fade-in slide-in-from-top-4 duration-200">
         {/* Search Input Header */}
@@ -96,7 +104,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               <X className="w-4 h-4" />
             </button>
           )}
-          <button onClick={onClose} className="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-stone-800 border border-stone-200 hover:border-stone-400 rounded-md transition-all font-lato">
+          <button
+            onClick={onClose}
+            className="px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-stone-800 border border-stone-200 hover:border-stone-400 rounded-md transition-all font-lato"
+          >
             Esc
           </button>
         </div>
@@ -193,6 +204,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
