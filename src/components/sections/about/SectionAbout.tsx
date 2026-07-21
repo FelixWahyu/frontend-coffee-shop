@@ -1,4 +1,4 @@
-import { Coffee, Heart, Compass, Users, Award, Landmark } from "lucide-react";
+import { Coffee, Heart, Compass, Users, Award, Landmark, Store, Briefcase } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutSection() {
@@ -49,27 +49,34 @@ export default function AboutSection() {
       {/* 2. Pengalaman / Milestones */}
       <div className="bg-stone-900/5 py-12 border-y border-stone-300/30">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div className="space-y-2">
               <div className="inline-flex p-3 bg-white/50 rounded-2xl text-[#C67C4E] mb-2">
                 <Award className="w-6 h-6" />
               </div>
-              <h4 className="text-4xl font-bold font-playfair text-stone-900">8+ Tahun</h4>
-              <p className="text-sm text-stone-600 font-lato">Konsistensi menyeduh kopi berkualitas tinggi</p>
+              <h4 className="text-3xl font-bold font-playfair text-stone-900">8+ Tahun</h4>
+              <p className="text-xs text-stone-600 font-lato">Konsistensi menyeduh kopi berkualitas tinggi</p>
             </div>
             <div className="space-y-2">
               <div className="inline-flex p-3 bg-white/50 rounded-2xl text-[#C67C4E] mb-2">
                 <Compass className="w-6 h-6" />
               </div>
-              <h4 className="text-4xl font-bold font-playfair text-stone-900">15+ Petani</h4>
-              <p className="text-sm text-stone-600 font-lato">Mitra tani lokal dari berbagai daerah Indonesia</p>
+              <h4 className="text-3xl font-bold font-playfair text-stone-900">15+ Petani</h4>
+              <p className="text-xs text-stone-600 font-lato">Mitra tani lokal berbagai daerah Indonesia</p>
             </div>
             <div className="space-y-2">
               <div className="inline-flex p-3 bg-white/50 rounded-2xl text-[#C67C4E] mb-2">
-                <Users className="w-6 h-6" />
+                <Store className="w-6 h-6" />
               </div>
-              <h4 className="text-4xl font-bold font-playfair text-stone-900">10 Cabang</h4>
-              <p className="text-sm text-stone-600 font-lato">Keceriaan yang dibagikan kepada pecinta kopi</p>
+              <h4 className="text-3xl font-bold font-playfair text-stone-900">10+ Cabang</h4>
+              <p className="text-xs text-stone-600 font-lato">Cabang resmi di kota-kota besar</p>
+            </div>
+            <div className="space-y-2">
+              <div className="inline-flex p-3 bg-white/50 rounded-2xl text-[#C67C4E] mb-2">
+                <Briefcase className="w-6 h-6" />
+              </div>
+              <h4 className="text-3xl font-bold font-playfair text-stone-900">100+ Karyawan</h4>
+              <p className="text-xs text-stone-600 font-lato">Barista & tim profesional berdedikasi</p>
             </div>
           </div>
         </div>
