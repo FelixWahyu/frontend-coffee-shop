@@ -3,7 +3,7 @@ import CafeFront from "@/public/assets/image/cafe-front.jpg";
 
 export default function HeroSection() {
   return (
-    <section className="relative h-[90vh] md:h-[80vh] bg-gray-800 flex items-center justify-center">
+    <section className="relative h-[90vh] bg-gray-800 flex items-center justify-center">
       <Image src={CafeFront} alt="hero-background" fill priority className="object-cover" />
       <div className="absolute inset-0 bg-linear-to-t from-[#30261C] to-[#30261C]/10"></div>
       <div className="relative z-10 container mx-auto p-4 mt-8 md:mt-10">

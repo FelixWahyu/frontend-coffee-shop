@@ -7,7 +7,7 @@ interface DetailHeroProps {
 
 export default function DetailHero({ article }: DetailHeroProps) {
   return (
-    <section className="relative h-[50vh] bg-gray-800 flex items-center justify-center">
+    <section className="relative h-[80vh] bg-gray-800 flex items-center justify-center">
       <Image src={article.image} alt={article.title} fill priority className="object-cover" />
       <div className="absolute inset-0 bg-linear-to-t from-[#30261C]/90 to-[#30261C]/20"></div>
       <div className="relative z-10 container mx-auto p-4">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Logo from "@/public/assets/logo/brand-3.jpg";
 import { Search, Menu, ShoppingBag, X } from "lucide-react";
@@ -10,10 +11,12 @@ import NavbarLinks from "@/components/ui/nav-links/navbar-links";
 import MobileNav from "@/components/ui/nav-links/mobile-nav";
 import NavbarAuth from "@/components/ui/nav-links/navbar-auth";
 import { useNavbar } from "@/hooks/auth/UseLogout";
+import SearchModal from "@/components/layout/SearchModal";
 
 export default function Navbar() {
   const pathName = usePathname();
   const { isMenuOpen, isAuth, toggleMenu, closeMenu, handleLogout } = useNavbar();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-4rem)] max-w-6xl">
@@ -34,7 +37,10 @@ export default function Navbar() {
         </div>
         <div className="flex gap-8 items-center">
           <div className="flex gap-3 items-center">
-            <Button className="p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300">
+            <Button
+              onClick={() => setIsSearchOpen(true)}
+              className="p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300"
+            >
               <Search size={18} />
             </Button>
             <Button className="p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300">
@@ -53,6 +59,8 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </nav>
   );
 }
