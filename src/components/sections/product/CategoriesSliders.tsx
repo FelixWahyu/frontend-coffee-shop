@@ -1,7 +1,7 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { ArrowLeft, ArrowRight, Coffee } from "lucide-react";
@@ -10,10 +10,25 @@ import LoadingSkeleton from "../../ui/loading";
 import EdgeUi from "../../ui/edge-ui";
 import useFeatures from "@/hooks/featuresCategory/UseFeature";
 import getSliderAtributes from "@/constants/slider";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const CategoriesSliders = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedCategory = searchParams.get("category");
+
+  const handleCategoryClick = (categoryId: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (params.get("category") === categoryId.toString()) {
+      params.delete("category");
+    } else {
+      params.set("category", categoryId.toString());
+    }
+    router.push(`/products?${params.toString()}`, { scroll: false });
+  };
+
   const { categories, loading, prevRef, nextRef } = useFeatures();
-  const { swiperAutoPlay, swiperBreakPoints } = getSliderAtributes({
+  const { swiperBreakPoints } = getSliderAtributes({
     breakpoints: [
       {
         width: 640,
@@ -49,30 +64,68 @@ export const CategoriesSliders = () => {
         </button>
 
         <Swiper
-          modules={[Navigation, Autoplay]}
-          autoplay={swiperAutoPlay}
+          modules={[Navigation]}
           onBeforeInit={(swiper: SwiperType) => {
             if (typeof swiper.params.navigation !== "boolean" && swiper.params.navigation) {
               swiper.params.navigation.prevEl = prevRef.current;
               swiper.params.navigation.nextEl = nextRef.current;
             }
           }}
-          loop={categories.length > 5}
+          loop={(categories.length + 1) > 5}
           grabCursor={true}
           slidesPerView={2}
           spaceBetween={20}
           breakpoints={swiperBreakPoints}
         >
-          {categories.map((category) => (
-            <SwiperSlide key={category.id}>
-              <div className="flex flex-col py-4 items-center gap-4 group cursor-pointer">
-                <div className="aspect-square w-36 h-36 rounded-full bg-[#FAF7F2] border border-stone-200/50 shadow-sm flex items-center justify-center text-[#C67C4E] group-hover:bg-[#F5EFE6] group-hover:scale-105 transition-all duration-300">
-                  <Coffee className="w-14 h-14" />
-                </div>
-                <h3 className="text-center font-bold font-playfair text-stone-800 text-lg group-hover:text-[#C67C4E] transition-colors">{category.name}</h3>
+          {/* 'Semua' Category Slide to Reset Filter */}
+          <SwiperSlide>
+            <div 
+              onClick={() => {
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete("category");
+                router.push(`/products?${params.toString()}`, { scroll: false });
+              }}
+              className="flex flex-col py-4 items-center gap-4 group cursor-pointer"
+            >
+              <div className={`aspect-square w-36 h-36 rounded-full border shadow-sm flex items-center justify-center transition-all duration-300 ${
+                !selectedCategory 
+                  ? "border-[#C67C4E] bg-[#F5EFE6] text-[#C67C4E] scale-105" 
+                  : "border-stone-200/50 bg-[#FAF7F2] text-stone-600 hover:bg-[#F5EFE6] hover:scale-105"
+              }`}>
+                <Coffee className="w-14 h-14" />
               </div>
-            </SwiperSlide>
-          ))}
+              <h3 className={`text-center font-bold font-playfair text-lg transition-colors duration-300 ${
+                !selectedCategory ? "text-[#C67C4E]" : "text-stone-800 group-hover:text-[#C67C4E]"
+              }`}>
+                Semua
+              </h3>
+            </div>
+          </SwiperSlide>
+
+          {categories.map((category) => {
+            const isActive = selectedCategory === category.id.toString();
+            return (
+              <SwiperSlide key={category.id}>
+                <div 
+                  onClick={() => handleCategoryClick(category.id)}
+                  className="flex flex-col py-4 items-center gap-4 group cursor-pointer"
+                >
+                  <div className={`aspect-square w-36 h-36 rounded-full border shadow-sm flex items-center justify-center transition-all duration-300 ${
+                    isActive 
+                      ? "border-[#C67C4E] bg-[#F5EFE6] text-[#C67C4E] scale-105" 
+                      : "border-stone-200/50 bg-[#FAF7F2] text-stone-600 hover:bg-[#F5EFE6] hover:scale-105"
+                  }`}>
+                    <Coffee className="w-14 h-14" />
+                  </div>
+                  <h3 className={`text-center font-bold font-playfair text-lg transition-colors duration-300 ${
+                    isActive ? "text-[#C67C4E]" : "text-stone-800 group-hover:text-[#C67C4E]"
+                  }`}>
+                    {category.name}
+                  </h3>
+                </div>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </section>

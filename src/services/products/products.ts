@@ -2,10 +2,13 @@ import { BASE_URL } from "@/lib/api";
 import { Product, ProductApiResponse } from "@/types/product";
 
 export const ProductService = {
-  getAllProducts: async ({ search = "" }: { search?: string } = {}): Promise<ProductApiResponse> => {
+  getAllProducts: async ({ search = "", category = "" }: { search?: string; category?: string } = {}): Promise<ProductApiResponse> => {
     const params = new URLSearchParams();
     if (search) {
       params.append("search", search);
+    }
+    if (category) {
+      params.append("category_id", category);
     }
 
     const res = await fetch(`${BASE_URL}/products?${params.toString()}`, {

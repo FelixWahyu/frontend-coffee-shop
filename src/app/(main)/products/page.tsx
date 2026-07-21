@@ -11,10 +11,11 @@ import { formatCurrency } from "@/utils/formatCurrency";
 export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const params = await searchParams;
   const search = typeof params.search === "string" ? params.search : "";
+  const category = typeof params.category === "string" ? params.category : "";
   let products: Product[] = [];
 
   try {
-    const result = await ProductService.getAllProducts({ search });
+    const result = await ProductService.getAllProducts({ search, category });
     products = result.data;
   } catch (error) {
     console.error("Error fetching products:", error);
