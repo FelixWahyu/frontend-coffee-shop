@@ -9,13 +9,14 @@ import { usePathname } from "next/navigation";
 import { navLinks } from "@/constants/navLinks";
 import NavbarLinks from "@/components/ui/nav-links/navbar-links";
 import MobileNav from "@/components/ui/nav-links/mobile-nav";
-import NavbarAuth from "@/components/ui/nav-links/navbar-auth";
+import dynamic from "next/dynamic";
+const NavbarAuth = dynamic(() => import("@/components/ui/nav-links/navbar-auth"), { ssr: false });
 import { useNavbar } from "@/hooks/auth/UseLogout";
 import SearchModal from "@/components/layout/SearchModal";
 
 export default function Navbar() {
   const pathName = usePathname();
-  const { isMenuOpen, isAuth, toggleMenu, closeMenu, handleLogout } = useNavbar();
+  const { isMenuOpen, isAuth, toggleMenu, closeMenu, handleLogout, users } = useNavbar();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
@@ -47,7 +48,7 @@ export default function Navbar() {
               <ShoppingBag size={18} />
             </Button>
           </div>
-          <NavbarAuth isAuth={isAuth} onLogout={handleLogout} atributes="hidden md:flex" />
+          <NavbarAuth isAuth={isAuth} user={users} onLogout={handleLogout} atributes="hidden md:flex" />
         </div>
       </div>
 
@@ -55,7 +56,7 @@ export default function Navbar() {
         <div className="bg-white md:hidden flex flex-col gap-4 px-4 py-2 rounded-xl shadow-md mt-2">
           <MobileNav pathName={pathName} links={navLinks} closeMenu={closeMenu} />
           <div className="mt-8 p-4 border-t border-gray-500">
-            <NavbarAuth isAuth={isAuth} onLogout={handleLogout} />
+            <NavbarAuth isAuth={isAuth} user={users} onLogout={handleLogout} />
           </div>
         </div>
       )}

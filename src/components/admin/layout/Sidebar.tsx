@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, LayoutGrid, Tag, Boxes, Archive, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useNavbar } from "@/hooks/auth/UseLogout";
 import Image from "next/image";
 import Button from "@/components/ui/button";
+import ConfirmModal from "@/components/ui/confirm-modal";
 
 interface SidebarAdminProps {
   isOpen: boolean;
@@ -14,6 +16,12 @@ interface SidebarAdminProps {
 export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
   const pathName = usePathname();
   const { isAuth, handleLogout } = useNavbar();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  const handleConfirmLogout = () => {
+    setShowLogoutConfirm(false);
+    handleLogout();
+  };
 
   return (
     <aside
@@ -62,7 +70,7 @@ export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
       <div className="shrink-0 space-y-2">
         {isAuth && (
           <Button
-            onClick={handleLogout}
+            onClick={() => setShowLogoutConfirm(true)}
             className="flex items-center justify-center w-full gap-2 text-md text-gray-900 bg-red-50 border border-black cursor-pointer px-4 py-1.5 font-lato shadow-[4px_4px_0px_#000000]/50 hover:bg-red-700 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all"
           >
             <LogOut className="w-5 h-5" />
@@ -77,6 +85,16 @@ export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
           Back to Website
         </Link>
       </div>
+
+      <ConfirmModal
+        open={showLogoutConfirm}
+        title="Konfirmasi Keluar"
+        message="Apakah Anda yakin ingin keluar dari halaman dashboard admin ini?"
+        confirmLabel="Keluar"
+        cancelLabel="Batal"
+        onConfirm={handleConfirmLogout}
+        onCancel={() => setShowLogoutConfirm(false)}
+      />
     </aside>
   );
 }

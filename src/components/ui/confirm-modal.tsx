@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AlertTriangle, X } from "lucide-react";
 
 interface ConfirmModalProps {
@@ -14,6 +15,12 @@ interface ConfirmModalProps {
 }
 
 export default function ConfirmModal({ open, title, message, confirmLabel = "Delete", cancelLabel = "Cancel", onConfirm, onCancel }: ConfirmModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -23,12 +30,15 @@ export default function ConfirmModal({ open, title, message, confirmLabel = "Del
     return () => document.removeEventListener("keydown", handleKey);
   }, [open, onCancel]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
       <div className="fixed inset-0 bg-black/50" onClick={onCancel} />
-      <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+
+      {/* Modal Container */}
+      <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200">
         <button onClick={onCancel} className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 cursor-pointer">
           <X className="w-5 h-5" />
         </button>
@@ -42,20 +52,15 @@ export default function ConfirmModal({ open, title, message, confirmLabel = "Del
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-3">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
-          >
+          <button onClick={onCancel} className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer">
             {cancelLabel}
           </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors cursor-pointer"
-          >
+          <button onClick={onConfirm} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors cursor-pointer">
             {confirmLabel}
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
