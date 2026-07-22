@@ -1,4 +1,4 @@
-import { Coffee, Heart, Compass, Users, Award, Landmark, Store, Briefcase } from "lucide-react";
+import { Coffee, Heart, Compass, Award, Landmark, Store, Briefcase } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutSection() {

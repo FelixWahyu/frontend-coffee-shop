@@ -13,6 +13,7 @@ export default function EditBlogPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!id || isNaN(id)) return;
     BlogService.getById(id)
       .then(setArticle)
       .catch(console.error)

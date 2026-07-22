@@ -6,6 +6,7 @@ import { ProductService } from "@/services/products/products";
 import ProductCard from "@/components/cards/ProductCard";
 import { formatCurrency } from "@/utils/formatCurrency";
 import AddToCartSection from "@/components/products/AddToCartSection";
+import { Product } from "@/src/types/product";
 
 export default async function DetailProduct({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -17,7 +18,7 @@ export default async function DetailProduct({ params }: { params: Promise<{ slug
   }
 
   // Fetch similar products based on the category ID
-  let similarProducts: any[] = [];
+  let similarProducts: Product[] = [];
   try {
     const categoryId = getProduct.category?.id;
     const similarRes = await ProductService.getAllProducts({
