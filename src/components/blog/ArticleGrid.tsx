@@ -1,12 +1,33 @@
+"use client";
+
 import { BlogArticle } from "@/types/blog";
 import BlogCard from "@/components/cards/BlogCard";
 import Link from "next/link";
+import LoadingSkeleton from "../ui/loading";
+import { BlogService } from "@/services/blog";
+import { useEffect, useState } from "react";
 
-interface ArticleGridProps {
-  articles: BlogArticle[];
-}
+export default function ArticleGrid() {
+  const [loading, setLoading] = useState(true);
+  const [articles, setArticles] = useState<BlogArticle[]>([]);
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const result = await BlogService.list();
+        setArticles(result);
+      } catch (error) {
+        console.error("Failed fetch articles.", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchArticles();
+  }, []);
 
-export default function ArticleGrid({ articles }: ArticleGridProps) {
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
+
   return (
     <section className="py-16 px-8">
       <div className="container mx-auto p-4">
