@@ -14,7 +14,6 @@ export default function HeroBlog() {
           <h1 className="text-5xl md:text-6xl font-bold mb-4 leading-tight italic font-playfair">
             Artikel <span className="not-italic text-[#C67C4E]">Kopi</span>
           </h1>
-          <div className="w-20 h-1 bg-[#C67C4E] rounded-full mb-4"></div>
           <div className="flex flex-col items-start md:items-center md:justify-center">
             <p className="text-lg text-gray-200 font-lato">Temukan berbagai artikel, tips, dan berita terbaru seputar kopi dari para ahli kami.</p>
           </div>

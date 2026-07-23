@@ -10,7 +10,6 @@ export function useBlogTable() {
 
   const fetchArticles = useCallback(async () => {
     try {
-      setLoading(true);
       const data = await BlogService.list(search);
       setArticles(data);
     } catch (error) {

@@ -6,14 +6,17 @@ import Link from "next/link";
 import LoadingSkeleton from "../ui/loading";
 import { BlogService } from "@/services/blog";
 import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
 
 export default function ArticleGrid() {
   const [loading, setLoading] = useState(true);
   const [articles, setArticles] = useState<BlogArticle[]>([]);
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const result = await BlogService.list();
+        const result = await BlogService.list(search);
         setArticles(result);
       } catch (error) {
         console.error("Failed fetch articles.", error);
@@ -22,7 +25,7 @@ export default function ArticleGrid() {
       }
     };
     fetchArticles();
-  }, []);
+  }, [search]);
 
   if (loading) {
     return <LoadingSkeleton />;
@@ -33,7 +36,10 @@ export default function ArticleGrid() {
       <div className="container mx-auto p-4">
         <h1 className="text-4xl font-bold font-playfair">Artikel Terbaru</h1>
         <p className="text-md font-lato mt-2 text-gray-600">Kumpulan artikel dan berita seputar kopi untuk Anda.</p>
-
+        <div className="bg-gray-50 mt-6 border border-gray-200 px-4 py-1.5 flex outline-0 gap-2 items-center rounded-lg w-full md:w-lg focus:border-[#C67C4E] focus:outline-1 focus:outline-[#C67C4E]">
+          <Search size={18} className="text-gray-500" />
+          <input type="text" name="search" placeholder="Cari..." onChange={(e) => setSearch(e.target.value)} value={search} className="rounded-lg w-full bg-transparent border-none focus:outline-none" />
+        </div>
         {articles.length === 0 ? (
           <p className="text-gray-500 mt-8">Belum ada artikel.</p>
         ) : (

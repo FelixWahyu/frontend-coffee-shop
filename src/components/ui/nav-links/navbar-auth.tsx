@@ -82,7 +82,7 @@ export default function NavAuth({ isAuth, user, onLogout, atributes = "" }: NavA
               {isAdmin && (
                 <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-stone-700 hover:bg-stone-50 hover:text-[#C67C4E] transition-all duration-200">
                   <LayoutGrid size={16} />
-                  Dashboard Admin
+                  Dashboard
                 </Link>
               )}
 
@@ -116,12 +116,11 @@ export default function NavAuth({ isAuth, user, onLogout, atributes = "" }: NavA
 
   // Mobile Version Layout (collapsible or static info container inside drawer)
   return (
-    <div className="flex flex-col gap-4 p-4 rounded-xl border border-stone-100 bg-stone-50">
+    <div className="flex flex-col gap-4 py-4 rounded-xl bg-stone-50">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-[#C67C4E] text-white flex items-center justify-center text-lg font-bold shadow-md">{userInitials}</div>
         <div className="flex-1 min-w-0">
-          <p className="text-base font-bold text-stone-800 truncate font-lato">{user.name || user.username}</p>
-          <p className="text-sm text-stone-500 truncate font-lato">@{user.username}</p>
+          <p className="text-base font-bold text-stone-800 truncate font-lato">{user.name}</p>
         </div>
         {isAdmin && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#C67C4E]/10 text-[#C67C4E] border border-[#C67C4E]/20">
@@ -131,11 +130,11 @@ export default function NavAuth({ isAuth, user, onLogout, atributes = "" }: NavA
         )}
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-row items-center gap-2">
         {isAdmin && (
           <Link href="/admin" className="flex items-center justify-center gap-2 w-full py-2 bg-stone-800 hover:bg-stone-900 text-white font-semibold rounded-xl text-sm transition-colors duration-200">
             <LayoutGrid size={16} />
-            Dashboard Admin
+            Dashboard
           </Link>
         )}
         <Button onClick={() => setShowLogoutConfirm(true)} className="flex items-center justify-center gap-2 w-full py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-xl text-sm transition-colors duration-200 cursor-pointer">
