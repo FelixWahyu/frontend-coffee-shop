@@ -16,7 +16,7 @@ export default function ProductCard({ title, price, category }: ProductCardProps
       <div className="mt-4">
         <h3 className="text-lg font-bold text-stone-800 font-playfair group-hover:text-[#C67C4E] transition-colors">{title}</h3>
         <p className="text-xs font-semibold px-2 py-0.5 mt-1 inline-block rounded-full bg-stone-100 text-stone-500 border border-stone-200/50 uppercase tracking-wider font-lato">{category || "Uncategorized"}</p>
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex flex-col justify-center gap-4 lg:gap-0 lg:flex-row lg:items-center lg:justify-between mt-6">
           <p className="text-md font-bold text-[#C67C4E] font-lato">{price}</p>
           <button className="bg-[#C67C4E] px-4 py-2 cursor-pointer text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#C67C4E]/80 transition-colors font-lato">Add to Cart</button>
         </div>

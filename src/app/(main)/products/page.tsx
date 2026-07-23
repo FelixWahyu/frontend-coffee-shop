@@ -1,12 +1,9 @@
-import Link from "next/link";
 import HeroSection from "@/components/sections/product/SectionHero";
 import { ProductService } from "@/services/products/products";
 import { SearchParams } from "@/components/products/SearchBox";
 import { Product } from "../../../types/product";
 import { CategoriesSliders } from "@/components/sections/product/CategoriesSliders";
-import ProductCard from "@/components/cards/ProductCard";
-import { formatCurrency } from "@/utils/formatCurrency";
-// import useProducts from "@/hooks/products/UseProducts";
+import ProductListSection from "@/components/sections/product/ProductList";
 
 export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const params = await searchParams;
@@ -31,18 +28,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
           <p className="text-md font-lato">This is the our menus we offer you.</p>
           <SearchParams />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-center">
-          {products.length === 0 && (
-            <div className="my-6">
-              <p className="text-gray-500 font-semibold">Product tidak ditemukan.</p>
-            </div>
-          )}
-          {products.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`} className="block">
-              <ProductCard title={product.name} price={formatCurrency(product.price)} category={product.category?.name} />
-            </Link>
-          ))}
-        </div>
+        <ProductListSection products={products} />
       </section>
     </>
   );
