@@ -1,21 +1,28 @@
 "use client";
 
+import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { ArrowLeft, ArrowRight, Coffee } from "lucide-react";
 import type { Swiper as SwiperType } from "swiper";
-import LoadingSkeleton from "../../ui/loading";
-import EdgeUi from "../../ui/edge-ui";
-import useFeatures from "@/hooks/featuresCategory/UseFeature";
-import getSliderAtributes from "@/constants/slider";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Category } from "@/types/categories";
+import getSliderAtributes from "@/constants/slider";
+import EdgeUi from "../../ui/edge-ui";
 
-export const CategoriesSliders = () => {
+interface CategoriesSlidersProps {
+  categories: Category[];
+}
+
+export const CategoriesSliders = ({ categories }: CategoriesSlidersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedCategory = searchParams.get("category");
+
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
 
   const handleCategoryClick = (categoryId: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -27,7 +34,6 @@ export const CategoriesSliders = () => {
     router.push(`/products?${params.toString()}`, { scroll: false });
   };
 
-  const { categories, loading, prevRef, nextRef } = useFeatures();
   const { swiperBreakPoints } = getSliderAtributes({
     breakpoints: [
       {
@@ -44,10 +50,6 @@ export const CategoriesSliders = () => {
       },
     ],
   });
-
-  if (loading) {
-    return <LoadingSkeleton />;
-  }
 
   if (categories.length === 0) {
     return <EdgeUi message="Data kategori belum tersedia." />;
