@@ -1,7 +1,17 @@
 import { BASE_URL } from "@/lib/api";
-import { CategoryRequest, CategoryApiResponse } from "@/types/categories";
+import { CategoryRequest, CategoryApiResponse, Category } from "@/types/categories";
 
 export const CategoryService = {
+  getCategories: async (search?: string): Promise<Category[]> => {
+    const params = search ? `?search=${encodeURIComponent(search)}` : "";
+    const req = await fetch(`${BASE_URL}/categories${params}`, {
+      credentials: "include",
+    });
+    const res: CategoryApiResponse = await req.json();
+    if (!req.ok) throw new Error("Failed to fetch category");
+    return res.data;
+  },
+
   createCategory: async (category: CategoryRequest): Promise<CategoryApiResponse> => {
     const req = await fetch(`${BASE_URL}/categories`, {
       method: "POST",
@@ -19,5 +29,17 @@ export const CategoryService = {
     }
 
     return res;
+  },
+
+  deleteCategory: async (id: number): Promise<void> => {
+    const req = await fetch(`${BASE_URL}/categories/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!req.ok) {
+      const res = await req.json();
+      throw new Error(res.message || "Failed to delete category");
+    }
   },
 };

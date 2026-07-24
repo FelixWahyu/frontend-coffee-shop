@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { ErrorCategory } from "@/types/errorMessage";
 import { CategoryRequest } from "@/types/categories";
 import { CategoryValidation } from "@/validations/categories/categoryValidation";
-import { CategoryService } from "@/src/services/admin/categories";
+import { CategoryService } from "@/services/admin/categories";
 
 export default function FormCategories() {
   const router = useRouter();

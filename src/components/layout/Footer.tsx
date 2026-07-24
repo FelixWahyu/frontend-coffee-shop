@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/assets/logo/brand-3.jpg";
-import { Mail, MapPin, MessageCircle, Camera, Send } from "lucide-react";
+import { Mail, MapPin, MessageCircleMore, Camera, Send, Phone } from "lucide-react";
 
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-[#30261C] px-6 pt-16 pb-6">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+    <footer className="bg-[#30261C] pt-16 pb-6">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
         <div className="space-y-5">
           <div className="flex items-center gap-4">
             <Image src={Logo} width={52} height={52} alt="coffee shop logo" className="rounded-full border border-gray-300" />
@@ -36,7 +36,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="space-y-4 text-white">
+        <div className="space-y-4 text-white lg:col-span-2">
           <h3 className="font-semibold uppercase tracking-wide">Kontak</h3>
           <div className="flex flex-col gap-4">
             <div className="flex items-start gap-3">
@@ -44,7 +44,7 @@ export default function Footer() {
               <span className="text-base font-lato text-slate-300">example@gmail.com</span>
             </div>
             <div className="flex items-start gap-3">
-              <MessageCircle size={18} className="mt-0.5 shrink-0 text-[#C67C4E]" />
+              <Phone size={18} className="mt-0.5 shrink-0 text-[#C67C4E]" />
               <span className="text-base font-lato text-slate-300">+62865-87656-9867</span>
             </div>
             <div className="flex items-start gap-3">
@@ -58,7 +58,7 @@ export default function Footer() {
           <h3 className="font-semibold uppercase tracking-wide">Sosial Media</h3>
           <div className="flex items-center gap-3">
             <a href="https://wa.me/6281282829298" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-white/10 hover:bg-[#C67C4E] hover:scale-110 transition-all duration-300">
-              <MessageCircle size={20} />
+              <MessageCircleMore size={20} />
             </a>
             <a href="#" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-white/10 hover:bg-[#C67C4E] hover:scale-110 transition-all duration-300">
               <Camera size={20} />
