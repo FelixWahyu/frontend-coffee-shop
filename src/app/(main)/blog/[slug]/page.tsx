@@ -25,7 +25,8 @@ export default async function DetailPage({ params }: { params: Promise<{ slug: s
   // Fetch similar articles
   let similarArticles: BlogArticle[] = [];
   try {
-    const allArticles = await BlogService.list();
+    const allArticlesRes = await BlogService.list();
+    const allArticles = allArticlesRes.data;
     similarArticles = allArticles.filter((a) => a.category === article.category && a.id !== article.id).slice(0, 3);
 
     // Fallback if no similar articles in same category

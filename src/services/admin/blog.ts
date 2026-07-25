@@ -19,9 +19,20 @@ export const BlogService = {
     return res.data;
   },
 
-  list: async (search?: string): Promise<BlogArticle[]> => {
-    const params = search ? `?search=${encodeURIComponent(search)}` : "";
-    const req = await fetch(`${BASE_URL}/blogs${params}`, {
+  list: async (search?: string, page?: number, size?: number): Promise<{ data: BlogArticle[]; paging?: any }> => {
+    const params = new URLSearchParams();
+    if (search) {
+      params.append("search", search);
+    }
+    if (page !== undefined) {
+      params.append("page", String(page));
+    }
+    if (size !== undefined) {
+      params.append("size", String(size));
+    }
+
+    const query = params.toString() ? `?${params.toString()}` : "";
+    const req = await fetch(`${BASE_URL}/blogs${query}`, {
       credentials: "include",
     });
 
@@ -31,7 +42,10 @@ export const BlogService = {
       throw new Error("Failed to fetch articles");
     }
 
-    return res.data;
+    return {
+      data: res.data,
+      paging: res.paging,
+    };
   },
 
   getById: async (id: number): Promise<BlogArticle> => {

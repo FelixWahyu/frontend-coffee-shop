@@ -9,28 +9,37 @@ import { useState, useEffect, useCallback } from "react";
 import { Product } from "@/types/product";
 import { ProductAdminService } from "@/services/admin/products";
 import { formatCurrency } from "@/utils/formatCurrency";
+import Pagination from "@/components/ui/pagination";
 
 export default function ProductTable() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
 
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await ProductAdminService.list(search);
-      setProducts(data);
+      const res = await ProductAdminService.list(search, page, 10);
+      setProducts(res.data);
+      setTotalPages(res.paging?.total_page || 1);
     } catch (error) {
       console.error("Failed to fetch products:", error);
     } finally {
       setLoading(false);
     }
-  }, [search]);
+  }, [search, page]);
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
+
+  // Reset page when search keyword changes
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -112,6 +121,11 @@ export default function ProductTable() {
           </table>
         </div>
       )}
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
       <ConfirmModal
         open={!!deleteTarget}
         title="Delete Product"

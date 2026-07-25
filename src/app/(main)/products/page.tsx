@@ -8,6 +8,7 @@ import { CategoriesSliders } from "@/components/sections/product/CategoriesSlide
 import ProductCard from "@/components/cards/ProductCard";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { Category } from "@/types/categories";
+import UrlPagination from "@/components/ui/UrlPagination";
 
 export default async function productPage({ 
   searchParams 
@@ -17,17 +18,21 @@ export default async function productPage({
   const params = await searchParams;
   const search = typeof params.search === "string" ? params.search : "";
   const category = typeof params.category === "string" ? params.category : "";
+  const page = typeof params.page === "string" ? Number(params.page) : 1;
+  const size = 8; // 8 products per page
   
   let products: Product[] = [];
   let categories: Category[] = [];
+  let totalPages = 1;
 
   // Fetch products and categories on the server side
   try {
     const [productResult, categoryResult] = await Promise.all([
-      ProductService.getAllProducts({ search, category }),
+      ProductService.getAllProducts({ search, category, page, size }),
       FeaturesService.getAllFeatures()
     ]);
     products = productResult.data;
+    totalPages = productResult.paging?.total_page || 1;
     categories = categoryResult.data;
   } catch (error) {
     console.error("Error fetching products or categories on server:", error);
@@ -56,6 +61,9 @@ export default async function productPage({
             </Link>
           ))}
         </div>
+        
+        {/* Pagination Section */}
+        <UrlPagination totalPages={totalPages} />
       </section>
     </>
   );

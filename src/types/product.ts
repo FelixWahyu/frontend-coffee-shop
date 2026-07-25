@@ -21,6 +21,11 @@ export interface ProductApiResponse {
   message: string;
   data: Product[];
   search?: string;
+  paging?: {
+    size: number;
+    total_page: number;
+    current_page: number;
+  };
 }
 
 export interface SingleProductApiResponse {

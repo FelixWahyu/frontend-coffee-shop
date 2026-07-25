@@ -6,9 +6,10 @@ import { Plus, Edit, Trash2, Search } from "lucide-react";
 import TextInput from "@/components/ui/form/text-input";
 import ConfirmModal from "@/components/ui/confirm-modal";
 import { useBlogTable } from "@/hooks/blog/useBlogTable";
+import Pagination from "@/components/ui/pagination";
 
 export default function BlogTable() {
-  const { articles, search, loading, deleteTarget, setSearch, setDeleteTarget, handleDelete } = useBlogTable();
+  const { articles, search, page, totalPages, loading, deleteTarget, setSearch, setPage, setDeleteTarget, handleDelete } = useBlogTable();
 
   return (
     <div>
@@ -72,6 +73,11 @@ export default function BlogTable() {
           </table>
         </div>
       )}
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
       <ConfirmModal
         open={!!deleteTarget}
         title="Delete Article"

@@ -42,7 +42,7 @@ export default function FormProduct({ product }: FormProductProps) {
       try {
         setLoadingCategories(true);
         const data = await CategoryService.getCategories();
-        setCategories(data);
+        setCategories(data.data);
       } catch (error) {
         console.error("Failed to load categories:", error);
       } finally {

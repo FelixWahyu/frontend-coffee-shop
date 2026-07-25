@@ -14,4 +14,9 @@ export interface CategoryApiResponse {
   success: boolean;
   message: string;
   data: Category[];
+  paging?: {
+    size: number;
+    total_page: number;
+    current_page: number;
+  };
 }

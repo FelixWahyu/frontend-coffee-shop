@@ -29,4 +29,9 @@ export interface BlogApiResponse {
   success: boolean;
   message: string;
   data: BlogArticle[];
+  paging?: {
+    size: number;
+    total_page: number;
+    current_page: number;
+  };
 }

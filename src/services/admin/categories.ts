@@ -2,14 +2,28 @@ import { BASE_URL } from "@/lib/api";
 import { CategoryRequest, CategoryApiResponse, Category } from "@/types/categories";
 
 export const CategoryService = {
-  getCategories: async (search?: string): Promise<Category[]> => {
-    const params = search ? `?search=${encodeURIComponent(search)}` : "";
-    const req = await fetch(`${BASE_URL}/categories${params}`, {
+  getCategories: async (search?: string, page?: number, size?: number): Promise<{ data: Category[]; paging?: any }> => {
+    const params = new URLSearchParams();
+    if (search) {
+      params.append("search", search);
+    }
+    if (page !== undefined) {
+      params.append("page", String(page));
+    }
+    if (size !== undefined) {
+      params.append("size", String(size));
+    }
+
+    const query = params.toString() ? `?${params.toString()}` : "";
+    const req = await fetch(`${BASE_URL}/categories${query}`, {
       credentials: "include",
     });
     const res: CategoryApiResponse = await req.json();
     if (!req.ok) throw new Error("Failed to fetch category");
-    return res.data;
+    return {
+      data: res.data,
+      paging: res.paging,
+    };
   },
 
   getCategoryById: async (id: number): Promise<Category> => {

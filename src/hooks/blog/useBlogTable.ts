@@ -5,23 +5,32 @@ import { BlogService } from "@/services/admin/blog";
 export function useBlogTable() {
   const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<{ id: number; title: string } | null>(null);
 
   const fetchArticles = useCallback(async () => {
     try {
-      const data = await BlogService.list(search);
-      setArticles(data);
+      setLoading(true);
+      const res = await BlogService.list(search, page, 10);
+      setArticles(res.data);
+      setTotalPages(res.paging?.total_page || 1);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-  }, [search]);
+  }, [search, page]);
 
   useEffect(() => {
     fetchArticles();
   }, [fetchArticles]);
+
+  // Reset page when search keyword changes
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -37,9 +46,12 @@ export function useBlogTable() {
   return {
     articles,
     search,
+    page,
+    totalPages,
     loading,
     deleteTarget,
     setSearch,
+    setPage,
     setDeleteTarget,
     handleDelete,
   };

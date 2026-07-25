@@ -8,27 +8,37 @@ import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { Category } from "@/types/categories";
 import { CategoryService } from "@/services/admin/categories";
+import Pagination from "@/components/ui/pagination";
 
 export default function CategoriesPage() {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
 
   const fetchCategories = useCallback(async () => {
     try {
-      const categories = await CategoryService.getCategories(search);
-      setCategories(categories);
+      setLoading(true);
+      const res = await CategoryService.getCategories(search, page, 10);
+      setCategories(res.data);
+      setTotalPages(res.paging?.total_page || 1);
     } catch (error) {
       console.error("Failed fetch category", error);
     } finally {
       setLoading(false);
     }
-  }, [search]);
+  }, [search, page]);
 
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
+
+  // Reset page when search keyword changes
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -97,6 +107,11 @@ export default function CategoriesPage() {
           </table>
         </div>
       )}
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
       <ConfirmModal
         open={!!deleteTarget}
         title="Delete Category"

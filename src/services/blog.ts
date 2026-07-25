@@ -2,9 +2,20 @@ import { BASE_URL } from "@/lib/api";
 import { BlogArticle, BlogApiResponse } from "@/types/blog";
 
 export const BlogService = {
-  list: async (search?: string): Promise<BlogArticle[]> => {
-    const params = search ? `?search=${encodeURIComponent(search)}` : "";
-    const req = await fetch(`${BASE_URL}/blogs${params}`, {
+  list: async (search?: string, page?: number, size?: number): Promise<BlogApiResponse> => {
+    const params = new URLSearchParams();
+    if (search) {
+      params.append("search", search);
+    }
+    if (page !== undefined) {
+      params.append("page", String(page));
+    }
+    if (size !== undefined) {
+      params.append("size", String(size));
+    }
+
+    const query = params.toString() ? `?${params.toString()}` : "";
+    const req = await fetch(`${BASE_URL}/blogs${query}`, {
       cache: "no-store",
     });
 
@@ -14,7 +25,7 @@ export const BlogService = {
       throw new Error("Failed to fetch articles");
     }
 
-    return res.data;
+    return res;
   },
 
   getBySlug: async (slug: string): Promise<BlogArticle> => {

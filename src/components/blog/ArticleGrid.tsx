@@ -2,12 +2,14 @@ import { BlogArticle } from "@/types/blog";
 import BlogCard from "@/components/cards/BlogCard";
 import Link from "next/link";
 import BlogSearchBox from "./BlogSearchBox";
+import UrlPagination from "../ui/UrlPagination";
 
 interface ArticleGridProps {
   articles: BlogArticle[];
+  totalPages: number;
 }
 
-export default function ArticleGrid({ articles }: ArticleGridProps) {
+export default function ArticleGrid({ articles, totalPages }: ArticleGridProps) {
   return (
     <section className="py-16 px-8">
       <div className="container mx-auto p-4">
@@ -28,6 +30,9 @@ export default function ArticleGrid({ articles }: ArticleGridProps) {
             ))}
           </div>
         )}
+        
+        {/* Pagination Section */}
+        <UrlPagination totalPages={totalPages} />
       </div>
     </section>
   );
