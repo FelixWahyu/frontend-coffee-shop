@@ -12,6 +12,15 @@ export const CategoryService = {
     return res.data;
   },
 
+  getCategoryById: async (id: number): Promise<Category> => {
+    const req = await fetch(`${BASE_URL}/categories/edit/${id}`, {
+      credentials: "include",
+    });
+    const res = await req.json();
+    if (!req.ok) throw new Error(res.message || "Failed to fetch edit category");
+    return res.data;
+  },
+
   createCategory: async (category: CategoryRequest): Promise<CategoryApiResponse> => {
     const req = await fetch(`${BASE_URL}/categories`, {
       method: "POST",
@@ -29,6 +38,18 @@ export const CategoryService = {
     }
 
     return res;
+  },
+
+  updateCategory: async (id: number, category: Partial<CategoryRequest>): Promise<Category> => {
+    const req = await fetch(`${BASE_URL}/categories/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(category),
+    });
+    const res = await req.json();
+    if (!req.ok) throw new Error(res.message || "Failed to update category.");
+    return res.data;
   },
 
   deleteCategory: async (id: number): Promise<void> => {

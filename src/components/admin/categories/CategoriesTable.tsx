@@ -43,7 +43,7 @@ export default function CategoriesPage() {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+      <div className="flex flex-col-reverse md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div className="flex items-center gap-2 border border-gray-900 px-2 rounded-lg w-full md:w-96">
           <Search className="w-5 h-5 text-gray-500" />
           <TextInput type="text" placeholder="Search categories..." value={search} onChange={(e) => setSearch(e.target.value)} className="border-none focus:border-none focus:ring-0" />
@@ -76,7 +76,7 @@ export default function CategoriesPage() {
                 <tr key={category.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 font-medium max-w-xs truncate">{category.name}</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm text-gray-500">{new Date(category.createdAt).toLocaleDateString("id-ID")}</td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border border-gray-300 px-4 py-2 w-10">
                     <div className="flex items-center justify-center gap-2">
                       <Link href={`/admin/categories/edit/${category.id}`} className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer">
                         <Edit className="w-4 h-4" />

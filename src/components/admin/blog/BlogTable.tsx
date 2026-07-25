@@ -12,7 +12,7 @@ export default function BlogTable() {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+      <div className="flex flex-col-reverse md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div className="flex items-center gap-2 border border-gray-900 px-2 rounded-lg w-full md:w-96">
           <Search className="w-5 h-5 text-gray-500" />
           <TextInput type="text" placeholder="Search articles..." value={search} onChange={(e) => setSearch(e.target.value)} className="border-none focus:border-none focus:ring-0" />

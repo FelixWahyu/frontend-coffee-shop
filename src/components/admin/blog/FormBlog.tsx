@@ -45,7 +45,7 @@ export default function FormBlog({ article }: FormBlogProps) {
           <Label htmlFor="content">Content</Label>
           <div className="flex border border-gray-900 px-2 py-1 rounded-md">
             <BookOpen className="w-5 h-5 mr-1 mt-2 shrink-0" />
-            <TextArea onChange={handleChange} value={formInput.content} id="content" name="content" placeholder="Article content..." className="border-none min-h-[200px]" />
+            <TextArea onChange={handleChange} value={formInput.content} id="content" name="content" placeholder="Article content..." className="border-none min-h-50" />
           </div>
           {errors.content && <ErrorMessage message={errors.content} />}
         </FormGroup>
@@ -104,7 +104,9 @@ export default function FormBlog({ article }: FormBlogProps) {
               {formInput.tags.map((tag) => (
                 <span key={tag} className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-[#F1F0EE] border border-[#30261C]/20 rounded-full">
                   {tag}
-                  <button type="button" onClick={() => removeTag(tag)} className="text-red-500 hover:text-red-700 ml-1 cursor-pointer">&times;</button>
+                  <button type="button" onClick={() => removeTag(tag)} className="text-red-500 hover:text-red-700 ml-1 cursor-pointer">
+                    &times;
+                  </button>
                 </span>
               ))}
             </div>
