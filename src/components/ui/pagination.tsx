@@ -10,18 +10,35 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
   if (totalPages <= 1) return null;
 
   const getPageNumbers = () => {
-    const pages = [];
-    const maxVisible = 5;
-    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    let end = Math.min(totalPages, start + maxVisible - 1);
+    const pages: (number | string)[] = [];
+    const siblingPages = 1;
 
-    if (end - start + 1 < maxVisible) {
-      start = Math.max(1, end - maxVisible + 1);
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+      return pages;
     }
 
-    for (let i = start; i <= end; i++) {
+    pages.push(1);
+
+    const startSibling = Math.max(2, currentPage - siblingPages);
+    const endSibling = Math.min(totalPages - 1, currentPage + siblingPages);
+
+    if (startSibling > 2) {
+      pages.push("...");
+    }
+
+    for (let i = startSibling; i <= endSibling; i++) {
       pages.push(i);
     }
+
+    if (endSibling < totalPages - 1) {
+      pages.push("...");
+    }
+
+    pages.push(totalPages);
+
     return pages;
   };
 
@@ -38,20 +55,33 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       </button>
 
       {/* Page Numbers */}
-      {getPageNumbers().map((page) => (
-        <button
-          key={page}
-          type="button"
-          onClick={() => onPageChange(page)}
-          className={`flex items-center justify-center w-10 h-10 border-2 border-black rounded-md font-semibold transition-all cursor-pointer ${
-            page === currentPage
-              ? "bg-[#C67C4E] text-white shadow-none translate-x-0.5 translate-y-0.5"
-              : "bg-gray-100 shadow-[2px_2px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:bg-[#C67C4E] hover:text-white"
-          }`}
-        >
-          {page}
-        </button>
-      ))}
+      {getPageNumbers().map((page, idx) => {
+        if (page === "...") {
+          return (
+            <span
+              key={`ellipsis-${idx}`}
+              className="flex items-center justify-center w-10 h-10 font-bold text-gray-500 select-none"
+            >
+              ...
+            </span>
+          );
+        }
+
+        return (
+          <button
+            key={page}
+            type="button"
+            onClick={() => onPageChange(page as number)}
+            className={`flex items-center justify-center w-10 h-10 border-2 border-black rounded-md font-semibold transition-all cursor-pointer ${
+              page === currentPage
+                ? "bg-[#C67C4E] text-white shadow-none translate-x-0.5 translate-y-0.5"
+                : "bg-gray-100 shadow-[2px_2px_0px_#000000] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:bg-[#C67C4E] hover:text-white"
+            }`}
+          >
+            {page}
+          </button>
+        );
+      })}
 
       {/* Next Button */}
       <button
