@@ -21,3 +21,11 @@ export interface ErrorBlog {
   tags?: string;
   readingTime?: string;
 }
+
+export interface ErrorProduct {
+  name?: string;
+  description?: string;
+  price?: string;
+  category_id?: string;
+  general?: string;
+}
