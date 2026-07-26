@@ -5,9 +5,10 @@ import Pagination from "./pagination";
 
 interface UrlPaginationProps {
   totalPages: number;
+  variant?: "modern" | "brutalism";
 }
 
-export default function UrlPagination({ totalPages }: UrlPaginationProps) {
+export default function UrlPagination({ totalPages, variant = "modern" }: UrlPaginationProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -18,11 +19,5 @@ export default function UrlPagination({ totalPages }: UrlPaginationProps) {
     router.push(`?${params.toString()}`);
   };
 
-  return (
-    <Pagination
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={handlePageChange}
-    />
-  );
+  return <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} variant={variant} />;
 }

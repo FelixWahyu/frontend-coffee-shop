@@ -57,13 +57,7 @@ export default function ProductTable() {
       <div className="flex flex-col-reverse md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div className="flex items-center gap-2 border border-gray-900 px-2 rounded-lg w-full md:w-96 bg-white">
           <Search className="w-5 h-5 text-gray-500" />
-          <TextInput
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border-none focus:border-none focus:ring-0 w-full"
-          />
+          <TextInput type="text" placeholder="Search products..." value={search} onChange={(e) => setSearch(e.target.value)} className="border-none focus:border-none focus:ring-0 w-full" />
         </div>
         <Link
           href="/admin/products/create"
@@ -99,10 +93,7 @@ export default function ProductTable() {
                   <td className="border-r border-gray-300 px-4 py-2 text-sm text-gray-500 max-w-xs truncate">{product.description || "-"}</td>
                   <td className="px-4 py-2">
                     <div className="flex items-center justify-center gap-2">
-                      <Link
-                        href={`/admin/products/edit/${product.id}`}
-                        className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer font-semibold"
-                      >
+                      <Link href={`/admin/products/edit/${product.id}`} className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer font-semibold">
                         <Edit className="w-4 h-4" />
                         Edit
                       </Link>
@@ -121,11 +112,7 @@ export default function ProductTable() {
           </table>
         </div>
       )}
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} variant="brutalism" />
       <ConfirmModal
         open={!!deleteTarget}
         title="Delete Product"

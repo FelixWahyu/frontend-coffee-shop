@@ -111,6 +111,7 @@ export default function CategoriesPage() {
         currentPage={page}
         totalPages={totalPages}
         onPageChange={setPage}
+        variant="brutalism"
       />
       <ConfirmModal
         open={!!deleteTarget}

@@ -77,6 +77,7 @@ export default function BlogTable() {
         currentPage={page}
         totalPages={totalPages}
         onPageChange={setPage}
+        variant="brutalism"
       />
       <ConfirmModal
         open={!!deleteTarget}

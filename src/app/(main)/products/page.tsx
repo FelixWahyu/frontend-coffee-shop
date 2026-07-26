@@ -10,27 +10,20 @@ import { formatCurrency } from "@/utils/formatCurrency";
 import { Category } from "@/types/categories";
 import UrlPagination from "@/components/ui/UrlPagination";
 
-export default async function productPage({ 
-  searchParams 
-}: { 
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }> 
-}) {
+export default async function productPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const params = await searchParams;
   const search = typeof params.search === "string" ? params.search : "";
   const category = typeof params.category === "string" ? params.category : "";
   const page = typeof params.page === "string" ? Number(params.page) : 1;
   const size = 8; // 8 products per page
-  
+
   let products: Product[] = [];
   let categories: Category[] = [];
   let totalPages = 1;
 
   // Fetch products and categories on the server side
   try {
-    const [productResult, categoryResult] = await Promise.all([
-      ProductService.getAllProducts({ search, category, page, size }),
-      FeaturesService.getAllFeatures()
-    ]);
+    const [productResult, categoryResult] = await Promise.all([ProductService.getAllProducts({ search, category, page, size }), FeaturesService.getAllFeatures()]);
     products = productResult.data;
     totalPages = productResult.paging?.total_page || 1;
     categories = categoryResult.data;
@@ -61,7 +54,7 @@ export default async function productPage({
             </Link>
           ))}
         </div>
-        
+
         {/* Pagination Section */}
         <UrlPagination totalPages={totalPages} />
       </section>
