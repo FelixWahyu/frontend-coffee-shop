@@ -9,6 +9,7 @@ export interface ErrorMsg {
 export interface ErrorCategory {
   name?: string;
   description?: string;
+  image?: string;
 }
 
 export interface ErrorBlog {
@@ -27,5 +28,6 @@ export interface ErrorProduct {
   description?: string;
   price?: string;
   category_id?: string;
+  image?: string;
   general?: string;
 }

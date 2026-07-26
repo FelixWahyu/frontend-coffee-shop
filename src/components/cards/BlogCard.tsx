@@ -3,6 +3,8 @@ import Card from "../ui/cards";
 import { BlogArticle } from "@/types/blog";
 import { formatDate } from "@/utils/formatDate";
 
+import { getImageUrl } from "@/utils/getImageUrl";
+
 interface BlogCardProps {
   article: BlogArticle;
 }
@@ -11,7 +13,7 @@ export default function BlogCard({ article }: BlogCardProps) {
   return (
     <Card className="bg-[#F1F0EE] flex flex-col h-full">
       <div className="relative aspect-video overflow-hidden rounded-lg">
-        <Image src={article.image} alt={article.title} fill className="object-cover transition-all duration-500 group-hover:scale-105" />
+        <Image src={getImageUrl(article.image)} alt={article.title} fill className="object-cover transition-all duration-500 group-hover:scale-105" />
       </div>
       <div className="p-4 flex flex-col flex-1">
         <div className="mb-2">

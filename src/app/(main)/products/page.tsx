@@ -50,7 +50,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
           )}
           {products.map((product) => (
             <Link key={product.id} href={`/products/${product.id}`} className="block">
-              <ProductCard title={product.name} price={formatCurrency(product.price)} category={product.category?.name} />
+              <ProductCard title={product.name} price={formatCurrency(product.price)} category={product.category?.name} image={product.image} />
             </Link>
           ))}
         </div>

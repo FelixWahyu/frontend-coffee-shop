@@ -11,6 +11,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Category } from "@/types/categories";
 import getSliderAtributes from "@/constants/slider";
 import EdgeUi from "../../ui/edge-ui";
+import Image from "next/image";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 interface CategoriesSlidersProps {
   categories: Category[];
@@ -112,12 +114,21 @@ export const CategoriesSliders = ({ categories }: CategoriesSlidersProps) => {
                   onClick={() => handleCategoryClick(category.id)}
                   className="flex flex-col py-4 items-center gap-4 group cursor-pointer"
                 >
-                  <div className={`aspect-square w-36 h-36 rounded-full border shadow-sm flex items-center justify-center transition-all duration-300 ${
+                  <div className={`aspect-square w-36 h-36 rounded-full border overflow-hidden shadow-sm flex items-center justify-center transition-all duration-300 relative ${
                     isActive 
                       ? "border-[#C67C4E] bg-[#F5EFE6] text-[#C67C4E] scale-105" 
                       : "border-stone-200/50 bg-[#FAF7F2] text-stone-600 hover:bg-[#F5EFE6] hover:scale-105"
                   }`}>
-                    <Coffee className="w-14 h-14" />
+                    {category.image ? (
+                      <Image
+                        src={getImageUrl(category.image)}
+                        alt={category.name}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <Coffee className="w-14 h-14" />
+                    )}
                   </div>
                   <h3 className={`text-center font-bold font-playfair text-lg transition-colors duration-300 ${
                     isActive ? "text-[#C67C4E]" : "text-stone-800 group-hover:text-[#C67C4E]"

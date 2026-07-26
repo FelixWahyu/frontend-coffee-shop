@@ -6,13 +6,15 @@ import TextInput from "../../ui/form/text-input";
 import TextArea from "../../ui/form/textarea";
 import ErrorMessage from "../../ui/form/error";
 import Button from "../../ui/button";
-import { Tag, TextAlignJustify, Save } from "lucide-react";
+import { Tag, TextAlignJustify, Save, X } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CategoryRequest } from "@/types/categories";
 import { ErrorCategory } from "@/types/errorMessage";
 import { CategoryService } from "@/services/admin/categories";
 import { CategoryValidation } from "@/validations/categories/categoryValidation";
+import { UploadService } from "@/services/admin/upload";
+import { BASE_URL } from "@/lib/api";
 
 export default function FormEditCategory() {
   const router = useRouter();
@@ -23,10 +25,14 @@ export default function FormEditCategory() {
   const [form, setForm] = useState<CategoryRequest>({
     name: "",
     description: "",
+    image: null,
   });
   const [errors, setErrors] = useState<ErrorCategory>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [fetching, setFetching] = useState<boolean>(true);
+  const [uploading, setUploading] = useState<boolean>(false);
+
+  const BASE_IMAGE_HOST = BASE_URL.replace("/api", "");
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -37,6 +43,7 @@ export default function FormEditCategory() {
         setForm({
           name: categoryData.name,
           description: categoryData.description || "",
+          image: categoryData.image || null,
         });
       } catch (error) {
         console.error("Failed to load category data:", error);
@@ -46,6 +53,22 @@ export default function FormEditCategory() {
     };
     fetchCategory();
   }, [id]);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const url = await UploadService.uploadImage(file);
+      setForm((prev) => ({ ...prev, image: url }));
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload image.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -116,7 +139,7 @@ export default function FormEditCategory() {
             <TextAlignJustify className="w-5 h-5 mr-1 mt-2 text-gray-500" />
             <TextArea
               onChange={handleChange}
-              value={form.description}
+              value={form.description || ""}
               id="description"
               name="description"
               placeholder="Input Description"
@@ -124,6 +147,39 @@ export default function FormEditCategory() {
             />
           </div>
           {errors.description && <ErrorMessage message={errors.description} />}
+        </FormGroup>
+
+        {/* Category Image File Upload */}
+        <FormGroup>
+          <Label htmlFor="image-file">Category Image</Label>
+          <div className="flex flex-col gap-3 p-3 border border-gray-900 rounded-md bg-stone-50">
+            {form.image && (
+              <div className="relative w-32 h-32 border-2 border-black rounded-md overflow-hidden shadow-[2px_2px_0px_#000000]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={form.image.startsWith("http") ? form.image : `${BASE_IMAGE_HOST}${form.image}`}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => setForm((prev) => ({ ...prev, image: null }))}
+                  className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+            <input
+              type="file"
+              id="image-file"
+              accept="image/*"
+              disabled={uploading}
+              onChange={handleImageUpload}
+              className="file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border file:border-black file:text-sm file:font-semibold file:bg-gray-100 file:hover:bg-gray-200 file:cursor-pointer text-sm text-stone-500"
+            />
+            {uploading && <p className="text-xs text-[#C67C4E] animate-pulse">Uploading image...</p>}
+          </div>
         </FormGroup>
 
         <Button

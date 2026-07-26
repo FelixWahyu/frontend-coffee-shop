@@ -95,6 +95,7 @@ export function useBlogForm(article?: BlogArticle | null) {
     errors,
     loading,
     isEditing,
+    setFormInput,
     setTagInput,
     handleChange,
     addTag,

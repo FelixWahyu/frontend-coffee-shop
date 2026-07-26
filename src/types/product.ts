@@ -7,6 +7,7 @@ export interface Product {
   } | null;
   price: number;
   description: string;
+  image?: string | null;
 }
 
 export interface ProductRequest {
@@ -14,6 +15,7 @@ export interface ProductRequest {
   description?: string | null;
   price: number;
   category_id: number;
+  image?: string | null;
 }
 
 export interface ProductApiResponse {

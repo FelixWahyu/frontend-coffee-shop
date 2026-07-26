@@ -6,7 +6,7 @@ import TextInput from "../../ui/form/text-input";
 import TextArea from "../../ui/form/textarea";
 import ErrorMessage from "../../ui/form/error";
 import Button from "../../ui/button";
-import { Tag, TextAlignJustify, Save, DollarSign, Folder } from "lucide-react";
+import { Tag, TextAlignJustify, Save, DollarSign, Folder, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Product, ProductRequest } from "@/types/product";
@@ -15,6 +15,8 @@ import { ErrorProduct } from "@/types/errorMessage";
 import { ProductAdminService } from "@/services/admin/products";
 import { CategoryService } from "@/services/admin/categories";
 import { ProductValidation } from "@/validations/products/productValidation";
+import { UploadService } from "@/services/admin/upload";
+import { BASE_URL } from "@/lib/api";
 
 interface FormProductProps {
   product?: Product;
@@ -29,12 +31,16 @@ export default function FormProduct({ product }: FormProductProps) {
     description: product?.description || "",
     price: product?.price || 0,
     category_id: product?.category?.id || 0,
+    image: product?.image || null,
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [errors, setErrors] = useState<ErrorProduct>({});
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(true);
+
+  const BASE_IMAGE_HOST = BASE_URL.replace("/api", "");
 
   // Fetch categories for the dropdown selector
   useEffect(() => {
@@ -51,6 +57,22 @@ export default function FormProduct({ product }: FormProductProps) {
     };
     fetchCategories();
   }, []);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const url = await UploadService.uploadImage(file);
+      setFormInput((prev) => ({ ...prev, image: url }));
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload image.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -206,6 +228,39 @@ export default function FormProduct({ product }: FormProductProps) {
             />
           </div>
           {errors.description && <ErrorMessage message={errors.description} />}
+        </FormGroup>
+
+        {/* Product Image File Upload */}
+        <FormGroup>
+          <Label htmlFor="image-file">Product Image</Label>
+          <div className="flex flex-col gap-3 p-3 border border-gray-900 rounded-md bg-stone-50">
+            {formInput.image && (
+              <div className="relative w-32 h-32 border-2 border-black rounded-md overflow-hidden shadow-[2px_2px_0px_#000000]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={formInput.image.startsWith("http") ? formInput.image : `${BASE_IMAGE_HOST}${formInput.image}`}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => setFormInput((prev) => ({ ...prev, image: null }))}
+                  className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+            <input
+              type="file"
+              id="image-file"
+              accept="image/*"
+              disabled={uploading}
+              onChange={handleImageUpload}
+              className="file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border file:border-black file:text-sm file:font-semibold file:bg-gray-100 file:hover:bg-gray-200 file:cursor-pointer text-sm text-stone-500"
+            />
+            {uploading && <p className="text-xs text-[#C67C4E] animate-pulse">Uploading image...</p>}
+          </div>
         </FormGroup>
 
         {/* Submit Button */}

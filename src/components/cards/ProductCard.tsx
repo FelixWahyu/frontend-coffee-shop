@@ -1,17 +1,29 @@
+import Image from "next/image";
 import Card from "../ui/cards";
 import { Coffee } from "lucide-react";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 interface ProductCardProps {
   title: string;
   price: number | string;
   category?: string | null;
+  image?: string | null;
 }
 
-export default function ProductCard({ title, price, category }: ProductCardProps) {
+export default function ProductCard({ title, price, category, image }: ProductCardProps) {
   return (
     <Card className="cursor-pointer p-3 bg-[#FAF7F2] border border-stone-200/50 hover:border-[#C67C4E]/40 hover:shadow-lg transition-all group duration-300 rounded-2xl">
       <div className="relative aspect-square bg-[#F5EFE6] overflow-hidden rounded-xl flex items-center justify-center text-[#C67C4E]">
-        <Coffee className="w-16 h-16 transition-transform duration-500 group-hover:scale-110" />
+        {image ? (
+          <Image
+            src={getImageUrl(image)}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        ) : (
+          <Coffee className="w-16 h-16 transition-transform duration-500 group-hover:scale-110" />
+        )}
       </div>
       <div className="mt-4">
         <h3 className="text-lg font-bold text-stone-800 font-playfair group-hover:text-[#C67C4E] transition-colors">{title}</h3>

@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Search, X, Coffee, Loader2 } from "lucide-react";
 import useProducts from "@/hooks/products/UseProducts";
 import { formatCurrency } from "@/utils/formatCurrency";
+import Image from "next/image";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -182,8 +184,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     className="flex gap-4 p-3 rounded-xl border border-stone-200/40 bg-white hover:bg-[#F5EFE6]/30 hover:border-[#C67C4E]/30 shadow-sm hover:shadow transition-all group duration-300"
                   >
                     {/* Visual Indicator */}
-                    <div className="w-12 h-12 rounded-lg bg-[#F5EFE6] flex items-center justify-center text-[#C67C4E] group-hover:scale-105 transition-transform duration-300 shrink-0 border border-stone-200/20">
-                      <Coffee className="w-6 h-6" />
+                    <div className="w-12 h-12 rounded-lg bg-[#F5EFE6] overflow-hidden flex items-center justify-center text-[#C67C4E] group-hover:scale-105 transition-transform duration-300 shrink-0 border border-stone-200/20 relative">
+                      {product.image ? (
+                        <Image
+                          src={getImageUrl(product.image)}
+                          alt={product.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <Coffee className="w-6 h-6" />
+                      )}
                     </div>
 
                     {/* Meta info */}

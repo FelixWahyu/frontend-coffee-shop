@@ -6,16 +6,38 @@ import TextArea from "@/components/ui/form/textarea";
 import ErrorMessage from "@/components/ui/form/error";
 import FormGroup from "@/components/ui/form/form-group";
 import Button from "@/components/ui/button";
-import { Save, FileText, Type, User, BookOpen, Clock, Image as ImageIcon, Tag } from "lucide-react";
+import { Save, FileText, Type, User, BookOpen, Clock, Image as ImageIcon, Tag, X } from "lucide-react";
 import { BlogArticle } from "@/types/blog";
 import { useBlogForm } from "@/hooks/blog/useBlogForm";
+import { useState } from "react";
+import { UploadService } from "@/services/admin/upload";
+import { BASE_URL } from "@/lib/api";
 
 interface FormBlogProps {
   article?: BlogArticle | null;
 }
 
 export default function FormBlog({ article }: FormBlogProps) {
-  const { formInput, tagInput, errors, loading, isEditing, setTagInput, handleChange, addTag, removeTag, handleSubmit } = useBlogForm(article);
+  const { formInput, tagInput, errors, loading, isEditing, setFormInput, setTagInput, handleChange, addTag, removeTag, handleSubmit } = useBlogForm(article);
+  const [uploading, setUploading] = useState(false);
+
+  const BASE_IMAGE_HOST = BASE_URL.replace("/api", "");
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const url = await UploadService.uploadImage(file);
+      setFormInput((prev) => ({ ...prev, image: url }));
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload image.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div className="p-6 rounded-md border-3 border-gray-900 max-w-2xl shadow-[6px_6px_0px_#000000]/60 bg-white">
@@ -52,10 +74,34 @@ export default function FormBlog({ article }: FormBlogProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormGroup>
-            <Label htmlFor="image">Image URL</Label>
-            <div className="flex items-center border border-gray-900 px-2 py-1 rounded-md">
-              <ImageIcon className="w-5 h-5 mr-1 shrink-0" />
-              <TextInput type="text" onChange={handleChange} value={formInput.image} id="image" name="image" placeholder="/assets/image/..." className="border-none" />
+            <Label htmlFor="image-file">Blog Image</Label>
+            <div className="flex flex-col gap-3 p-3 border border-gray-900 rounded-md bg-stone-50">
+              {formInput.image && (
+                <div className="relative w-32 h-32 border-2 border-black rounded-md overflow-hidden shadow-[2px_2px_0px_#000000]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={formInput.image.startsWith("http") ? formInput.image : `${BASE_IMAGE_HOST}${formInput.image}`}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setFormInput((prev) => ({ ...prev, image: "" }))}
+                    className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+              <input
+                type="file"
+                id="image-file"
+                accept="image/*"
+                disabled={uploading}
+                onChange={handleImageUpload}
+                className="file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border file:border-black file:text-sm file:font-semibold file:bg-gray-100 file:hover:bg-gray-200 file:cursor-pointer text-sm text-stone-500"
+              />
+              {uploading && <p className="text-xs text-[#C67C4E] animate-pulse">Uploading image...</p>}
             </div>
             {errors.image && <ErrorMessage message={errors.image} />}
           </FormGroup>
