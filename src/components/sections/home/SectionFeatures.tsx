@@ -61,7 +61,7 @@ export default function FeaturesSection() {
         >
           {categories.map((feature) => (
             <SwiperSlide key={feature.id}>
-              <FeatureCard title={feature.name} description={feature.description} image={FeaturesImg} />
+              <FeatureCard title={feature.name} description={feature.description} image={feature.image || FeaturesImg} />
             </SwiperSlide>
           ))}
         </Swiper>

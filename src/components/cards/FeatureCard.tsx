@@ -1,5 +1,6 @@
 import Image, { ImageProps } from "next/image";
 import Card from "../ui/cards";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 interface FeatureCardProps {
   title: string;
@@ -8,10 +9,12 @@ interface FeatureCardProps {
 }
 
 export default function FeatureCard({ title, description, image }: FeatureCardProps) {
+  const resolvedImage = typeof image === "string" ? getImageUrl(image) : image;
+
   return (
     <Card className="h-full group bg-[#F1F0EE]">
       <div className="relative overflow-hidden aspect-4/3">
-        <Image src={image} alt={title} className="object-cover opacity-100 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300" fill />
+        <Image src={resolvedImage} alt={title} className="object-cover opacity-100 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300" fill />
       </div>
       <div className="p-5">
         <h3 className="mb-3 text-xl font-semibold font-playfair">{title}</h3>

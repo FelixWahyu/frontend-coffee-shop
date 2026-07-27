@@ -6,7 +6,9 @@ import { ProductService } from "@/services/products/products";
 import ProductCard from "@/components/cards/ProductCard";
 import { formatCurrency } from "@/utils/formatCurrency";
 import AddToCartSection from "@/components/products/AddToCartSection";
-import { Product } from "@/src/types/product";
+import { Product } from "@/types/product";
+import Image from "next/image";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 export default async function DetailProduct({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -46,8 +48,18 @@ export default async function DetailProduct({ params }: { params: Promise<{ slug
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Product Image/Icon */}
-        <div className="lg:col-span-6 aspect-square w-full bg-[#FAF7F2] border border-stone-200/50 shadow-md rounded-3xl flex items-center justify-center text-[#C67C4E] p-16">
-          <Coffee className="w-36 h-36 animate-pulse duration-3000" />
+        <div className="lg:col-span-6 aspect-square w-full bg-[#FAF7F2] border border-stone-200/50 shadow-md rounded-3xl flex items-center justify-center text-[#C67C4E] overflow-hidden relative">
+          {getProduct.image ? (
+            <Image
+              src={getImageUrl(getProduct.image)}
+              alt={getProduct.name}
+              fill
+              priority
+              className="object-cover"
+            />
+          ) : (
+            <Coffee className="w-36 h-36 animate-pulse duration-3000" />
+          )}
         </div>
 
         {/* Right Column: Info */}
@@ -79,7 +91,7 @@ export default async function DetailProduct({ params }: { params: Promise<{ slug
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {similarProducts.map((similar) => (
               <Link key={similar.id} href={`/products/${similar.id}`} className="block">
-                <ProductCard title={similar.name} price={formatCurrency(similar.price)} category={similar.category?.name} />
+                <ProductCard title={similar.name} price={formatCurrency(similar.price)} category={similar.category?.name} image={similar.image} />
               </Link>
             ))}
           </div>
