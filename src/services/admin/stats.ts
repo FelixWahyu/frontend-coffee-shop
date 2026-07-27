@@ -4,6 +4,7 @@ export interface StatsResponse {
   products: number;
   categories: number;
   users: number;
+  blogs: number;
 }
 
 export const StatsService = {
