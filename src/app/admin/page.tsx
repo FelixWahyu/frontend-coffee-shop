@@ -1,9 +1,35 @@
+"use client";
+
 import StatCard from "@/components/admin/cards/StatCard";
 import { formatDate } from "@/utils/formatDate";
-import { Package, ShoppingCart, Users } from "lucide-react";
+import { Package, Folder, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { StatsService, StatsResponse } from "@/services/admin/stats";
 
 export default function AdminPage() {
   const currentDate = new Date();
+  const [stats, setStats] = useState<StatsResponse>({
+    products: 0,
+    categories: 0,
+    users: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const data = await StatsService.getStats();
+        setStats(data);
+      } catch (error) {
+        console.error("Failed to load dashboard stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
   return (
     <div>
       <div className="flex flex-col md:flex-row justify-center md:justify-between items-start md:items-center mb-8">
@@ -18,9 +44,24 @@ export default function AdminPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <StatCard title="Total Products" value="96" icon={<Package className="w-6 h-6" />} className="bg-yellow-400" />
-        <StatCard title="Total Users" value="135" icon={<Users className="w-6 h-6" />} className="bg-blue-500" />
-        <StatCard title="Total Orders" value="450" icon={<ShoppingCart className="w-6 h-6" />} className="bg-emerald-500" />
+        <StatCard
+          title="Total Products"
+          value={loading ? "..." : stats.products}
+          icon={<Package className="w-6 h-6" />}
+          className="bg-yellow-400"
+        />
+        <StatCard
+          title="Total Categories"
+          value={loading ? "..." : stats.categories}
+          icon={<Folder className="w-6 h-6" />}
+          className="bg-emerald-500"
+        />
+        <StatCard
+          title="Total Users"
+          value={loading ? "..." : stats.users}
+          icon={<Users className="w-6 h-6" />}
+          className="bg-blue-500"
+        />
       </div>
     </div>
   );
