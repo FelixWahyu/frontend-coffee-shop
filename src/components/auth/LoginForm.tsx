@@ -53,6 +53,7 @@ export default function Login() {
                     id="username"
                     name="username"
                     autoComplete="username"
+                    placeholder="Username"
                     className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition pl-10"
                   />
                 </div>
@@ -70,14 +71,10 @@ export default function Login() {
                     id="password"
                     name="password"
                     autoComplete="current-password"
+                    placeholder="Password"
                     className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition w-full pl-10"
                   />
-                  <Button
-                    type="button"
-                    aria-label="Toggle password visibility"
-                    onClick={handleTogglePassword}
-                    className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700"
-                  >
+                  <Button type="button" aria-label="Toggle password visibility" onClick={handleTogglePassword} className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700">
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </Button>
                 </div>

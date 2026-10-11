@@ -14,36 +14,7 @@ import { RegisterRequest } from "@/types/login";
 import { BASE_URL } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, User, Lock, KeyRound } from "lucide-react";
-
-const validate = (values: RegisterRequest): ErrorMsg => {
-  const errors: ErrorMsg = {};
-
-  if (!values.name) {
-    errors.name = "Name is required";
-  } else if (values.name.length < 3) {
-    errors.name = "Name must be at least 3 characters";
-  }
-
-  if (!values.username) {
-    errors.username = "Username is required";
-  } else if (values.username.length < 3) {
-    errors.username = "Username must be at least 3 characters";
-  }
-
-  if (!values.password) {
-    errors.password = "Password is required";
-  } else if (values.password.length < 6) {
-    errors.password = "Password must be at least 6 characters";
-  }
-
-  if (!values.confirmPassword) {
-    errors.confirmPassword = "Confirm password is required";
-  } else if (values.confirmPassword !== values.password) {
-    errors.confirmPassword = "Password does not match";
-  }
-
-  return errors;
-};
+import { ValidationRegister } from "@/validations/auth/registerValidation";
 
 export default function Register() {
   const [form, setForm] = useState<RegisterRequest>({
@@ -65,7 +36,7 @@ export default function Register() {
     };
     setForm(updateForm);
 
-    const validationErrors = validate(updateForm);
+    const validationErrors = ValidationRegister(updateForm);
 
     setErrors((prev) => ({
       ...prev,
@@ -80,7 +51,7 @@ export default function Register() {
       return;
     }
 
-    const validationErrors = validate(form);
+    const validationErrors = ValidationRegister(form);
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -154,10 +125,18 @@ export default function Register() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <FormGroup>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">Name Lengkap</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                  <TextInput onChange={handleChange} value={form.name} type="text" id="name" name="name" className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition pl-10" />
+                  <TextInput
+                    onChange={handleChange}
+                    value={form.name}
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Nama Lengkap"
+                    className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition pl-10"
+                  />
                 </div>
                 <ErrorMessage message={errors.name} />
               </FormGroup>
@@ -166,7 +145,16 @@ export default function Register() {
                 <Label htmlFor="username">Username</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                  <TextInput onChange={handleChange} value={form.username} type="text" id="username" name="username" autoComplete="username" className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition pl-10" />
+                  <TextInput
+                    onChange={handleChange}
+                    value={form.username}
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Username"
+                    autoComplete="username"
+                    className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition pl-10"
+                  />
                 </div>
                 <ErrorMessage message={errors.username} />
               </FormGroup>
@@ -182,6 +170,7 @@ export default function Register() {
                     id="password"
                     name="password"
                     autoComplete="new-password"
+                    placeholder="Password"
                     className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition w-full pl-10"
                   />
                   <Button
@@ -197,7 +186,7 @@ export default function Register() {
               </FormGroup>
 
               <FormGroup>
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword">Konfirmasi Password</Label>
                 <div className="relative">
                   <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                   <TextInput
@@ -207,6 +196,7 @@ export default function Register() {
                     id="confirmPassword"
                     name="confirmPassword"
                     autoComplete="new-password"
+                    placeholder="Konfirmasi Password"
                     className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition w-full pl-10"
                   />
                 </div>
