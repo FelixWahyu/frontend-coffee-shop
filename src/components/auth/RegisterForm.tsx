@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+// import { useState } from "react";
 import CoffeeBg from "@/public/assets/image/biji-coffe-cup.jpg";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,92 +9,94 @@ import TextInput from "@/components/ui/form/text-input";
 import Label from "@/components/ui/form/label";
 import ErrorMessage from "@/components/ui/form/error";
 import Button from "@/components/ui/button";
-import { ErrorMsg } from "@/types/errorMessage";
-import { RegisterRequest } from "@/types/login";
-import { BASE_URL } from "@/lib/api";
-import { useRouter } from "next/navigation";
+// import { ErrorMsg } from "@/types/errorMessage";
+// import { RegisterRequest } from "@/types/login";
+// import { BASE_URL } from "@/lib/api";
+// import { useRouter } from "next/navigation";
 import { Eye, EyeOff, User, Lock, KeyRound } from "lucide-react";
-import { ValidationRegister } from "@/validations/auth/registerValidation";
+import { useRegister } from "@/hooks/auth/useRegister";
+// import { ValidationRegister } from "@/validations/auth/registerValidation";
 
 export default function Register() {
-  const [form, setForm] = useState<RegisterRequest>({
-    name: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [errors, setErrors] = useState<ErrorMsg>({});
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
+  // const [form, setForm] = useState<RegisterRequest>({
+  //   name: "",
+  //   username: "",
+  //   password: "",
+  //   confirmPassword: "",
+  // });
+  // const [errors, setErrors] = useState<ErrorMsg>({});
+  // const [loading, setLoading] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
+  // const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const updateForm = {
-      ...form,
-      [name]: value,
-    };
-    setForm(updateForm);
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   const updateForm = {
+  //     ...form,
+  //     [name]: value,
+  //   };
+  //   setForm(updateForm);
 
-    const validationErrors = ValidationRegister(updateForm);
+  //   const validationErrors = ValidationRegister(updateForm);
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: validationErrors[name as keyof RegisterRequest],
-      general: "",
-    }));
-  };
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     [name]: validationErrors[name as keyof RegisterRequest],
+  //     general: "",
+  //   }));
+  // };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (loading) {
-      return;
-    }
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (loading) {
+  //     return;
+  //   }
 
-    const validationErrors = ValidationRegister(form);
+  //   const validationErrors = ValidationRegister(form);
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+  //   if (Object.keys(validationErrors).length > 0) {
+  //     setErrors(validationErrors);
+  //     return;
+  //   }
 
-    setLoading(true);
-    setErrors({});
+  //   setLoading(true);
+  //   setErrors({});
 
-    try {
-      const request = await fetch(`${BASE_URL}/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+  //   try {
+  //     const request = await fetch(`${BASE_URL}/users`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(form),
+  //     });
 
-      const response = await request.json();
+  //     const response = await request.json();
 
-      if (!request.ok) {
-        setErrors({
-          general: response.message || "Username is already taken.",
-        });
-        return;
-      }
+  //     if (!request.ok) {
+  //       setErrors({
+  //         general: response.message || "Username is already taken.",
+  //       });
+  //       return;
+  //     }
 
-      setForm({
-        name: "",
-        username: "",
-        password: "",
-        confirmPassword: "",
-      });
-      router.replace("/login");
-    } catch (error) {
-      console.error(error);
-      setErrors({
-        general: "Terjadi kesalahan saat registrasi.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setForm({
+  //       name: "",
+  //       username: "",
+  //       password: "",
+  //       confirmPassword: "",
+  //     });
+  //     router.replace("/login");
+  //   } catch (error) {
+  //     console.error(error);
+  //     setErrors({
+  //       general: "Terjadi kesalahan saat registrasi.",
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const { form, loading, errors, handleSubmit, handleChange, handleTogglePassword, showPassword } = useRegister();
 
   return (
     <section className="min-h-screen">
@@ -173,12 +175,7 @@ export default function Register() {
                     placeholder="Password"
                     className="bg-gray-50 border border-gray-200 focus:border-[#C67C4E] focus:ring-2 focus:ring-[#C67C4E]/20 rounded-xl transition w-full pl-10"
                   />
-                  <Button
-                    type="button"
-                    aria-label="Toggle password visibility"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700"
-                  >
+                  <Button type="button" aria-label="Toggle password visibility" onClick={handleTogglePassword} className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-gray-500 transition hover:text-gray-700">
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </Button>
                 </div>
