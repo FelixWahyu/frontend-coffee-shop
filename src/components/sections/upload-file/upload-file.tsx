@@ -5,56 +5,23 @@ import Button from "../../ui/button";
 import FormGroup from "../../ui/form/form-group";
 import ErrorMessage from "../../ui/form/error";
 import Label from "../../ui/form/label";
-import { useEffect, useState } from "react";
+import { useLatihanUpload } from "./hooks-upload/useLatihanUpload";
 
 export const LatihanUploadFile = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const { file, preview, errorMsg, handleChange, handleRemove, handleSubmit } = useLatihanUpload();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (!file) return;
-
-    const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
-    const Max_Size = 2 * 1024 * 1024;
-
-    if (!allowedTypes.includes(file.type)) {
-      console.log("Format gambar tidak didukung");
-      return;
-    }
-
-    if (file.size > Max_Size) {
-      console.log("Ukuran file maks 2 MB");
-      return;
-    }
-
-    setFile(file);
-  };
-
-  useEffect(() => {
-    if (!file) {
-      setPreview(null);
-      return;
-    }
-
-    const previewUrl = URL.createObjectURL(file);
-
-    setPreview(previewUrl);
-
-    const cleanFile = () => {
-      URL.revokeObjectURL(previewUrl);
-    };
-
-    return cleanFile;
-  }, [file]);
   return (
     <section className="mx-auto my-28 max-w-md ">
-      <form action="" encType="multipart/form-data">
+      <form action="" onSubmit={handleSubmit} encType="multipart/form-data">
         <FormGroup>
           <Label htmlFor="image">Image</Label>
           <TextInput type="file" onChange={handleChange} id="image" name="image" accept="image/*" className="bg-gray-50" />
+          {errorMsg && <ErrorMessage message={errorMsg} />}
         </FormGroup>
+
+        <Button type="submit" className="bg-gray-50 hover:bg-gray-100 cursor-pointer px-8 py-2">
+          Kirim
+        </Button>
       </form>
 
       {preview && <img src={preview} alt="Preview" className="mt-5 w-64 h-64 object-cover rounded-lg" />}
@@ -66,6 +33,10 @@ export const LatihanUploadFile = () => {
           <p>{file.type}</p>
         </div>
       )}
+
+      <Button type="button" className="bg-gray-100 mt-10 px-6 py-2 cursor-pointer hover:bg-gray-200 transition-colors duration-300" onClick={handleRemove}>
+        Hapus Gambar
+      </Button>
     </section>
   );
 };
