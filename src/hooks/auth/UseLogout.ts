@@ -48,6 +48,10 @@ export const useNavbar = () => {
       await LogoutService();
 
       setIsAuth(false);
+      setUsers(null);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("auth-change"));
+      }
       router.replace("/");
     } catch (error) {
       if (error instanceof Error) {

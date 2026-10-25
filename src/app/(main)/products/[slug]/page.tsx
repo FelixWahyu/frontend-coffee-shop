@@ -79,7 +79,7 @@ export default async function DetailProduct({ params }: { params: Promise<{ slug
 
           {/* Interactive add to cart - pushed to bottom */}
           <div className="mt-auto pt-6">
-            <AddToCartSection price={getProduct.price} />
+            <AddToCartSection product={getProduct} />
           </div>
         </div>
       </div>
@@ -90,9 +90,15 @@ export default async function DetailProduct({ params }: { params: Promise<{ slug
           <h2 className="text-2xl font-bold font-playfair text-stone-900 mb-8">Produk Serupa</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {similarProducts.map((similar) => (
-              <Link key={similar.id} href={`/products/${similar.id}`} className="block">
-                <ProductCard title={similar.name} price={formatCurrency(similar.price)} category={similar.category?.name} image={similar.image} />
-              </Link>
+              <ProductCard
+                key={similar.id}
+                id={similar.id}
+                rawPrice={similar.price}
+                title={similar.name}
+                price={formatCurrency(similar.price)}
+                category={similar.category?.name}
+                image={similar.image}
+              />
             ))}
           </div>
         </section>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import LoginService from "@/services/auth/loginService";
 import { LoginRequest } from "@/types/login";
 import { ValidationLogin } from "@/validations/auth/loginValidation";
@@ -9,6 +9,9 @@ import { ErrorMsg } from "@/types/errorMessage";
 
 export const useLogin = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
+
   const [form, setForm] = useState<LoginRequest>({
     username: "",
     password: "",
@@ -50,15 +53,24 @@ export const useLogin = () => {
       setLoading(true);
       setErrors({});
 
-      await LoginService(form);
+      const res = await LoginService(form);
 
       setForm({
         username: "",
         password: "",
       });
 
-      router.replace("/admin");
-      //   console.log(response);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("auth-change"));
+      }
+
+      if (redirect) {
+        router.replace(redirect);
+      } else if (res?.data?.role === "ADMIN") {
+        router.replace("/admin");
+      } else {
+        router.replace("/");
+      }
     } catch (error) {
       //   console.error(error);
       if (error instanceof Error) {

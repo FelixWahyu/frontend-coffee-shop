@@ -49,9 +49,15 @@ export default async function productPage({ searchParams }: { searchParams: Prom
             </div>
           )}
           {products.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`} className="block">
-              <ProductCard title={product.name} price={formatCurrency(product.price)} category={product.category?.name} image={product.image} />
-            </Link>
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              rawPrice={product.price}
+              title={product.name}
+              price={formatCurrency(product.price)}
+              category={product.category?.name}
+              image={product.image}
+            />
           ))}
         </div>
 

@@ -13,10 +13,12 @@ import dynamic from "next/dynamic";
 const NavbarAuth = dynamic(() => import("@/components/ui/nav-links/navbar-auth"), { ssr: false });
 import { useNavbar } from "@/hooks/auth/UseLogout";
 import SearchModal from "@/components/layout/SearchModal";
+import { useCart } from "@/context/cart/CartContext";
 
 export default function Navbar() {
   const pathName = usePathname();
   const { isMenuOpen, isAuth, toggleMenu, closeMenu, handleLogout, users } = useNavbar();
+  const { totalItems, setIsCartOpen } = useCart();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
@@ -44,8 +46,17 @@ export default function Navbar() {
             >
               <Search size={18} />
             </Button>
-            <Button className="p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300">
+            <Button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-1 cursor-pointer text-gray-700 font-semibold hover:text-[#C67C4E] transition-colors duration-300"
+              aria-label="Buka Keranjang"
+            >
               <ShoppingBag size={18} />
+              {totalItems > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-[#C67C4E] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
             </Button>
           </div>
           <NavbarAuth isAuth={isAuth} user={users} onLogout={handleLogout} atributes="hidden md:flex" />
