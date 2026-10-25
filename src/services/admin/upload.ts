@@ -5,16 +5,27 @@ export const UploadService = {
     const formData = new FormData();
     formData.append("image", file);
 
-    const res = await fetch(`${BASE_URL}/upload`, {
+    const res = await fetch(`${BASE_URL}/admin/upload`, {
       method: "POST",
+      credentials: "include",
       body: formData,
     });
 
+    const json = await res.json();
+
     if (!res.ok) {
-      throw new Error("Failed to upload image");
+      console.error("Upload image gagal:", {
+        status: res.status,
+        response: json,
+      });
+
+      throw new Error(json.errors || "Gagal mengunggah gambar.");
     }
 
-    const json = await res.json();
+    if (!json.data?.url) {
+      throw new Error("URL gambar tidak ditemukan dalam response.");
+    }
+
     return json.data.url;
   },
 };

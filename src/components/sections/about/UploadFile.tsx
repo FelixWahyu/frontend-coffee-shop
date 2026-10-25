@@ -7,6 +7,7 @@ import Button from "../../ui/button";
 import FormGroup from "../../ui/form/form-group";
 import { useState, useEffect } from "react";
 import { BASE_URL } from "@/lib/api";
+import Image from "next/image";
 
 interface ProductsProps {
   name: string;
@@ -148,7 +149,8 @@ export default function UploadFile() {
         </FormGroup>
         {preview && (
           <div className="mt-3">
-            <img src={preview} alt="preview-gambar" className="w-64 h-64 object-cover rounded-md border" />
+            {/* <img src={preview} alt="preview-gambar" className="w-64 h-64 object-cover rounded-md border" /> */}
+            <Image src={preview} alt="preview-gambar" width={100} height={100} className="object-cover rounded-md" />
           </div>
         )}
         <Button type="submit" className="bg-gray-50 mt-10 px-4 py-1.5 rounded-lg hover:bg-gray-100">

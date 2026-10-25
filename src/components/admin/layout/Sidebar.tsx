@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, LayoutGrid, Tag, Boxes, Archive, LogOut } from "lucide-react";
+import { ArrowLeft, LayoutGrid, Tag, Boxes, Archive, LogOut, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useNavbar } from "@/hooks/auth/UseLogout";
 import Image from "next/image";
@@ -64,6 +64,13 @@ export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
           >
             <Archive className="w-5 h-5" />
             Manage Blog
+          </Link>
+          <Link
+            href="/admin/users"
+            className={`flex items-center gap-2 ${pathName.startsWith("/admin/users") ? "bg-gray-900 text-white translate-y-1 translate-x-1 shadow-none" : "hover:bg-gray-900 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none"} shadow-[4px_4px_0px_#000000]/50 border border-black px-4 py-1.5 transition-all`}
+          >
+            <Users className="w-5 h-5" />
+            Manage Users
           </Link>
         </div>
       </nav>

@@ -120,15 +120,7 @@ export default function FormEditCategory() {
           <Label htmlFor="name">Category Name</Label>
           <div className="flex items-center border border-gray-900 px-2 py-1 rounded-md">
             <Tag className="w-5 h-5 mr-1 text-gray-500" />
-            <TextInput
-              type="text"
-              onChange={handleChange}
-              value={form.name}
-              id="name"
-              name="name"
-              placeholder="Input Name"
-              className="border-none focus:ring-gray-300"
-            />
+            <TextInput type="text" onChange={handleChange} value={form.name} id="name" name="name" placeholder="Input Name" className="border-none focus:ring-gray-300" />
           </div>
           {errors.name && <ErrorMessage message={errors.name} />}
         </FormGroup>
@@ -137,14 +129,7 @@ export default function FormEditCategory() {
           <Label htmlFor="description">Description (Optional)</Label>
           <div className="flex items-start border border-gray-900 px-2 py-1 rounded-md">
             <TextAlignJustify className="w-5 h-5 mr-1 mt-2 text-gray-500" />
-            <TextArea
-              onChange={handleChange}
-              value={form.description || ""}
-              id="description"
-              name="description"
-              placeholder="Input Description"
-              className="border-none min-h-50 w-full focus:ring-gray-300"
-            />
+            <TextArea onChange={handleChange} value={form.description || ""} id="description" name="description" placeholder="Input Description" className="border-none min-h-50 w-full focus:ring-gray-300" />
           </div>
           {errors.description && <ErrorMessage message={errors.description} />}
         </FormGroup>
@@ -156,16 +141,8 @@ export default function FormEditCategory() {
             {form.image && (
               <div className="relative w-32 h-32 border-2 border-black rounded-md overflow-hidden shadow-[2px_2px_0px_#000000]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={form.image.startsWith("http") ? form.image : `${BASE_IMAGE_HOST}${form.image}`}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => setForm((prev) => ({ ...prev, image: null }))}
-                  className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer"
-                >
+                <img src={form.image.startsWith("http") ? form.image : `${BASE_IMAGE_HOST}${form.image}`} alt="Preview" className="w-full h-full object-cover" />
+                <button type="button" onClick={() => setForm((prev) => ({ ...prev, image: null }))} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer">
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -174,6 +151,7 @@ export default function FormEditCategory() {
               type="file"
               id="image-file"
               accept="image/*"
+              name="image"
               disabled={uploading}
               onChange={handleImageUpload}
               className="file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border file:border-black file:text-sm file:font-semibold file:bg-gray-100 file:hover:bg-gray-200 file:cursor-pointer text-sm text-stone-500"

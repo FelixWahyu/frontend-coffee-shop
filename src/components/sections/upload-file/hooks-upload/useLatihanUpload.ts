@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BASE_URL } from "@/lib/api";
 
 export const useLatihanUpload = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -16,12 +17,14 @@ export const useLatihanUpload = () => {
 
     if (!allowedTypes.includes(inputFile.type)) {
       setFile(null);
+      setPreview(null);
       setErrorMsg("Format gambar tidak didukung");
       return;
     }
 
     if (inputFile.size > Max_Size) {
       setFile(null);
+      setPreview(null);
       setErrorMsg("Ukuran file maks 2 MB");
       return;
     }
@@ -44,7 +47,7 @@ export const useLatihanUpload = () => {
     };
   }, [file]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMsg("");
 
@@ -55,15 +58,34 @@ export const useLatihanUpload = () => {
 
     const formData = new FormData();
 
-    formData.append("image", file);
+    formData.append("images", file);
 
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
+    try {
+      const res = await fetch(`${BASE_URL}/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Gagal upload file");
+
+      const result = await res.json();
+
+      console.log(result);
+
+      setFile(null);
+      setPreview(null);
+    } catch (error) {
+      console.log(error);
     }
+
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
   };
 
   const handleRemove = () => {
     setFile(null);
+    setPreview(null);
   };
 
   return {

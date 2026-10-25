@@ -31,3 +31,12 @@ export interface ErrorProduct {
   image?: string;
   general?: string;
 }
+
+export interface ErrorUser {
+  name?: string;
+  username?: string;
+  password?: string;
+  role?: string;
+  general?: string;
+}
+
