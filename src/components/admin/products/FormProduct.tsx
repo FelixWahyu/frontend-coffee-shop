@@ -9,6 +9,7 @@ import Button from "../../ui/button";
 import { Tag, TextAlignJustify, Save, DollarSign, Folder, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Product, ProductRequest } from "@/types/product";
 import { Category } from "@/types/categories";
 import { ErrorProduct } from "@/types/errorMessage";
@@ -74,11 +75,9 @@ export default function FormProduct({ product }: FormProductProps) {
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    
+
     // Parse price and category_id as numbers
     let parsedValue: string | number = value;
     if (name === "price") {
@@ -143,11 +142,7 @@ export default function FormProduct({ product }: FormProductProps) {
         <h2>Form {isEditMode ? "Edit" : "Create"} Product</h2>
       </div>
 
-      {errors.general && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-sm">
-          {errors.general}
-        </div>
-      )}
+      {errors.general && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-sm">{errors.general}</div>}
 
       <form onSubmit={handleSubmit}>
         {/* Product Name */}
@@ -155,15 +150,7 @@ export default function FormProduct({ product }: FormProductProps) {
           <Label htmlFor="name">Product Name</Label>
           <div className="flex items-center border border-gray-900 px-2 py-1 rounded-md bg-white">
             <Tag className="w-5 h-5 mr-1 text-gray-500" />
-            <TextInput
-              type="text"
-              onChange={handleChange}
-              value={formInput.name}
-              id="name"
-              name="name"
-              placeholder="Input Product Name"
-              className="border-none focus:ring-gray-300 w-full"
-            />
+            <TextInput type="text" onChange={handleChange} value={formInput.name} id="name" name="name" placeholder="Input Product Name" className="border-none focus:ring-gray-300 w-full" />
           </div>
           {errors.name && <ErrorMessage message={errors.name} />}
         </FormGroup>
@@ -183,7 +170,9 @@ export default function FormProduct({ product }: FormProductProps) {
                 value={formInput.category_id || ""}
                 className="w-full bg-transparent border-none py-1.5 px-2 focus:outline-none focus:ring-0 text-stone-800 cursor-pointer text-sm"
               >
-                <option value="" disabled>-- Select Category --</option>
+                <option value="" disabled>
+                  -- Select Category --
+                </option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
@@ -200,15 +189,7 @@ export default function FormProduct({ product }: FormProductProps) {
           <Label htmlFor="price">Price (Rupiah)</Label>
           <div className="flex items-center border border-gray-900 px-2 py-1 rounded-md bg-white">
             <DollarSign className="w-5 h-5 mr-1 text-gray-500" />
-            <TextInput
-              type="number"
-              onChange={handleChange}
-              value={formInput.price || ""}
-              id="price"
-              name="price"
-              placeholder="Input Price"
-              className="border-none focus:ring-gray-300 w-full"
-            />
+            <TextInput type="number" onChange={handleChange} value={formInput.price || ""} id="price" name="price" placeholder="Input Price" className="border-none focus:ring-gray-300 w-full" />
           </div>
           {errors.price && <ErrorMessage message={errors.price} />}
         </FormGroup>
@@ -218,14 +199,7 @@ export default function FormProduct({ product }: FormProductProps) {
           <Label htmlFor="description">Description (Optional)</Label>
           <div className="flex items-start border border-gray-900 px-2 py-1 rounded-md bg-white">
             <TextAlignJustify className="w-5 h-5 mr-1 mt-2 text-gray-500" />
-            <TextArea
-              onChange={handleChange}
-              value={formInput.description || ""}
-              id="description"
-              name="description"
-              placeholder="Input Product Description"
-              className="border-none min-h-32 w-full focus:ring-gray-300"
-            />
+            <TextArea onChange={handleChange} value={formInput.description || ""} id="description" name="description" placeholder="Input Product Description" className="border-none min-h-32 w-full focus:ring-gray-300" />
           </div>
           {errors.description && <ErrorMessage message={errors.description} />}
         </FormGroup>
@@ -237,16 +211,8 @@ export default function FormProduct({ product }: FormProductProps) {
             {formInput.image && (
               <div className="relative w-32 h-32 border-2 border-black rounded-md overflow-hidden shadow-[2px_2px_0px_#000000]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={formInput.image.startsWith("http") ? formInput.image : `${BASE_IMAGE_HOST}${formInput.image}`}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => setFormInput((prev) => ({ ...prev, image: null }))}
-                  className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer"
-                >
+                <img src={formInput.image.startsWith("http") ? formInput.image : `${BASE_IMAGE_HOST}${formInput.image}`} alt="Preview" className="w-full h-full object-cover" />
+                <button type="button" onClick={() => setFormInput((prev) => ({ ...prev, image: null }))} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer">
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -263,15 +229,24 @@ export default function FormProduct({ product }: FormProductProps) {
           </div>
         </FormGroup>
 
-        {/* Submit Button */}
-        <Button
-          type="submit"
-          disabled={loading}
-          className="flex items-center mt-4 cursor-pointer px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 border border-black rounded-md bg-gray-200 font-semibold hover:text-white hover:bg-blue-600 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
-        >
-          <Save className="w-5 h-5 mr-1" />
-          {loading ? "Menyimpan..." : "Simpan"}
-        </Button>
+        <div className="mt-6 flex items-center gap-3">
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            disabled={loading}
+            className="flex items-center cursor-pointer px-4 py-2 shadow-[4px_4px_0px_#000000]/50 border border-black rounded-md bg-gray-200 font-semibold hover:text-white hover:bg-blue-600 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
+          >
+            <Save className="w-5 h-5 mr-1" />
+            {loading ? "Menyimpan..." : "Simpan"}
+          </Button>
+
+          <Link
+            href="/admin/products"
+            className="px-4 py-2 bg-gray-200 text-gray-900 font-semibold rounded-md border border-black shadow-[4px_4px_0px_#000000]/50 hover:bg-gray-300 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+          >
+            Cancel
+          </Link>
+        </div>
       </form>
     </div>
   );

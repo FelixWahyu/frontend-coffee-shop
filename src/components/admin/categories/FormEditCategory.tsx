@@ -9,6 +9,7 @@ import Button from "../../ui/button";
 import { Tag, TextAlignJustify, Save, X } from "lucide-react";
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { CategoryRequest } from "@/types/categories";
 import { ErrorCategory } from "@/types/errorMessage";
 import { CategoryService } from "@/services/admin/categories";
@@ -160,14 +161,23 @@ export default function FormEditCategory() {
           </div>
         </FormGroup>
 
-        <Button
-          type="submit"
-          disabled={loading}
-          className="flex items-center mt-4 cursor-pointer px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 border border-black rounded-md bg-gray-200 font-semibold hover:text-white hover:bg-blue-600 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
-        >
-          <Save className="w-5 h-5 mr-1" />
-          {loading ? "Menyimpan..." : "Simpan"}
-        </Button>
+        <div className="mt-6 flex items-center gap-3">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="flex items-center cursor-pointer px-4 py-2 shadow-[4px_4px_0px_#000000]/50 border border-black rounded-md bg-gray-200 font-semibold hover:text-white hover:bg-blue-600 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all disabled:opacity-50"
+          >
+            <Save className="w-5 h-5 mr-1" />
+            {loading ? "Menyimpan..." : "Simpan"}
+          </Button>
+
+          <Link
+            href="/admin/categories"
+            className="px-4 py-2 bg-gray-200 text-gray-900 font-semibold rounded-md border border-black shadow-[4px_4px_0px_#000000]/50 hover:bg-gray-300 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+          >
+            Cancel
+          </Link>
+        </div>
       </form>
     </div>
   );

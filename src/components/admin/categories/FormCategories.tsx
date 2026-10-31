@@ -8,6 +8,7 @@ import Button from "@/components/ui/button";
 import { Save, Tag, TextAlignJustify, X } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ErrorCategory } from "@/types/errorMessage";
 import { CategoryRequest } from "@/types/categories";
 import { CategoryValidation } from "@/validations/categories/categoryValidation";
@@ -119,16 +120,8 @@ export default function FormCategories() {
             {formInput.image && (
               <div className="relative w-32 h-32 border-2 border-black rounded-md overflow-hidden shadow-[2px_2px_0px_#000000]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={formInput.image.startsWith("http") ? formInput.image : `${BASE_IMAGE_HOST}${formInput.image}`}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => setFormInput((prev) => ({ ...prev, image: null }))}
-                  className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer"
-                >
+                <img src={formInput.image.startsWith("http") ? formInput.image : `${BASE_IMAGE_HOST}${formInput.image}`} alt="Preview" className="w-full h-full object-cover" />
+                <button type="button" onClick={() => setFormInput((prev) => ({ ...prev, image: null }))} className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 cursor-pointer">
                   <X className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -145,13 +138,22 @@ export default function FormCategories() {
           </div>
         </FormGroup>
 
-        <Button
-          type="submit"
-          className="flex items-center mt-4 cursor-pointer px-4 py-1.5 shadow-[4px_4px_0px_#000000]/50 border border-black rounded-md bg-gray-200 font-semibold hover:text-white hover:bg-blue-600 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
-        >
-          <Save className="w-5 h-5 mr-1" />
-          Simpan
-        </Button>
+        <div className="mt-6 flex items-center gap-3">
+          <Button
+            type="submit"
+            className="flex items-center cursor-pointer px-4 py-2 shadow-[4px_4px_0px_#000000]/50 border border-black rounded-md bg-gray-200 font-semibold hover:text-white hover:bg-blue-600 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+          >
+            <Save className="w-5 h-5 mr-1" />
+            Simpan
+          </Button>
+
+          <Link
+            href="/admin/categories"
+            className="px-4 py-2 bg-gray-200 text-gray-900 font-semibold rounded-md border border-black shadow-[4px_4px_0px_#000000]/50 hover:bg-gray-300 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
+          >
+            Cancel
+          </Link>
+        </div>
       </form>
     </div>
   );

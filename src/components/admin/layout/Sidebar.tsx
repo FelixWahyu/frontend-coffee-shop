@@ -46,14 +46,14 @@ export default function SidebarAdmin({ isOpen }: SidebarAdminProps) {
         <div className="flex flex-col gap-2">
           <Link
             href="/admin/categories"
-            className={`flex items-center gap-2 ${pathName === "/admin/categories" ? "bg-gray-900 text-white translate-y-1 translate-x-1 shadow-none" : "hover:bg-gray-900 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none"} shadow-[4px_4px_0px_#000000]/50 border border-black px-4 py-1.5 transition-all`}
+            className={`flex items-center gap-2 ${pathName.startsWith("/admin/categories") ? "bg-gray-900 text-white translate-y-1 translate-x-1 shadow-none" : "hover:bg-gray-900 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none"} shadow-[4px_4px_0px_#000000]/50 border border-black px-4 py-1.5 transition-all`}
           >
             <Tag className="w-5 h-5" />
             Manage Categories
           </Link>
           <Link
             href="/admin/products"
-            className={`flex items-center gap-2 ${pathName === "/admin/products" ? "bg-gray-900 text-white translate-y-1 translate-x-1 shadow-none" : "hover:bg-gray-900 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none"} shadow-[4px_4px_0px_#000000]/50 border border-black px-4 py-1.5 transition-all`}
+            className={`flex items-center gap-2 ${pathName.startsWith("/admin/products") ? "bg-gray-900 text-white translate-y-1 translate-x-1 shadow-none" : "hover:bg-gray-900 hover:text-white hover:translate-y-1 hover:translate-x-1 hover:shadow-none"} shadow-[4px_4px_0px_#000000]/50 border border-black px-4 py-1.5 transition-all`}
           >
             <Boxes className="w-5 h-5" />
             Manage Products
