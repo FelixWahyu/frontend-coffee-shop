@@ -1,28 +1,65 @@
-import { useState, useEffect, useRef } from "react";
-import { Review } from "@/types/review";
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Review, CreateReviewInput } from "@/types/review";
 import { ReviewService } from "@/services/home/reviewService";
 
 export default function useReview() {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
+  const prevRef = useRef<HTMLButtonElement | null>(null);
+  const nextRef = useRef<HTMLButtonElement | null>(null);
 
   const [reviewData, setReviewData] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await ReviewService.getReviews();
-        setReviewData(result.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
+  const fetchReviews = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const result = await ReviewService.getReviews();
+      setReviewData(result.data || []);
+    } catch (err: any) {
+      console.error("Error fetching reviews:", err);
+      setError(err?.message || "Gagal memuat ulasan");
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  return { reviewData, isLoading, prevRef, nextRef };
+  useEffect(() => {
+    fetchReviews();
+  }, [fetchReviews]);
+
+  const addReview = async (input: CreateReviewInput) => {
+    try {
+      setIsSubmitting(true);
+      setError(null);
+      const response = await ReviewService.createReview(input);
+      if (response && response.data) {
+        setReviewData((prev) => [response.data, ...prev]);
+      } else {
+        await fetchReviews();
+      }
+      return response;
+    } catch (err: any) {
+      console.error("Error submitting review:", err);
+      const errMsg = err?.message || "Gagal mengirim ulasan";
+      setError(errMsg);
+      throw new Error(errMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return {
+    reviewData,
+    isLoading,
+    isSubmitting,
+    error,
+    prevRef,
+    nextRef,
+    refetchReviews: fetchReviews,
+    addReview,
+  };
 }
