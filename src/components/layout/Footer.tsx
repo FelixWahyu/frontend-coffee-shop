@@ -6,7 +6,7 @@ import { Mail, MapPin, MessageCircleMore, Camera, Send, Phone } from "lucide-rea
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-[#30261C] pt-16 pb-6">
+    <footer className="bg-[#30261C] pt-16 pb-6 px-4 lg:px-0">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
         <div className="space-y-5">
           <div className="flex items-center gap-4">
