@@ -1,5 +1,19 @@
 import { BASE_URL } from "@/lib/api";
-import { User, CreateUserRequest, UpdateUserRequest, UserApiResponse, SingleUserApiResponse } from "@/types/users";
+import {
+  User,
+  UserDetail,
+  CreateUserRequest,
+  UpdateUserRequest,
+  CreateContactInput,
+  UpdateContactInput,
+  CreateAddressInput,
+  UpdateAddressInput,
+  UserApiResponse,
+  SingleUserApiResponse,
+  SingleUserDetailApiResponse,
+  Contact,
+  Address,
+} from "@/types/users";
 
 export const UserService = {
   getUsers: async (search?: string, page?: number, size?: number): Promise<{ data: User[]; paging?: any }> => {
@@ -26,11 +40,11 @@ export const UserService = {
     };
   },
 
-  getUserByUsername: async (username: string): Promise<User> => {
+  getUserByUsername: async (username: string): Promise<UserDetail> => {
     const req = await fetch(`${BASE_URL}/admin/users/${username}`, {
       credentials: "include",
     });
-    const res: SingleUserApiResponse = await req.json();
+    const res: SingleUserDetailApiResponse = await req.json();
     if (!req.ok) throw new Error(res.message || "Failed to fetch user");
     return res.data;
   },
@@ -78,6 +92,96 @@ export const UserService = {
     if (!req.ok) {
       const res = await req.json();
       throw new Error(res.errors || res.message || "Failed to delete user");
+    }
+  },
+
+  // Contact operations for admin
+  createContact: async (username: string, contact: CreateContactInput): Promise<Contact> => {
+    const req = await fetch(`${BASE_URL}/admin/users/${username}/contacts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(contact),
+    });
+
+    const res = await req.json();
+    if (!req.ok) {
+      throw new Error(res.errors || res.message || "Failed to create contact");
+    }
+
+    return res.data;
+  },
+
+  updateContact: async (username: string, contactId: number, contact: UpdateContactInput): Promise<Contact> => {
+    const req = await fetch(`${BASE_URL}/admin/users/${username}/contacts/${contactId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(contact),
+    });
+
+    const res = await req.json();
+    if (!req.ok) {
+      throw new Error(res.errors || res.message || "Failed to update contact");
+    }
+
+    return res.data;
+  },
+
+  deleteContact: async (username: string, contactId: number): Promise<void> => {
+    const req = await fetch(`${BASE_URL}/admin/users/${username}/contacts/${contactId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!req.ok) {
+      const res = await req.json();
+      throw new Error(res.errors || res.message || "Failed to delete contact");
+    }
+  },
+
+  // Address operations for admin
+  createAddress: async (username: string, contactId: number, address: CreateAddressInput): Promise<Address> => {
+    const req = await fetch(`${BASE_URL}/admin/users/${username}/contacts/${contactId}/addresses`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(address),
+    });
+
+    const res = await req.json();
+    if (!req.ok) {
+      throw new Error(res.errors || res.message || "Failed to create address");
+    }
+
+    return res.data;
+  },
+
+  updateAddress: async (username: string, contactId: number, addressId: number, address: UpdateAddressInput): Promise<Address> => {
+    const req = await fetch(`${BASE_URL}/admin/users/${username}/contacts/${contactId}/addresses/${addressId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(address),
+    });
+
+    const res = await req.json();
+    if (!req.ok) {
+      throw new Error(res.errors || res.message || "Failed to update address");
+    }
+
+    return res.data;
+  },
+
+  deleteAddress: async (username: string, contactId: number, addressId: number): Promise<void> => {
+    const req = await fetch(`${BASE_URL}/admin/users/${username}/contacts/${contactId}/addresses/${addressId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!req.ok) {
+      const res = await req.json();
+      throw new Error(res.errors || res.message || "Failed to delete address");
     }
   },
 };
