@@ -5,58 +5,35 @@ import TextInput from "@/components/ui/form/text-input";
 import Button from "@/components/ui/button";
 import ConfirmModal from "@/components/ui/confirm-modal";
 import { Search, Plus, Edit, Trash2 } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
-import { Category } from "@/types/categories";
-import { CategoryService } from "@/services/admin/categories";
 import Pagination from "@/components/ui/pagination";
+import { useCategoryTable } from "@/hooks/categories";
 
 export default function CategoriesPage() {
-  const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
-
-  const fetchCategories = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await CategoryService.getCategories(search, page, 10);
-      setCategories(res.data);
-      setTotalPages(res.paging?.total_page || 1);
-    } catch (error) {
-      console.error("Failed fetch category", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [search, page]);
-
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
-
-  // Reset page when search keyword changes
-  useEffect(() => {
-    setPage(1);
-  }, [search]);
-
-  const handleDelete = async () => {
-    if (!deleteTarget) return;
-    try {
-      await CategoryService.deleteCategory(deleteTarget.id);
-      setDeleteTarget(null);
-      fetchCategories();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const {
+    categories,
+    loading,
+    search,
+    setSearch,
+    page,
+    setPage,
+    totalPages,
+    deleteTarget,
+    setDeleteTarget,
+    handleDelete,
+  } = useCategoryTable();
 
   return (
     <div>
       <div className="flex flex-col-reverse md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div className="flex items-center gap-2 border border-gray-900 px-2 rounded-lg w-full md:w-96 bg-white">
           <Search className="w-5 h-5 text-gray-500" />
-          <TextInput type="text" placeholder="Search categories..." value={search} onChange={(e) => setSearch(e.target.value)} className="border-none focus:border-none focus:ring-0 w-full" />
+          <TextInput
+            type="text"
+            placeholder="Search categories..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border-none focus:border-none focus:ring-0 w-full"
+          />
         </div>
         <Link
           href="/admin/categories/create"
@@ -77,7 +54,7 @@ export default function CategoriesPage() {
             <thead>
               <tr className="bg-gray-100 border-b-3 border-gray-900">
                 <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">Name</th>
-                <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">CreateAt</th>
+                <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">CreatedAt</th>
                 <th className="px-4 py-3 text-center font-bold text-gray-700">Actions</th>
               </tr>
             </thead>
@@ -85,10 +62,15 @@ export default function CategoriesPage() {
               {categories.map((category) => (
                 <tr key={category.id} className="hover:bg-gray-50 border-b border-gray-300 last:border-b-0">
                   <td className="border-r border-gray-300 px-4 py-2 font-medium max-w-xs truncate">{category.name}</td>
-                  <td className="border-r border-gray-300 px-4 py-2 text-sm text-gray-500">{new Date(category.createdAt).toLocaleDateString("id-ID")}</td>
+                  <td className="border-r border-gray-300 px-4 py-2 text-sm text-gray-500">
+                    {new Date(category.createdAt).toLocaleDateString("id-ID")}
+                  </td>
                   <td className="px-4 py-2 w-10">
                     <div className="flex items-center justify-center gap-2">
-                      <Link href={`/admin/categories/edit/${category.id}`} className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer font-semibold">
+                      <Link
+                        href={`/admin/categories/edit/${category.id}`}
+                        className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer font-semibold"
+                      >
                         <Edit className="w-4 h-4" />
                         Edit
                       </Link>
@@ -107,12 +89,14 @@ export default function CategoriesPage() {
           </table>
         </div>
       )}
+
       <Pagination
         currentPage={page}
         totalPages={totalPages}
         onPageChange={setPage}
         variant="brutalism"
       />
+
       <ConfirmModal
         open={!!deleteTarget}
         title="Delete Category"

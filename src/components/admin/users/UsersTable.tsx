@@ -25,10 +25,11 @@ export default function UsersTable() {
       setErrorMessage(null);
       const res = await UserService.getUsers(search, page, 10);
       setUsers(res.data);
-      setTotalPages(res.paging?.total_page || 1);
-    } catch (error: any) {
+      setTotalPages(res.paging?.total_page ?? 1);
+    } catch (error: unknown) {
       console.error("Failed fetch users", error);
-      setErrorMessage(error.message || "Failed to fetch users");
+      const message = error instanceof Error ? error.message : "Failed to fetch users";
+      setErrorMessage(message);
     } finally {
       setLoading(false);
     }
@@ -49,9 +50,10 @@ export default function UsersTable() {
       await UserService.deleteUser(deleteTarget.username);
       setDeleteTarget(null);
       fetchUsers();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to delete user", error);
-      alert(error.message || "Failed to delete user");
+      const message = error instanceof Error ? error.message : "Failed to delete user";
+      alert(message);
       setDeleteTarget(null);
     }
   };
@@ -61,13 +63,7 @@ export default function UsersTable() {
       <div className="flex flex-col-reverse md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div className="flex items-center gap-2 border border-gray-900 px-2 rounded-lg w-full md:w-96 bg-white">
           <Search className="w-5 h-5 text-gray-500" />
-          <TextInput
-            type="text"
-            placeholder="Search users by name or username..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border-none focus:border-none focus:ring-0 w-full"
-          />
+          <TextInput type="text" placeholder="Search users by name or username..." value={search} onChange={(e) => setSearch(e.target.value)} className="border-none focus:border-none focus:ring-0 w-full" />
         </div>
         <Link
           href="/admin/users/create"
@@ -78,11 +74,7 @@ export default function UsersTable() {
         </Link>
       </div>
 
-      {errorMessage && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
-          {errorMessage}
-        </div>
-      )}
+      {errorMessage && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">{errorMessage}</div>}
 
       {loading ? (
         <p className="text-gray-500">Loading...</p>
@@ -106,19 +98,14 @@ export default function UsersTable() {
                   <td className="border-r border-gray-300 px-4 py-2 font-medium max-w-xs truncate text-gray-800">{user.name}</td>
                   <td className="border-r border-gray-300 px-4 py-2">
                     <span
-                      className={`inline-block px-2.5 py-0.5 text-xs font-bold rounded-full border border-black shadow-[2px_2px_0px_#000000]/40 ${
-                        user.role === "ADMIN" ? "bg-purple-200 text-purple-900" : "bg-emerald-100 text-emerald-900"
-                      }`}
+                      className={`inline-block px-2.5 py-0.5 text-xs font-bold rounded-full border border-black shadow-[2px_2px_0px_#000000]/40 ${user.role === "ADMIN" ? "bg-purple-200 text-purple-900" : "bg-emerald-100 text-emerald-900"}`}
                     >
                       {user.role}
                     </span>
                   </td>
                   <td className="px-4 py-2 w-10">
                     <div className="flex items-center justify-center gap-2">
-                      <Link
-                        href={`/admin/users/edit/${user.username}`}
-                        className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer font-semibold"
-                      >
+                      <Link href={`/admin/users/edit/${user.username}`} className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer font-semibold">
                         <Edit className="w-4 h-4" />
                         Edit
                       </Link>
@@ -138,12 +125,7 @@ export default function UsersTable() {
         </div>
       )}
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-        variant="brutalism"
-      />
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} variant="brutalism" />
 
       <ConfirmModal
         open={!!deleteTarget}

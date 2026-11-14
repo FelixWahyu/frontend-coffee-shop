@@ -63,9 +63,10 @@ export default function FormEditUser() {
         role: (data.role as "USER" | "ADMIN") || "USER",
         password: "",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to load user data:", error);
-      setApiError(error.message || "Failed to load user data");
+      const message = error instanceof Error ? error.message : "Failed to load user data";
+      setApiError(message);
     } finally {
       setFetching(false);
     }
@@ -115,9 +116,10 @@ export default function FormEditUser() {
       setSuccessMsg("Informasi akun pengguna berhasil diperbarui!");
       setTimeout(() => setSuccessMsg(null), 3000);
       await fetchUserData();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to update user", error);
-      setApiError(error.message || "Failed to update user");
+      const message = error instanceof Error ? error.message : "Failed to update user";
+      setApiError(message);
     } finally {
       setLoading(false);
     }
@@ -206,8 +208,9 @@ export default function FormEditUser() {
       setTimeout(() => setSuccessMsg(null), 3000);
       setDeleteTarget(null);
       await fetchUserData();
-    } catch (err: any) {
-      alert(err.message || "Gagal menghapus item");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Gagal menghapus item";
+      alert(message);
       setDeleteTarget(null);
     }
   };

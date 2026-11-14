@@ -120,8 +120,9 @@ export default function ContactModal({ isOpen, onClose, onSave, initialData }: C
         await onSave(payload);
       }
       onClose();
-    } catch (err: any) {
-      setErrorMsg(err.message || "Gagal menyimpan kontak");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Gagal menyimpan kontak";
+      setErrorMsg(message);
     } finally {
       setLoading(false);
     }

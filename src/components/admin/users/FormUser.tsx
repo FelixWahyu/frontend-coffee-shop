@@ -5,7 +5,7 @@ import TextInput from "@/components/ui/form/text-input";
 import ErrorMessage from "@/components/ui/form/error";
 import FormGroup from "@/components/ui/form/form-group";
 import Button from "@/components/ui/button";
-import { Save, User as UserIcon, Shield, Key, AtSign, ArrowLeft } from "lucide-react";
+import { Save, User as UserIcon, Shield, Key, AtSign } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -56,9 +56,10 @@ export default function FormUser() {
       await UserService.createUser(formInput);
 
       router.replace("/admin/users");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to create user", error);
-      setApiError(error.message || "Failed to create user");
+      const message = error instanceof Error ? error.message : "Failed to fetch users";
+      setApiError(message);
     } finally {
       setLoading(false);
     }
@@ -68,10 +69,6 @@ export default function FormUser() {
     <div className="p-6 rounded-md border-3 border-gray-900 max-w-lg shadow-[6px_6px_0px_#000000]/60 bg-white">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-semibold tracking-wide text-gray-800">Create New User</h2>
-        <Link href="/admin/users" className="flex items-center gap-1 text-sm text-gray-600 hover:text-black hover:underline">
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </Link>
       </div>
 
       {apiError && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-sm">{apiError}</div>}

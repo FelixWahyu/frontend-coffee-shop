@@ -85,8 +85,9 @@ export default function AddressModal({ isOpen, onClose, onSave, initialData, con
       });
 
       onClose();
-    } catch (err: any) {
-      setErrorMsg(err.message || "Gagal menyimpan alamat");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Gagal menyimpan alamat";
+      setErrorMsg(message);
     } finally {
       setLoading(false);
     }

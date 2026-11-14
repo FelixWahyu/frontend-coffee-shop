@@ -125,11 +125,12 @@ export default function FormProduct({ product }: FormProductProps) {
 
       router.replace("/admin/products");
       router.refresh();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
+      const message = error instanceof Error ? error.message : "Failed to save product";
       setErrors((prev) => ({
         ...prev,
-        general: error.message || "Failed to save product",
+        general: message,
       }));
     } finally {
       setLoading(false);
