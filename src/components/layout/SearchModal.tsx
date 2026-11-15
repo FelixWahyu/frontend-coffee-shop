@@ -1,83 +1,32 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Search, X, Coffee, Loader2 } from "lucide-react";
-import useProducts from "@/hooks/products/UseProducts";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Image from "next/image";
 import { getImageUrl } from "@/utils/getImageUrl";
+import useSearchModal from "@/hooks/search/useSearchModal";
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const SUGGESTIONS = ["Espresso", "Cappuccino", "Latte", "Americano", "Macchiato"];
-
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
-  const [mounted, setMounted] = useState(false);
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  // Set mounted flag on client side to prevent SSR issues with Portal
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  // Debounce the query to prevent overloading the database/API on every keystroke
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedQuery(query);
-    }, 250);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [query]);
-
-  // Focus the input when the modal is opened
-  useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        inputRef.current?.focus();
-      }, 50);
-      document.body.style.overflow = "hidden"; // Prevent scrolling behind modal
-
-      return () => {
-        clearTimeout(timer);
-      };
-    } else {
-      document.body.style.overflow = "unset";
-    }
-  }, [isOpen]);
-
-  // Handle escape key to close
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
-
-  // Hook to fetch products based on debounced search query
-  const { products, isLoading } = useProducts({ search: debouncedQuery });
-
-  // Handle backdrop click to close
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      onClose();
-    }
-  };
+  const {
+    mounted,
+    query,
+    handleQueryChange,
+    handleClearQuery,
+    handleSelectSuggestion,
+    inputRef,
+    modalRef,
+    handleBackdropClick,
+    products,
+    isLoading,
+    suggestions,
+  } = useSearchModal({ isOpen, onClose });
 
   if (!isOpen || !mounted) return null;
 
@@ -92,15 +41,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             type="text"
             placeholder="Search for coffee, drinks, or foods..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleQueryChange}
             className="flex-1 bg-transparent text-stone-800 placeholder-stone-400 focus:outline-none text-lg py-1 font-lato"
           />
           {query && (
             <button
-              onClick={() => {
-                setQuery("");
-                inputRef.current?.focus();
-              }}
+              onClick={handleClearQuery}
               className="p-1 rounded-full text-stone-400 hover:bg-stone-100 hover:text-stone-600 transition-colors mr-1"
             >
               <X className="w-4 h-4" />
@@ -139,13 +85,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             <div>
               <h3 className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 font-lato">Popular Searches</h3>
               <div className="flex flex-wrap gap-2 mb-6">
-                {SUGGESTIONS.map((suggestion) => (
+                {suggestions.map((suggestion) => (
                   <button
                     key={suggestion}
-                    onClick={() => {
-                      setQuery(suggestion);
-                      inputRef.current?.focus();
-                    }}
+                    onClick={() => handleSelectSuggestion(suggestion)}
                     className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-full bg-stone-100 hover:bg-[#F5EFE6] text-stone-600 hover:text-[#C67C4E] border border-stone-200/50 hover:border-[#C67C4E]/30 transition-all cursor-pointer font-lato"
                   >
                     <Search className="w-3 h-3" />

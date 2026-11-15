@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import usePagination from "@/hooks/ui/usePagination";
 
 interface PaginationProps {
   currentPage: number;
@@ -7,41 +8,19 @@ interface PaginationProps {
   variant?: "modern" | "brutalism";
 }
 
-export default function Pagination({ currentPage, totalPages, onPageChange, variant = "modern" }: PaginationProps) {
+export default function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+  variant = "modern",
+}: PaginationProps) {
+  const { pages, isFirstPage, isLastPage, handlePrev, handleNext } = usePagination({
+    currentPage,
+    totalPages,
+    onPageChange,
+  });
+
   if (totalPages <= 1) return null;
-
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    const siblingPages = 1;
-
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-      return pages;
-    }
-
-    pages.push(1);
-
-    const startSibling = Math.max(2, currentPage - siblingPages);
-    const endSibling = Math.min(totalPages - 1, currentPage + siblingPages);
-
-    if (startSibling > 2) {
-      pages.push("...");
-    }
-
-    for (let i = startSibling; i <= endSibling; i++) {
-      pages.push(i);
-    }
-
-    if (endSibling < totalPages - 1) {
-      pages.push("...");
-    }
-
-    pages.push(totalPages);
-
-    return pages;
-  };
 
   const isBrutalist = variant === "brutalism";
 
@@ -55,15 +34,15 @@ export default function Pagination({ currentPage, totalPages, onPageChange, vari
       {/* Prev Button */}
       <button
         type="button"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        onClick={handlePrev}
+        disabled={isFirstPage}
         className={btnClasses}
       >
         <ChevronLeft size={18} />
       </button>
 
       {/* Page Numbers */}
-      {getPageNumbers().map((page, idx) => {
+      {pages.map((page, idx) => {
         if (page === "...") {
           return (
             <span
@@ -105,8 +84,8 @@ export default function Pagination({ currentPage, totalPages, onPageChange, vari
       {/* Next Button */}
       <button
         type="button"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        onClick={handleNext}
+        disabled={isLastPage}
         className={btnClasses}
       >
         <ChevronRight size={18} />

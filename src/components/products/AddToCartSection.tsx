@@ -1,53 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import { Plus, Minus, ShoppingBag } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useCart } from "@/context/cart/CartContext";
-import getCurrrentUser from "@/services/auth/authUser";
 import { Product } from "@/types/product";
+import useAddToCart from "@/hooks/products/useAddToCart";
 
 interface AddToCartSectionProps {
   product: Product;
 }
 
 export default function AddToCartSection({ product }: AddToCartSectionProps) {
-  const router = useRouter();
-  const { addToCart, setIsCartOpen } = useCart();
-  const [quantity, setQuantity] = useState(1);
-  const [checkingAuth, setCheckingAuth] = useState(false);
-
-  const handleIncrement = () => setQuantity((prev) => prev + 1);
-  const handleDecrement = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
-
-  const handleAddToCart = async () => {
-    if (checkingAuth) return;
-    try {
-      setCheckingAuth(true);
-      const user = await getCurrrentUser();
-      if (!user) {
-        router.push(`/login?redirect=/products/${product.id}`);
-        return;
-      }
-
-      addToCart(
-        {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-        },
-        quantity
-      );
-
-      setIsCartOpen(true);
-    } catch (error) {
-      console.error("Auth check error:", error);
-      router.push(`/login?redirect=/products/${product.id}`);
-    } finally {
-      setCheckingAuth(false);
-    }
-  };
+  const {
+    quantity,
+    checkingAuth,
+    totalPrice,
+    handleIncrement,
+    handleDecrement,
+    handleAddToCart,
+  } = useAddToCart(product);
 
   return (
     <div className="space-y-6 pt-6 border-t border-stone-200">
@@ -76,7 +45,7 @@ export default function AddToCartSection({ product }: AddToCartSectionProps) {
         <div className="flex-1 w-full">
           <p className="text-xs text-stone-400 font-lato">Total Harga</p>
           <p className="text-2xl font-bold text-[#C67C4E] font-lato">
-            Rp {(product.price * quantity).toLocaleString("id-ID")}
+            Rp {totalPrice.toLocaleString("id-ID")}
           </p>
         </div>
         <button

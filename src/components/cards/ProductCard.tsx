@@ -5,10 +5,7 @@ import Link from "next/link";
 import Card from "../ui/cards";
 import { Coffee } from "lucide-react";
 import { getImageUrl } from "@/utils/getImageUrl";
-import { useCart } from "@/context/cart/CartContext";
-import getCurrrentUser from "@/services/auth/authUser";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import useProductCard from "@/hooks/products/useProductCard";
 
 interface ProductCardProps {
   id?: number;
@@ -20,49 +17,12 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ id, title, price, rawPrice, category, image }: ProductCardProps) {
-  const router = useRouter();
-  const { addToCart, setIsCartOpen } = useCart();
-  const [loading, setLoading] = useState(false);
-
-  const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (loading) return;
-
-    try {
-      setLoading(true);
-      const user = await getCurrrentUser();
-      if (!user) {
-        const redirectUrl = id ? `/products/${id}` : "/products";
-        router.push(`/login?redirect=${redirectUrl}`);
-        return;
-      }
-
-      if (id && rawPrice !== undefined) {
-        addToCart(
-          {
-            id,
-            name: title,
-            price: rawPrice,
-            image: image,
-          },
-          1
-        );
-        setIsCartOpen(true);
-      } else if (id) {
-        router.push(`/products/${id}`);
-      }
-    } catch (error) {
-      console.error("Auth check error:", error);
-      const redirectUrl = id ? `/products/${id}` : "/products";
-      router.push(`/login?redirect=${redirectUrl}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const productUrl = id ? `/products/${id}` : "#";
+  const { loading, handleAddToCart, productUrl } = useProductCard({
+    id,
+    title,
+    rawPrice,
+    image,
+  });
 
   return (
     <Card className="p-3 bg-[#FAF7F2] border border-stone-200/50 hover:border-[#C67C4E]/40 hover:shadow-lg transition-all group duration-300 rounded-2xl flex flex-col justify-between h-full">

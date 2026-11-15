@@ -1,27 +1,26 @@
 "use client";
 
-import { useCart } from "@/context/cart/CartContext";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { X, Plus, Minus, Trash2, ShoppingBag, Coffee, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import useCartDrawer from "@/hooks/cart/useCartDrawer";
 
 export default function CartDrawer() {
-  const { items, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, clearCart, totalItems, totalQuantity, totalPrice } = useCart();
-
-  // Prevent background scrolling when drawer is open
-  useEffect(() => {
-    if (isCartOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isCartOpen]);
+  const {
+    items,
+    isCartOpen,
+    closeCart,
+    totalItems,
+    totalQuantity,
+    totalPrice,
+    handleIncrement,
+    handleDecrement,
+    handleRemove,
+    clearCart,
+    handleCheckout,
+  } = useCartDrawer();
 
   if (!isCartOpen) return null;
 
@@ -30,7 +29,7 @@ export default function CartDrawer() {
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity animate-in fade-in duration-300"
-        onClick={() => setIsCartOpen(false)}
+        onClick={closeCart}
       />
 
       {/* Slide-over Drawer */}
@@ -45,7 +44,7 @@ export default function CartDrawer() {
             </span>
           </div>
           <button
-            onClick={() => setIsCartOpen(false)}
+            onClick={closeCart}
             className="p-1.5 rounded-full hover:bg-stone-100 text-stone-500 hover:text-stone-800 transition-colors cursor-pointer"
             aria-label="Tutup keranjang"
           >
@@ -66,7 +65,7 @@ export default function CartDrawer() {
               </p>
               <Link
                 href="/products"
-                onClick={() => setIsCartOpen(false)}
+                onClick={closeCart}
                 className="inline-flex items-center gap-2 bg-[#C67C4E] hover:bg-[#b86d3e] text-white font-bold py-2.5 px-6 rounded-xl font-lato text-sm transition-all shadow-sm"
               >
                 Mulai Belanja
@@ -104,7 +103,7 @@ export default function CartDrawer() {
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex items-center bg-[#F5EFE6] border border-stone-200 rounded-lg p-0.5">
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => handleDecrement(item.id, item.quantity)}
                         className="p-1 rounded hover:bg-white text-stone-600 transition-colors cursor-pointer"
                         aria-label="Kurangi"
                       >
@@ -114,7 +113,7 @@ export default function CartDrawer() {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => handleIncrement(item.id, item.quantity)}
                         className="p-1 rounded hover:bg-white text-stone-600 transition-colors cursor-pointer"
                         aria-label="Tambah"
                       >
@@ -129,7 +128,7 @@ export default function CartDrawer() {
 
                 {/* Remove Button */}
                 <button
-                  onClick={() => removeFromCart(item.id)}
+                  onClick={() => handleRemove(item.id)}
                   className="p-2 text-stone-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
                   title="Hapus dari keranjang"
                 >
@@ -158,9 +157,7 @@ export default function CartDrawer() {
 
             <div className="space-y-2">
               <button
-                onClick={() => {
-                  alert("Fitur checkout sedang dipersiapkan!");
-                }}
+                onClick={handleCheckout}
                 className="w-full flex items-center justify-center gap-2 bg-[#C67C4E] hover:bg-[#b86d3e] text-white font-bold py-3 px-6 rounded-2xl shadow-md transition-all cursor-pointer font-lato"
               >
                 Lanjut ke Pembayaran

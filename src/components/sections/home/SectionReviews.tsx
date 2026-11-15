@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -9,68 +8,33 @@ import "swiper/css/pagination";
 import ReviewCard from "@/components/cards/ReviewCard";
 import LoadingSkeleton from "../../ui/loading";
 import { ArrowLeft, ArrowRight, MessageSquarePlus, Star, Sparkles } from "lucide-react";
-import type { Swiper as SwiperType } from "swiper";
-import useReview from "@/hooks/reviews/UseReview";
-import getSliderAtributes from "@/constants/slider";
 import ReviewModal from "./ReviewModal";
-import getCurrrentUser from "@/services/auth/authUser";
-import { UserResponse } from "@/types/users";
+import useSectionReviews from "@/hooks/reviews/useSectionReviews";
 
 export default function ReviewSection() {
-  const { reviewData, isLoading, prevRef, nextRef, refetchReviews } = useReview();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState<UserResponse | null>(null);
-  const [isAuth, setIsAuth] = useState(false);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const currentUser = await getCurrrentUser();
-        if (currentUser && currentUser.data) {
-          setUser(currentUser.data);
-          setIsAuth(true);
-        } else {
-          setUser(null);
-          setIsAuth(false);
-        }
-      } catch {
-        setUser(null);
-        setIsAuth(false);
-      }
-    };
-
-    fetchUser();
-
-    const handleAuthChange = () => {
-      fetchUser();
-    };
-
-    window.addEventListener("auth-change", handleAuthChange);
-    return () => window.removeEventListener("auth-change", handleAuthChange);
-  }, []);
-
-  const { swiperAutoPlay, swiperPagination, swiperBreakPoints } = getSliderAtributes({
-    breakpoints: [
-      {
-        width: 640,
-        slidesPerView: 2,
-      },
-      {
-        width: 768,
-        slidesPerView: 3,
-      },
-    ],
-  });
+  const {
+    reviewData,
+    isLoading,
+    prevRef,
+    nextRef,
+    isModalOpen,
+    openModal,
+    closeModal,
+    handleSuccess,
+    user,
+    isAuth,
+    totalReviews,
+    averageRating,
+    swiperAutoPlay,
+    swiperPagination,
+    swiperBreakPoints,
+    onBeforeInit,
+    isLoop,
+  } = useSectionReviews();
 
   if (isLoading) {
     return <LoadingSkeleton />;
   }
-
-  const totalReviews = reviewData.length;
-  const averageRating =
-    totalReviews > 0
-      ? (reviewData.reduce((acc, curr) => acc + curr.rating, 0) / totalReviews).toFixed(1)
-      : "5.0";
 
   return (
     <section className="px-6 md:px-8 py-16 bg-[#E2D9C8]">
@@ -93,7 +57,7 @@ export default function ReviewSection() {
 
           {/* Action Button */}
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={openModal}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#C67C4E] hover:bg-[#b06a3d] text-white font-lato font-semibold text-sm shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer"
           >
             <MessageSquarePlus className="w-4 h-4" />
@@ -115,7 +79,7 @@ export default function ReviewSection() {
             </p>
             <div className="pt-2">
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={openModal}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#C67C4E] hover:bg-[#b06a3d] text-white font-lato font-semibold text-sm shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer"
               >
                 <MessageSquarePlus className="w-4 h-4" />
@@ -144,13 +108,8 @@ export default function ReviewSection() {
               className="review-swiper !py-4"
               modules={[Navigation, Autoplay, Pagination]}
               autoplay={swiperAutoPlay}
-              onBeforeInit={(swiper: SwiperType) => {
-                if (typeof swiper.params.navigation !== "boolean" && swiper.params.navigation) {
-                  swiper.params.navigation.prevEl = prevRef.current;
-                  swiper.params.navigation.nextEl = nextRef.current;
-                }
-              }}
-              loop={totalReviews > 3}
+              onBeforeInit={onBeforeInit}
+              loop={isLoop}
               grabCursor={true}
               pagination={swiperPagination}
               slidesPerView={1}
@@ -183,8 +142,8 @@ export default function ReviewSection() {
       {/* Review Modal */}
       <ReviewModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={() => refetchReviews()}
+        onClose={closeModal}
+        onSuccess={handleSuccess}
         user={user}
         isAuth={isAuth}
       />

@@ -1,57 +1,31 @@
 "use client";
 
-import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { ArrowLeft, ArrowRight, Coffee } from "lucide-react";
-import type { Swiper as SwiperType } from "swiper";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Category } from "@/types/categories";
-import getSliderAtributes from "@/constants/slider";
 import EdgeUi from "../../ui/edge-ui";
 import Image from "next/image";
 import { getImageUrl } from "@/utils/getImageUrl";
+import useCategorySlider from "@/hooks/products/useCategorySlider";
 
 interface CategoriesSlidersProps {
   categories: Category[];
 }
 
 export const CategoriesSliders = ({ categories }: CategoriesSlidersProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const selectedCategory = searchParams.get("category");
-
-  const prevRef = useRef<HTMLButtonElement>(null);
-  const nextRef = useRef<HTMLButtonElement>(null);
-
-  const handleCategoryClick = (categoryId: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (params.get("category") === categoryId.toString()) {
-      params.delete("category");
-    } else {
-      params.set("category", categoryId.toString());
-    }
-    router.push(`/products?${params.toString()}`, { scroll: false });
-  };
-
-  const { swiperBreakPoints } = getSliderAtributes({
-    breakpoints: [
-      {
-        width: 640,
-        slidesPerView: 3,
-      },
-      {
-        width: 768,
-        slidesPerView: 4,
-      },
-      {
-        width: 1024,
-        slidesPerView: 5,
-      },
-    ],
-  });
+  const {
+    selectedCategory,
+    prevRef,
+    nextRef,
+    handleCategoryClick,
+    handleResetCategory,
+    onBeforeInit,
+    swiperBreakPoints,
+    isLoop,
+  } = useCategorySlider(categories);
 
   if (categories.length === 0) {
     return <EdgeUi message="Data kategori belum tersedia." />;
@@ -60,22 +34,23 @@ export const CategoriesSliders = ({ categories }: CategoriesSlidersProps) => {
   return (
     <section className="pt-20 px-6 bg-[#E2D9C8]">
       <div className="container mx-auto relative">
-        <button ref={prevRef} className="absolute cursor-pointer left-2 md:-left-10 top-1/2 z-10 -translate-y-1/2 bg-white/80 backdrop-blur-md shadow-md rounded-full p-3 hover:scale-105 transition">
+        <button
+          ref={prevRef}
+          className="absolute cursor-pointer left-2 md:-left-10 top-1/2 z-10 -translate-y-1/2 bg-white/80 backdrop-blur-md shadow-md rounded-full p-3 hover:scale-105 transition"
+        >
           <ArrowLeft size={20} />
         </button>
-        <button ref={nextRef} className="absolute cursor-pointer right-2 md:-right-10 top-1/2 z-10 -translate-y-1/2 bg-white/80 backdrop-blur-md shadow-md rounded-full p-3 hover:scale-105 transition">
+        <button
+          ref={nextRef}
+          className="absolute cursor-pointer right-2 md:-right-10 top-1/2 z-10 -translate-y-1/2 bg-white/80 backdrop-blur-md shadow-md rounded-full p-3 hover:scale-105 transition"
+        >
           <ArrowRight size={20} />
         </button>
 
         <Swiper
           modules={[Navigation]}
-          onBeforeInit={(swiper: SwiperType) => {
-            if (typeof swiper.params.navigation !== "boolean" && swiper.params.navigation) {
-              swiper.params.navigation.prevEl = prevRef.current;
-              swiper.params.navigation.nextEl = nextRef.current;
-            }
-          }}
-          loop={(categories.length + 1) > 5}
+          onBeforeInit={onBeforeInit}
+          loop={isLoop}
           grabCursor={true}
           slidesPerView={2}
           spaceBetween={20}
@@ -84,11 +59,7 @@ export const CategoriesSliders = ({ categories }: CategoriesSlidersProps) => {
           {/* 'Semua' Category Slide to Reset Filter */}
           <SwiperSlide>
             <div 
-              onClick={() => {
-                const params = new URLSearchParams(searchParams.toString());
-                params.delete("category");
-                router.push(`/products?${params.toString()}`, { scroll: false });
-              }}
+              onClick={handleResetCategory}
               className="flex flex-col py-4 items-center gap-4 group cursor-pointer"
             >
               <div className={`aspect-square w-36 h-36 rounded-full border shadow-sm flex items-center justify-center transition-all duration-300 ${

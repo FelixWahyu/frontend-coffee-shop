@@ -1,4 +1,3 @@
-import Link from "next/link";
 import HeroSection from "@/components/sections/product/SectionHero";
 import { ProductService } from "@/services/products/products";
 import { FeaturesService } from "@/services/home/featureService";
@@ -49,15 +48,7 @@ export default async function productPage({ searchParams }: { searchParams: Prom
             </div>
           )}
           {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              id={product.id}
-              rawPrice={product.price}
-              title={product.name}
-              price={formatCurrency(product.price)}
-              category={product.category?.name}
-              image={product.image}
-            />
+            <ProductCard key={product.id} id={product.id} rawPrice={product.price} title={product.name} price={formatCurrency(product.price)} category={product.category?.name} image={product.image} />
           ))}
         </div>
 
