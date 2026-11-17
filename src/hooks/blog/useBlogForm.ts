@@ -4,10 +4,14 @@ import { BlogRequest, BlogArticle } from "@/types/blog";
 import { ErrorBlog } from "@/types/errorMessage";
 import { BlogValidation } from "@/validations/blog/blogValidation";
 import { BlogService } from "@/services/admin/blog";
+import { BASE_URL } from "@/lib/api";
+import { UploadService } from "@/services/admin/upload";
 
 export function useBlogForm(article?: BlogArticle | null) {
   const router = useRouter();
   const isEditing = !!article;
+  const [uploading, setUploading] = useState(false);
+  const BASE_IMAGE_HOST = BASE_URL.replace("/api", "");
 
   const [formInput, setFormInput] = useState<BlogRequest>({
     title: "",
@@ -89,6 +93,22 @@ export function useBlogForm(article?: BlogArticle | null) {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const url = await UploadService.uploadImage(file);
+      setFormInput((prev) => ({ ...prev, image: url }));
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload image.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return {
     formInput,
     tagInput,
@@ -101,5 +121,8 @@ export function useBlogForm(article?: BlogArticle | null) {
     addTag,
     removeTag,
     handleSubmit,
+    uploading,
+    BASE_IMAGE_HOST,
+    handleImageUpload,
   };
 }

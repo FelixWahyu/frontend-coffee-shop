@@ -10,35 +10,13 @@ import { Save, FileText, Type, User, BookOpen, Clock, Tag, X } from "lucide-reac
 import Link from "next/link";
 import { BlogArticle } from "@/types/blog";
 import { useBlogForm } from "@/hooks/blog/useBlogForm";
-import { useState } from "react";
-import { UploadService } from "@/services/admin/upload";
-import { BASE_URL } from "@/lib/api";
 
 interface FormBlogProps {
   article?: BlogArticle | null;
 }
 
 export default function FormBlog({ article }: FormBlogProps) {
-  const { formInput, tagInput, errors, loading, isEditing, setFormInput, setTagInput, handleChange, addTag, removeTag, handleSubmit } = useBlogForm(article);
-  const [uploading, setUploading] = useState(false);
-
-  const BASE_IMAGE_HOST = BASE_URL.replace("/api", "");
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setUploading(true);
-      const url = await UploadService.uploadImage(file);
-      setFormInput((prev) => ({ ...prev, image: url }));
-    } catch (err) {
-      console.error(err);
-      alert("Failed to upload image.");
-    } finally {
-      setUploading(false);
-    }
-  };
+  const { formInput, tagInput, errors, loading, isEditing, setFormInput, setTagInput, handleChange, addTag, removeTag, handleSubmit, uploading, BASE_IMAGE_HOST, handleImageUpload } = useBlogForm(article);
 
   return (
     <div className="p-6 rounded-md border-3 border-gray-900 max-w-2xl shadow-[6px_6px_0px_#000000]/60 bg-white">

@@ -15,7 +15,7 @@ export function useBlogTable() {
       setLoading(true);
       const res = await BlogService.list(search, page, 10);
       setArticles(res.data);
-      setTotalPages(res.paging?.total_page || 1);
+      setTotalPages(res.paging?.total_page ?? 1);
     } catch (error) {
       console.error(error);
     } finally {
