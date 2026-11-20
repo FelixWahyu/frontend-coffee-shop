@@ -6,64 +6,11 @@ import ErrorMessage from "@/components/ui/form/error";
 import FormGroup from "@/components/ui/form/form-group";
 import Button from "@/components/ui/button";
 import { Save, User as UserIcon, Shield, Key, AtSign } from "lucide-react";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ErrorUser } from "@/types/errorMessage";
-import { CreateUserRequest } from "@/types/users";
-import { validateCreateUser } from "@/validations/users/userValidation";
-import { UserService } from "@/services/admin/users";
+import { useFormUser } from "@/hooks/users/useFormUser";
 
 export default function FormUser() {
-  const router = useRouter();
-  const [formInput, setFormInput] = useState<CreateUserRequest>({
-    name: "",
-    username: "",
-    password: "",
-    role: "USER",
-  });
-  const [errors, setErrors] = useState<ErrorUser>({});
-  const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    const updateForm = { ...formInput, [name]: value };
-    setFormInput(updateForm);
-
-    const validationErrors = validateCreateUser(updateForm);
-    setErrors((prev) => ({
-      ...prev,
-      [name]: validationErrors[name as keyof ErrorUser],
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (loading) return;
-
-    const validationErrors = validateCreateUser(formInput);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setErrors({});
-      setApiError(null);
-
-      await UserService.createUser(formInput);
-
-      router.replace("/admin/users");
-    } catch (error: unknown) {
-      console.error("Failed to create user", error);
-      const message = error instanceof Error ? error.message : "Failed to fetch users";
-      setApiError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { apiError, errors, loading, formInput, handleChange, handleSubmit } = useFormUser();
 
   return (
     <div className="p-6 rounded-md border-3 border-gray-900 max-w-lg shadow-[6px_6px_0px_#000000]/60 bg-white">

@@ -7,141 +7,67 @@ import Label from "@/components/ui/form/label";
 import TextInput from "@/components/ui/form/text-input";
 import FormGroup from "@/components/ui/form/form-group";
 import Button from "@/components/ui/button";
-import { Contact, CreateContactInput, UpdateContactInput } from "@/types/users";
-
-interface ContactModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (data: CreateContactInput | UpdateContactInput) => Promise<void>;
-  initialData?: Contact | null;
-}
+import type { ContactModalProps } from "@/types/contact.modal";
+import { useContactModal } from "@/hooks/users/useContactModal";
 
 export default function ContactModal({ isOpen, onClose, onSave, initialData }: ContactModalProps) {
   const [mounted, setMounted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-
-  // Address fields (only for new contact creation)
-  const [withAddress, setWithAddress] = useState(false);
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [province, setProvince] = useState("");
-  const [country, setCountry] = useState("Indonesia");
-  const [postalCode, setPostalCode] = useState("");
 
   useEffect(() => {
     setMounted(true);
-    return () => setMounted(false);
   }, []);
 
-  useEffect(() => {
-    if (initialData) {
-      setFirstName(initialData.first_name || "");
-      setLastName(initialData.last_name || "");
-      setEmail(initialData.email || "");
-      setPhone(initialData.phone || "");
-      setWithAddress(false);
-    } else {
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPhone("");
-      setWithAddress(false);
-      setStreet("");
-      setCity("");
-      setProvince("");
-      setCountry("Indonesia");
-      setPostalCode("");
-    }
-    setErrorMsg(null);
-  }, [initialData, isOpen]);
+  const {
+    loading,
+    errorMsg,
+    isEditMode,
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [isOpen, onClose]);
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    email,
+    setEmail,
+    phone,
+    setPhone,
+
+    withAddress,
+    setWithAddress,
+    street,
+    setStreet,
+    city,
+    setCity,
+    province,
+    setProvince,
+    country,
+    setCountry,
+    postalCode,
+    setPostalCode,
+
+    handleSubmit,
+  } = useContactModal({ isOpen, onClose, onSave, initialData });
 
   if (!isOpen || !mounted) return null;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!firstName.trim()) {
-      setErrorMsg("Nama depan (first name) wajib diisi");
-      return;
-    }
-    if (!lastName.trim()) {
-      setErrorMsg("Nama belakang (last name) wajib diisi");
-      return;
-    }
-
-    if (withAddress && (!city.trim() || !province.trim())) {
-      setErrorMsg("Jika mengisi alamat, Kota dan Provinsi wajib diisi");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setErrorMsg(null);
-
-      if (initialData) {
-        await onSave({
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
-          email: email.trim() || undefined,
-          phone: phone.trim() || undefined,
-        });
-      } else {
-        const payload: CreateContactInput = {
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
-          email: email.trim() || undefined,
-          phone: phone.trim() || undefined,
-        };
-
-        if (withAddress && city.trim() && province.trim()) {
-          payload.address = {
-            street: street.trim() || undefined,
-            city: city.trim(),
-            province: province.trim(),
-            country: country.trim() || undefined,
-            postal_code: postalCode.trim() || undefined,
-          };
-        }
-
-        await onSave(payload);
-      }
-      onClose();
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Gagal menyimpan kontak";
-      setErrorMsg(message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-black/50"
+        onClick={() => {
+          if (!loading) onClose();
+        }}
+      />
 
       {/* Modal Dialog */}
       <div className="relative bg-white rounded-md border-3 border-gray-900 shadow-[6px_6px_0px_#000000] w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200 z-10">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-black cursor-pointer p-1 rounded-md">
+        <button onClick={onClose} disabled={loading} className="absolute top-4 right-4 text-gray-500 hover:text-black cursor-pointer p-1 rounded-md disabled:opacity-50 disabled:cursor-not-allowed">
           <X className="w-5 h-5" />
         </button>
 
         <div className="mb-5 pb-3 border-b-2 border-gray-900 flex items-center gap-2">
           <UserIcon className="w-6 h-6 text-gray-900" />
-          <h3 className="text-xl font-bold text-gray-900">{initialData ? "Edit Informasi Kontak" : "Tambah Kontak Baru"}</h3>
+          <h3 className="text-xl font-bold text-gray-900">{isEditMode ? "Edit Informasi Kontak" : "Tambah Kontak Baru"}</h3>
         </div>
 
         {errorMsg && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-sm font-medium">{errorMsg}</div>}
@@ -180,7 +106,7 @@ export default function ContactModal({ isOpen, onClose, onSave, initialData }: C
           </FormGroup>
 
           {/* Optional address inputs for new contact */}
-          {!initialData && (
+          {!isEditMode && (
             <div className="pt-2 border-t border-gray-200">
               <label className="flex items-center gap-2 cursor-pointer mb-3 select-none">
                 <input type="checkbox" checked={withAddress} onChange={(e) => setWithAddress(e.target.checked)} className="w-4 h-4 text-blue-600 rounded border-gray-900 focus:ring-0 cursor-pointer" />
@@ -247,7 +173,7 @@ export default function ContactModal({ isOpen, onClose, onSave, initialData }: C
               ) : (
                 <>
                   <Save className="w-4 h-4" />
-                  <span>{initialData ? "Simpan Perubahan" : "Tambah Kontak"}</span>
+                  <span>{isEditMode ? "Simpan Perubahan" : "Tambah Kontak"}</span>
                 </>
               )}
             </Button>
