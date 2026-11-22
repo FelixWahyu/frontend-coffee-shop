@@ -2,7 +2,7 @@
 
 import StatCard from "@/components/admin/cards/StatCard";
 import { formatDate } from "@/utils/formatDate";
-import { Package, Folder, Users, BookOpen } from "lucide-react";
+import { Package, Folder, Users, BookOpen, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { StatsService, StatsResponse } from "@/services/admin/stats";
 
@@ -13,6 +13,7 @@ export default function AdminPage() {
     categories: 0,
     users: 0,
     blogs: 0,
+    reviews: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -44,7 +45,7 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
         <StatCard
           title="Total Products"
           value={loading ? "..." : stats.products}
@@ -68,6 +69,12 @@ export default function AdminPage() {
           value={loading ? "..." : stats.blogs}
           icon={<BookOpen className="w-6 h-6" />}
           className="bg-orange-400"
+        />
+        <StatCard
+          title="Total Reviews"
+          value={loading ? "..." : (stats.reviews ?? 0)}
+          icon={<Star className="w-6 h-6" />}
+          className="bg-amber-400"
         />
       </div>
     </div>

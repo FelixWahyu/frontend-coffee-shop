@@ -5,6 +5,7 @@ export interface StatsResponse {
   categories: number;
   users: number;
   blogs: number;
+  reviews?: number;
 }
 
 export const StatsService = {

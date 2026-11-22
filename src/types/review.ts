@@ -23,6 +23,12 @@ export interface ReviewApiResponse {
   success: boolean;
   message: string;
   data: Review[];
+  paging?: {
+    size: number;
+    total_page: number;
+    current_page: number;
+    total_item?: number;
+  };
 }
 
 export interface SingleReviewApiResponse {
