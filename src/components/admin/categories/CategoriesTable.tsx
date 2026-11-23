@@ -4,36 +4,21 @@ import Link from "next/link";
 import TextInput from "@/components/ui/form/text-input";
 import Button from "@/components/ui/button";
 import ConfirmModal from "@/components/ui/confirm-modal";
-import { Search, Plus, Edit, Trash2 } from "lucide-react";
+import { Search, Plus, Edit, Trash2, Coffee } from "lucide-react";
 import Pagination from "@/components/ui/pagination";
 import { useCategoryTable } from "@/hooks/categories";
+import Image from "next/image";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 export default function CategoriesPage() {
-  const {
-    categories,
-    loading,
-    search,
-    setSearch,
-    page,
-    setPage,
-    totalPages,
-    deleteTarget,
-    setDeleteTarget,
-    handleDelete,
-  } = useCategoryTable();
+  const { categories, loading, search, setSearch, page, setPage, totalPages, deleteTarget, setDeleteTarget, handleDelete } = useCategoryTable();
 
   return (
     <div>
       <div className="flex flex-col-reverse md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div className="flex items-center gap-2 border border-gray-900 px-2 rounded-lg w-full md:w-96 bg-white">
           <Search className="w-5 h-5 text-gray-500" />
-          <TextInput
-            type="text"
-            placeholder="Search categories..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border-none focus:border-none focus:ring-0 w-full"
-          />
+          <TextInput type="text" placeholder="Search categories..." value={search} onChange={(e) => setSearch(e.target.value)} className="border-none focus:border-none focus:ring-0 w-full" />
         </div>
         <Link
           href="/admin/categories/create"
@@ -53,24 +38,39 @@ export default function CategoriesPage() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-100 border-b-3 border-gray-900">
+                <th className="border-r border-gray-300 px-4 py-3 text-center font-bold text-gray-700">Image</th>
                 <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">Name</th>
-                <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">CreatedAt</th>
+                <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">Description</th>
                 <th className="px-4 py-3 text-center font-bold text-gray-700">Actions</th>
               </tr>
             </thead>
             <tbody>
               {categories.map((category) => (
-                <tr key={category.id} className="hover:bg-gray-50 border-b border-gray-300 last:border-b-0">
-                  <td className="border-r border-gray-300 px-4 py-2 font-medium max-w-xs truncate">{category.name}</td>
-                  <td className="border-r border-gray-300 px-4 py-2 text-sm text-gray-500">
-                    {new Date(category.createdAt).toLocaleDateString("id-ID")}
+                <tr key={category.id} className="hover:bg-gray-100 border-b border-gray-300 last:border-b-0">
+                  <td className="border-r border-gray-300 px-4 py-2 text-center w-20">
+                    <div className="flex items-center justify-center">
+                      {category.image ? (
+                        <div className="relative w-12 h-12 rounded-lg border border-black/20 overflow-hidden bg-gray-50 shadow-xs">
+                          <Image
+                            src={getImageUrl(category.image)}
+                            alt={category.name}
+                            fill
+                            sizes="48px"
+                            className="object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-12 h-12 rounded-lg border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-400">
+                          <Coffee className="w-6 h-6" />
+                        </div>
+                      )}
+                    </div>
                   </td>
+                  <td className="border-r border-gray-300 px-4 py-2 font-medium max-w-xs truncate">{category.name}</td>
+                  <td className="border-r border-gray-300 px-4 py-2 text-sm text-gray-500">{category.description || "-"}</td>
                   <td className="px-4 py-2 w-10">
                     <div className="flex items-center justify-center gap-2">
-                      <Link
-                        href={`/admin/categories/edit/${category.id}`}
-                        className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer font-semibold"
-                      >
+                      <Link href={`/admin/categories/edit/${category.id}`} className="flex items-center gap-1 px-3 py-1 text-sm border border-black rounded-md bg-gray-200 hover:bg-yellow-400 transition-all cursor-pointer font-semibold">
                         <Edit className="w-4 h-4" />
                         Edit
                       </Link>
@@ -90,12 +90,7 @@ export default function CategoriesPage() {
         </div>
       )}
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-        variant="brutalism"
-      />
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} variant="brutalism" />
 
       <ConfirmModal
         open={!!deleteTarget}

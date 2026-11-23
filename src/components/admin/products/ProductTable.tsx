@@ -46,7 +46,7 @@ export default function ProductTable() {
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-50 border-b border-gray-300 last:border-b-0">
+                <tr key={product.id} className="hover:bg-gray-100 border-b border-gray-300 last:border-b-0">
                   <td className="border-r border-gray-300 px-4 py-2 font-medium max-w-xs truncate">{product.name}</td>
                   <td className="border-r border-gray-300 px-4 py-2 text-sm text-gray-600">{product.category?.name || "Uncategorized"}</td>
                   <td className="border-r border-gray-300 px-4 py-2 font-medium text-amber-800">{formatCurrency(product.price)}</td>

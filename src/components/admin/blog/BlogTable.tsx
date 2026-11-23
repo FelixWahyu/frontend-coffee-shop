@@ -45,7 +45,7 @@ export default function BlogTable() {
             </thead>
             <tbody>
               {articles.map((article) => (
-                <tr key={article.id} className="hover:bg-gray-50 border-b border-gray-300 last:border-b-0">
+                <tr key={article.id} className="hover:bg-gray-100 border-b border-gray-300 last:border-b-0">
                   <td className="border-r border-gray-300 px-4 py-2 font-medium max-w-xs truncate">{article.title}</td>
                   <td className="border-r border-gray-300 px-4 py-2">
                     <span className="px-2 py-0.5 text-sm bg-[#C67C4E]/10 text-[#C67C4E] rounded-full">{article.category}</span>
@@ -73,12 +73,7 @@ export default function BlogTable() {
           </table>
         </div>
       )}
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-        variant="brutalism"
-      />
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} variant="brutalism" />
       <ConfirmModal
         open={!!deleteTarget}
         title="Delete Article"

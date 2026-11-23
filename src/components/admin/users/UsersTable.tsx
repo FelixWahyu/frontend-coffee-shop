@@ -46,7 +46,7 @@ export default function UsersTable() {
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.username} className="hover:bg-gray-50 border-b border-gray-300 last:border-b-0">
+                <tr key={user.username} className="hover:bg-gray-100 border-b border-gray-300 last:border-b-0">
                   <td className="border-r border-gray-300 px-4 py-2 font-semibold text-gray-900">{user.username}</td>
                   <td className="border-r border-gray-300 px-4 py-2 font-medium max-w-xs truncate text-gray-800">{user.name}</td>
                   <td className="border-r border-gray-300 px-4 py-2">

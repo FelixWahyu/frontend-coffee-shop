@@ -10,11 +10,11 @@ interface ReviewDetailModalProps {
 }
 
 const RATING_LABELS: Record<number, string> = {
-  1: "Sangat Buruk 😞",
-  2: "Kurang Memuaskan 😐",
-  3: "Cukup Baik 😊",
-  4: "Sangat Puas 👍",
-  5: "Luar Biasa / Sempurna! ☕",
+  1: "Sangat Buruk",
+  2: "Kurang Memuaskan",
+  3: "Cukup Baik",
+  4: "Sangat Puas",
+  5: "Sempurna",
 };
 
 export default function ReviewDetailModal({ review, onClose }: ReviewDetailModalProps) {
