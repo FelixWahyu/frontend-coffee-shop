@@ -50,14 +50,8 @@ export default function CategoriesPage() {
                   <td className="border-r border-gray-300 px-4 py-2 text-center w-20">
                     <div className="flex items-center justify-center">
                       {category.image ? (
-                        <div className="relative w-12 h-12 rounded-lg border border-black/20 overflow-hidden bg-gray-50 shadow-xs">
-                          <Image
-                            src={getImageUrl(category.image)}
-                            alt={category.name}
-                            fill
-                            sizes="48px"
-                            className="object-cover"
-                          />
+                        <div className="w-12 h-12 rounded-lg border border-black/20 overflow-hidden bg-gray-50 shadow-xs shrink-0">
+                          <Image src={getImageUrl(category.image)} alt={category.name} width={48} height={48} className="h-full w-full object-cover" />
                         </div>
                       ) : (
                         <div className="w-12 h-12 rounded-lg border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-400">

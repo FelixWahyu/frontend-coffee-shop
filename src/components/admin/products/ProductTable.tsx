@@ -4,10 +4,12 @@ import TextInput from "../../ui/form/text-input";
 import Button from "../../ui/button";
 import ConfirmModal from "../../ui/confirm-modal";
 import Link from "next/link";
-import { Search, Plus, Edit, Trash2 } from "lucide-react";
+import { Search, Plus, Edit, Trash2, Coffee } from "lucide-react";
 import { formatCurrency } from "@/utils/formatCurrency";
 import Pagination from "@/components/ui/pagination";
 import { useProductTable } from "@/src/hooks/products/useProductTable";
+import { getImageUrl } from "@/utils/getImageUrl";
+import Image from "next/image";
 
 export default function ProductTable() {
   const { loading, search, setSearch, products, deleteTarget, setDeleteTarget, page, setPage, totalPages, handleDelete } = useProductTable();
@@ -37,6 +39,7 @@ export default function ProductTable() {
           <table className="w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gray-100 border-b-3 border-gray-900">
+                <th className="border-r border-gray-300 px-4 py-3 text-center font-bold text-gray-700">Image</th>
                 <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">Product Name</th>
                 <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">Category</th>
                 <th className="border-r border-gray-300 px-4 py-3 text-left font-bold text-gray-700">Price</th>
@@ -47,6 +50,19 @@ export default function ProductTable() {
             <tbody>
               {products.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-100 border-b border-gray-300 last:border-b-0">
+                  <td className="border-r border-gray-300 px-4 py-2 text-center w-20">
+                    <div className="flex items-center justify-center">
+                      {product.image ? (
+                        <div className="w-12 h-12 rounded-lg border border-black/20 overflow-hidden bg-gray-50 shadow-xs shrink-0">
+                          <Image src={getImageUrl(product.image)} width={48} height={48} alt={product.name} className="h-full w-full object-cover" />
+                        </div>
+                      ) : (
+                        <div className="w-12 h-12 rounded-lg border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-400">
+                          <Coffee className="w-6 h-6" />
+                        </div>
+                      )}
+                    </div>
+                  </td>
                   <td className="border-r border-gray-300 px-4 py-2 font-medium max-w-xs truncate">{product.name}</td>
                   <td className="border-r border-gray-300 px-4 py-2 text-sm text-gray-600">{product.category?.name || "Uncategorized"}</td>
                   <td className="border-r border-gray-300 px-4 py-2 font-medium text-amber-800">{formatCurrency(product.price)}</td>
