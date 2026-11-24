@@ -4,7 +4,7 @@ import Link from "next/link";
 import Button from "@/components/ui/button";
 import ConfirmModal from "@/components/ui/confirm-modal";
 import { UserResponse } from "@/types/users";
-import { ChevronDown, LogOut, LayoutGrid, Shield } from "lucide-react";
+import { ChevronDown, LogOut, LayoutGrid, Shield, User } from "lucide-react";
 import useNavAuth from "@/hooks/auth/useNavAuth";
 
 interface NavAuthProps {
@@ -78,6 +78,15 @@ export default function NavAuth({ isAuth, user, onLogout, atributes = "" }: NavA
 
             {/* Menu Links */}
             <div className="p-1">
+              <Link
+                href="/profile"
+                onClick={closeDropdown}
+                className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-stone-700 hover:bg-stone-50 hover:text-[#C67C4E] transition-all duration-200"
+              >
+                <User size={16} />
+                Profil Saya
+              </Link>
+
               {isAdmin && (
                 <Link
                   href="/admin"
@@ -132,7 +141,14 @@ export default function NavAuth({ isAuth, user, onLogout, atributes = "" }: NavA
         )}
       </div>
 
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-col gap-2">
+        <Link
+          href="/profile"
+          className="flex items-center justify-center gap-2 w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold rounded-xl text-sm transition-colors duration-200"
+        >
+          <User size={16} />
+          Profil Saya
+        </Link>
         {isAdmin && (
           <Link
             href="/admin"
